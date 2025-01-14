@@ -56,27 +56,18 @@ h1:hover {
 }
 
 .circle {
-  width: 150px;
-  height: 150px;
-  background-color: #a18d7f;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: all 0.5s ease;
-}
-
-.circle:hover {
-  background-color: #806b5c;
+  display: none;
 }
 
 body.inverted {
   background-color: #4a5e6a;
 }
 
-body.inverted .circle {
+body.inverted .circle-container {
   background-color: #5e7282;
 }
 
-body.inverted .circle:hover {
+body.inverted .circle-container:hover {
   background-color: #7f93a3;
 }
 
@@ -98,6 +89,76 @@ body.inverted .circle:hover {
   }
 }
 
+/* Update existing media query and add new responsive styles */
+@media screen and (max-width: 768px) {
+  .circles-wrapper {
+    flex-direction: column;
+    gap: 80px;  /* Space between circles */
+    margin-top: 40px;
+  }
+
+  .circle-container {
+    width: 120px;  /* Slightly smaller circles */
+    height: 120px;
+    margin: 0;  /* Remove horizontal margin */
+  }
+
+  h1 {
+    font-size: 36px;
+    margin-bottom: 30px;
+  }
+
+  .circle-label {
+    bottom: -35px;
+    font-size: 20px;  /* Slightly smaller text */
+  }
+
+  /* Adjust loader for mobile */
+  .loading-circles {
+    width: 80px;
+    height: 80px;
+  }
+
+  .loading-circle {
+    width: 15px;
+    height: 15px;
+  }
+
+  .loading-circle:nth-child(2) {
+    left: 30px;
+  }
+
+  .loading-circle:nth-child(3) {
+    left: 60px;
+  }
+
+  /* Adjust header padding */
+  header {
+    padding: 15px;
+  }
+
+  .copyright {
+    font-size: 12px;
+  }
+}
+
+/* Add styles for very small screens */
+@media screen and (max-width: 360px) {
+  .circle-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .circle-label {
+    font-size: 18px;
+    bottom: -30px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+}
+
 /* Add loader styles */
 .loader {
   position: fixed;
@@ -105,6 +166,7 @@ body.inverted .circle:hover {
   left: 0;
   width: 100%;
   height: 100%;
+  opacity: 0.7;
   background-color: #b5a195;
   display: flex;
   justify-content: center;
@@ -124,7 +186,7 @@ body.inverted .circle:hover {
   height: 20px;
   background-color: #a18d7f;
   border-radius: 50%;
-  animation: bounce 1.5s infinite ease-in-out;
+  animation: bounce 2s infinite ease-in-out;
 }
 
 .loading-circle:nth-child(1) {
@@ -160,4 +222,69 @@ body.inverted .circle:hover {
   opacity: 0;
   visibility: hidden;
   transition: all 1s ease;
+}
+
+/* Style for the circle container */
+.circle-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-color: #a18d7f;
+  margin: 0 50px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.circle-container:hover {
+  background-color: #806b5c;
+  transform: scale(1.05);
+}
+
+/* New active state */
+.circle-container.active {
+  background: rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.circle-label {
+  position: absolute;
+  bottom: -40px;
+  width: 100%;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+  font-family: 'Alexandria', sans-serif;
+  opacity: 0.5;
+  filter: blur(2px);
+}
+
+.circle-container:hover .circle-label {
+  opacity: 0.8;
+  filter: blur(1px);
+}
+
+.circle-container.active .circle-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.circles-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+/* Update loader background for inverted state */
+body.inverted .loader {
+  background-color: #4a5e6a;
+}
+
+body.inverted .loading-circle {
+  background-color: #5e7282;
 }

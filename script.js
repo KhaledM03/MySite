@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide loader and show content after last circle fades
       setTimeout(() => {
         loader.classList.add('hidden');
-        content.style.opacity = '1';
+        content.style.opacity = '0.7';
       }, 800); // After all circles have faded
 
     }, 2000); // Spin for 2 seconds
@@ -27,4 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.querySelector('.title').addEventListener('click', () => {
   document.body.classList.toggle('inverted');
+});
+
+document.querySelectorAll('.circle-container').forEach(circle => {
+    circle.addEventListener('click', function() {
+        // Remove active class from all circles
+        document.querySelectorAll('.circle-container').forEach(c => {
+            c.classList.remove('active');
+        });
+        // Add active class to clicked circle
+        this.classList.add('active');
+    });
 }); 
