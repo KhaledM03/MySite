@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------- Base typography & background ---------- */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  @apply bg-paper text-ink antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+
+/* Subtle blueprint grid layered over the paper background.
+   Kept very light so it reads as engineering paper, not a tech demo. */
+.bg-blueprint {
+  background-color: theme("colors.paper.DEFAULT");
+  background-image: theme("backgroundImage.blueprint-grid");
+  background-size: theme("backgroundSize.grid-32");
+}
+
+/* Small uppercase eyebrow used on every section card */
+.eyebrow {
+  @apply text-[11px] font-medium uppercase tracking-[0.14em] text-ink-mute;
+}
+
+/* Hairline divider used inside cards */
+.hairline {
+  @apply border-t border-paper-line;
+}
