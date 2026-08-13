@@ -34,6 +34,21 @@ export default function SiteHeader() {
 
   const workIsCurrent = pathname.startsWith("/work");
 
+  const navigateToHomeChapter = (event, href) => {
+    setOpen(false);
+    if (pathname !== "/") return;
+
+    event.preventDefault();
+    const hash = href.slice(href.indexOf("#"));
+    window.dispatchEvent(new CustomEvent("portfolio:navigate", {
+      detail: {
+        hash,
+        behavior: "smooth",
+        historyMode: window.location.hash === hash ? "replace" : "push",
+      },
+    }));
+  };
+
   return (
     <header className="site-header" aria-label="Primary navigation">
       <Link className="wordmark" href="/">
@@ -53,7 +68,9 @@ export default function SiteHeader() {
               key={link.label}
               href={link.href}
               aria-current={current ? "page" : undefined}
-              onClick={() => setOpen(false)}
+              onClick={(event) => link.section === "home"
+                ? navigateToHomeChapter(event, link.href)
+                : setOpen(false)}
             >
               {link.label}
             </Link>

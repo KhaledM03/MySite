@@ -23,16 +23,15 @@ export const projects = [
       "Coursework and hands-on builds required physical measurements, simulated logic, debugging, and functional validation.",
     role: "Computer and electrical engineering student",
     technology: ["Circuit analysis", "Logisim", "Oscilloscope", "Fusion 360"],
-    proof: "Repository evidence includes lab captures, digital logic, and CAD models",
-    status: "Evidence preview",
-    href: "/media/engineering-lab.webp",
-    action: "Open lab proof",
-    image: "/media/engineering-lab.webp",
+    proof: "Real lab captures, digital logic simulation, and CAD studies",
+    status: "Full collection",
+    href: "/work/engineering-lab",
+    action: "Enter the lab",
+    image: "/media/engineering-lab/oscilloscope-card.webp",
     imageWidth: 1600,
-    imageHeight: 2133,
+    imageHeight: 1120,
     imageAlt: "Oscilloscope and function generator measuring a circuit on a lab bench",
     tone: "sage",
-    externalAsset: true,
   },
   {
     slug: "the-cove-dev",
@@ -43,7 +42,7 @@ export const projects = [
       "Small-business clients needed responsive web applications with dynamic user interfaces.",
     role: "Full-stack web development",
     technology: ["HTML", "CSS", "JavaScript", "Git"],
-    proof: "$6K profit reported for the 2025 company side project",
+    proof: "Verified repository screenshots show responsive client-facing interfaces",
     status: "Evidence preview",
     href: "/media/the-cove-dev.webp",
     action: "Open interface proof",
@@ -66,4 +65,38 @@ export const resetWaveFacts = {
     "7,200 seconds ÷ 10 seconds = 720, so the measured timing represents an approximate 720× speedup.",
   resumeTechnology: ["Python", "Linux"],
   repositoryTechnology: ["SSH", "Paramiko", "ThreadPoolExecutor"],
+};
+
+// Source ledger: visitor-facing copy may use verified fields only. Items marked
+// unresolved stay internal until Khaled supplies matching source evidence.
+export const engineeringLabSources = {
+  verified: {
+    courseAssociation: "EET 118",
+    relatedReport: "EET-118 — EXPERIMENT #6C",
+    reportDate: "Wednesday, March 25",
+    reportTopics: [
+      "DC voltage",
+      "ripple voltage",
+      "RMS voltage",
+      "percentage error",
+      "total RMS voltage",
+    ],
+    measuredCapacitance: "58.1 μF",
+    board: "Board #21",
+    resumeSkills: [
+      "Circuit Analysis",
+      "Digital Logic Design",
+      "Logisim simulation",
+      "testing",
+      "debugging",
+      "validation",
+    ],
+  },
+  unresolved: {
+    photographToExperimentMapping: true,
+    oscilloscopeChannelDefinitions: true,
+    logisimCircuitPurpose: true,
+    fusionModelPurpose: true,
+    individualOrTeamStatus: true,
+  },
 };

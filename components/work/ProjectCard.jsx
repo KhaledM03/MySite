@@ -19,6 +19,7 @@ export default function ProjectCard({ project, featured = false }) {
             width={project.imageWidth}
             height={project.imageHeight}
             sizes={featured ? "(max-width: 760px) 92vw, 52vw" : "(max-width: 760px) 92vw, 43vw"}
+            loading="eager"
           />
         ) : (
           <div className="resetwave-visual" aria-hidden="true">
