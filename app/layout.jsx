@@ -1,15 +1,15 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Khaled Mousa — Engineer & Developer",
+  title: "Khaled Mousa — Engineer, Developer & Builder",
   description:
-    "Portfolio of Khaled Mousa — Computer & Electrical Engineering Technology student. Systems, automation, full-stack.",
+    "Khaled Mousa builds at the intersection of computer engineering, electrical engineering, automation, and full-stack development.",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="bg-blueprint min-h-screen">{children}</body>
+      <body>{children}</body>
     </html>
   );
 }
