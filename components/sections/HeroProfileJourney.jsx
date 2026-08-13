@@ -48,7 +48,25 @@ export default function HeroProfileJourney() {
   const trailRef = useRef(null);
   const chapterRef = useRef(null);
 
+  const navigateWithinJourney = (event, hash) => {
+    event.preventDefault();
+    window.dispatchEvent(new CustomEvent("portfolio:navigate", {
+      detail: {
+        hash,
+        behavior: "smooth",
+        historyMode: window.location.hash === hash ? "replace" : "push",
+      },
+    }));
+  };
+
   useEffect(() => {
+    const previousScrollRestoration = "scrollRestoration" in window.history
+      ? window.history.scrollRestoration
+      : null;
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+
     const elements = {
       journey: journeyRef.current,
       stage: stageRef.current,
@@ -70,6 +88,8 @@ export default function HeroProfileJourney() {
     let frame = 0;
     let pointerX = 0;
     let pointerY = 0;
+    let navigationFrame = 0;
+    let historyTimer = 0;
 
     const render = () => {
       frame = 0;
@@ -144,6 +164,77 @@ export default function HeroProfileJourney() {
       if (!frame) frame = window.requestAnimationFrame(render);
     };
 
+    const chapterTargets = {
+      "#arrival": elements.hero,
+      "#profile": elements.profile,
+      "#engineering": elements.engineering,
+    };
+
+    const chapterProgress = {
+      "#arrival": 0,
+      "#profile": 0.38,
+      "#engineering": 0.86,
+    };
+
+    const navigateToChapter = ({ hash, behavior = "auto", historyMode = "none" }) => {
+      const marker = document.querySelector(hash);
+      const focusTarget = chapterTargets[hash];
+      if (!marker || !focusTarget) return;
+
+      const rootStyles = window.getComputedStyle(document.documentElement);
+      const headerHeight = Number.parseFloat(rootStyles.getPropertyValue("--site-header-height")) || 0;
+      const anchorGap = Number.parseFloat(rootStyles.getPropertyValue("--site-anchor-gap")) || 0;
+      const destinationTop = reduceMotion.matches
+        ? focusTarget.getBoundingClientRect().top + window.scrollY
+        : elements.journey.getBoundingClientRect().top + window.scrollY
+          + chapterProgress[hash] * Math.max(1, elements.journey.offsetHeight - window.innerHeight)
+          + headerHeight + anchorGap;
+      const top = hash === "#arrival" && !reduceMotion.matches
+        ? 0
+        : Math.max(0, destinationTop - headerHeight - anchorGap);
+      const scrollBehavior = reduceMotion.matches ? "auto" : behavior;
+
+      if (historyMode === "push") window.history.pushState(null, "", hash);
+      if (historyMode === "replace") window.history.replaceState(null, "", hash);
+
+      window.scrollTo({ top, behavior: scrollBehavior });
+      focusTarget.focus({ preventScroll: true });
+      requestRender();
+    };
+
+    const scheduleChapterNavigation = (options) => {
+      if (navigationFrame) window.cancelAnimationFrame(navigationFrame);
+      navigationFrame = window.requestAnimationFrame(() => {
+        navigationFrame = 0;
+        navigateToChapter(options);
+      });
+    };
+
+    const onChapterNavigation = (event) => {
+      scheduleChapterNavigation(event.detail);
+    };
+
+    const onHistoryNavigation = () => {
+      if (chapterTargets[window.location.hash]) {
+        const hash = window.location.hash;
+        const restoreHistoryPosition = () => {
+          navigateToChapter({ hash, behavior: "auto" });
+        };
+        restoreHistoryPosition();
+        if (historyTimer) window.clearTimeout(historyTimer);
+        historyTimer = window.setTimeout(() => {
+          historyTimer = 0;
+          restoreHistoryPosition();
+        }, 350);
+      }
+    };
+
+    const onPageShow = () => {
+      if (chapterTargets[window.location.hash]) {
+        navigateToChapter({ hash: window.location.hash, behavior: "auto" });
+      }
+    };
+
     const onPointerMove = (event) => {
       if (reduceMotion.matches) return;
       pointerX = event.clientX / window.innerWidth - 0.5;
@@ -154,24 +245,42 @@ export default function HeroProfileJourney() {
     window.addEventListener("scroll", requestRender, { passive: true });
     window.addEventListener("resize", requestRender);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("portfolio:navigate", onChapterNavigation);
+    window.addEventListener("popstate", onHistoryNavigation, { capture: true });
+    window.addEventListener("hashchange", onHistoryNavigation, { capture: true });
+    window.addEventListener("pageshow", onPageShow, { capture: true });
     reduceMotion.addEventListener("change", requestRender);
     render();
 
+    if (chapterTargets[window.location.hash]) {
+      scheduleChapterNavigation({ hash: window.location.hash, behavior: "auto" });
+    }
+
     return () => {
       if (frame) window.cancelAnimationFrame(frame);
+      if (navigationFrame) window.cancelAnimationFrame(navigationFrame);
+      if (historyTimer) window.clearTimeout(historyTimer);
       window.removeEventListener("scroll", requestRender);
       window.removeEventListener("resize", requestRender);
       window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("portfolio:navigate", onChapterNavigation);
+      window.removeEventListener("popstate", onHistoryNavigation, { capture: true });
+      window.removeEventListener("hashchange", onHistoryNavigation, { capture: true });
+      window.removeEventListener("pageshow", onPageShow, { capture: true });
       reduceMotion.removeEventListener("change", requestRender);
+      if (previousScrollRestoration) {
+        window.history.scrollRestoration = previousScrollRestoration;
+      }
     };
   }, []);
 
   return (
     <main className="site-shell">
-      <a className="skip-link" href="#engineering">Skip to engineering profile</a>
+      <a className="skip-link" href="#engineering" onClick={(event) => navigateWithinJourney(event, "#engineering")}>Skip to engineering profile</a>
       <SiteHeader />
 
       <section className="journey" ref={journeyRef} aria-label="Interactive engineering story">
+        <span id="arrival" className="journey-anchor arrival-anchor" aria-hidden="true" />
         <span id="profile" className="journey-anchor profile-anchor" aria-hidden="true" />
         <span id="engineering" className="journey-anchor engineering-anchor" aria-hidden="true" />
 
@@ -201,14 +310,14 @@ export default function HeroProfileJourney() {
             ))}
           </div>
 
-          <article id="arrival" className="hero-copy chapter-copy" ref={heroRef}>
+          <article className="hero-copy chapter-copy" ref={heroRef} tabIndex={-1}>
             <p className="chapter-kicker"><span>Engineering</span><span>Code</span><span>Systems</span></p>
             <h1>I build the bridge between <em>hardware</em> and software.</h1>
             <p className="hero-intro">
               I&apos;m Khaled Mousa—a computer and electrical engineering student building automation, digital systems, and full-stack products that work beyond the demo.
             </p>
             <div className="hero-actions">
-              <a className="button button-primary" href="#profile">Start the field log <span aria-hidden="true">↓</span></a>
+              <a className="button button-primary" href="#profile" onClick={(event) => navigateWithinJourney(event, "#profile")}>Start the field log <span aria-hidden="true">↓</span></a>
               <a className="button button-secondary" href="/resume/khaled-mousa-resume.pdf" target="_blank" rel="noreferrer">Read résumé <span aria-hidden="true">↗</span></a>
             </div>
             <div className="hero-signal-strip" aria-label="Engineering focus areas">
@@ -224,7 +333,7 @@ export default function HeroProfileJourney() {
             <Image className="character-image" src="/characters/khaled-hero.webp" alt="" fill priority sizes="(max-width: 780px) 82vw, 47vw" />
           </div>
 
-          <article className="profile-copy chapter-copy" ref={profileRef} aria-label="Profile">
+          <article className="profile-copy chapter-copy" ref={profileRef} aria-label="Profile" tabIndex={-1}>
             <p className="section-label">Field log · The builder</p>
             <h2>Curious by nature.<br /><em>Precise</em> by practice.</h2>
             <p className="profile-lead">
@@ -259,7 +368,7 @@ export default function HeroProfileJourney() {
             <Image src="/characters/drone.webp" alt="" fill sizes="14vw" />
           </div>
 
-          <article className="engineering-copy chapter-copy" ref={engineeringRef} aria-label="Engineering capabilities">
+          <article className="engineering-copy chapter-copy" ref={engineeringRef} aria-label="Engineering capabilities" tabIndex={-1}>
             <p className="section-label">Build mode · Capabilities</p>
             <h2>Built where code meets <em>current.</em></h2>
             <p className="engineering-lead">

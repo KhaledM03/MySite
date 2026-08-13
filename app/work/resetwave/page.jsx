@@ -133,7 +133,7 @@ export default function ResetWavePage() {
         </div>
         <div className="case-navigation">
           <Link className="button button-secondary" href="/work">← Back to all work</Link>
-          <Link className="button button-primary" href="/">Replay the homepage ↗</Link>
+          <Link className="button button-primary" href="/work/engineering-lab">Next: Engineering Lab →</Link>
         </div>
       </section>
     </CaseStudyLayout>
