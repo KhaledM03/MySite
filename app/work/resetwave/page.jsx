@@ -1,12 +1,16 @@
 import Link from "next/link";
 import CaseStudyLayout from "@/components/work/CaseStudyLayout";
+import TransitionLink from "@/components/navigation/TransitionLink";
+import StructuredData from "@/components/seo/StructuredData";
 import { resetWaveFacts } from "@/data/projects";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
-export const metadata = {
-  title: "ResetWave Case Study — Khaled Mousa",
+export const metadata = createPageMetadata({
+  title: "ResetWave Automation Case Study",
   description:
     "How Khaled Mousa reduced a repetitive engineering task from approximately two hours to approximately ten seconds with a sanitized Python and Linux automation workflow.",
-};
+  path: "/work/resetwave",
+});
 
 const technology = [
   ...resetWaveFacts.resumeTechnology,
@@ -16,6 +20,18 @@ const technology = [
 export default function ResetWavePage() {
   return (
     <CaseStudyLayout>
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: "ResetWave Automation Case Study",
+          url: `${SITE_URL}/work/resetwave`,
+          description:
+            "A sanitized case study of a Python and Linux operational automation workflow with documented before-and-after timing.",
+          author: { "@id": `${SITE_URL}/#person` },
+          keywords: technology.join(", "),
+        }}
+      />
       <section id="overview" className="case-section case-overview">
         <p className="case-section-number">01 / Overview</p>
         <h2>Operational automation with a measurable result.</h2>
@@ -119,23 +135,36 @@ export default function ResetWavePage() {
       </section>
 
       <section id="reflection" className="case-section">
-        <p className="case-section-number">07 / Lessons & next iteration</p>
-        <h2>What the evidence supports—and what still needs Khaled&apos;s voice.</h2>
-        <div className="reflection-grid">
+        <p className="case-section-number">07 / Reflection &amp; next iteration</p>
+        <h2>Figure it out, then make it useful.</h2>
+        <p className="case-lead">
+          The hardest part was turning an open-ended operational problem into a system I could understand end to end. That meant breaking it down, testing each part, and staying with it until the workflow became clear and dependable.
+        </p>
+        <div className="reflection-grid reflection-grid-three">
           <div>
-            <h3>Evidence-led takeaway</h3>
-            <p>The project record shows that operational automation is not complete at execution: system debugging, reliability work, and validation are part of the engineering result.</p>
+            <h3>The challenge</h3>
+            <p>There was no single obvious answer. Progress came from working through the problem methodically and making the pieces operate as one reliable workflow.</p>
           </div>
-          <div className="needs-input">
-            <h3>Reflection still needed</h3>
-            <p>A personal lesson learned and a specific “what I would improve next” have not been supplied. This is intentionally marked instead of replacing Khaled&apos;s perspective with invented copy.</p>
+          <div>
+            <h3>The lesson</h3>
+            <p>ResetWave reinforced the kind of engineering I want to do: build things that change how work happens in the real world and create impact people can actually feel.</p>
           </div>
-        </div>
-        <div className="case-navigation">
-          <Link className="button button-secondary" href="/work">← Back to all work</Link>
-          <Link className="button button-primary" href="/work/engineering-lab">Next: Engineering Lab →</Link>
+          <div>
+            <h3>Next iteration</h3>
+            <p>I would add a graphical user interface so the workflow is easier to operate and inspect through a clear visual layer.</p>
+          </div>
         </div>
       </section>
+
+      <nav className="project-navigation" aria-label="Previous and next projects">
+        <TransitionLink href="/work/the-cove-dev" transitionLabel="Opening The Cove Dev">
+          <span>Previous project</span><strong>← The Cove Dev</strong>
+        </TransitionLink>
+        <Link href="/work"><span>Project index</span><strong>All work ↑</strong></Link>
+        <TransitionLink href="/work/engineering-lab" transitionLabel="Opening Engineering Lab">
+          <span>Next project</span><strong>Engineering Lab →</strong>
+        </TransitionLink>
+      </nav>
     </CaseStudyLayout>
   );
 }

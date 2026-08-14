@@ -1,16 +1,20 @@
 import Image from "next/image";
 import Link from "next/link";
+import TransitionLink from "@/components/navigation/TransitionLink";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import EngineeringLabExperience from "@/components/work/EngineeringLabExperience";
 import EvidenceLightbox from "@/components/work/EvidenceLightbox";
+import StructuredData from "@/components/seo/StructuredData";
 import { engineeringLabSources } from "@/data/projects";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
-export const metadata = {
-  title: "Engineering Lab — Khaled Mousa",
+export const metadata = createPageMetadata({
+  title: "Engineering Lab Collection",
   description:
     "An evidence-led collection of Khaled Mousa’s electronics measurements, digital logic simulation, CAD studies, and engineering process.",
-};
+  path: "/work/engineering-lab",
+});
 
 const media = {
   oscilloscopeOne: {
@@ -68,6 +72,18 @@ function EvidenceImage({ item, className = "" }) {
 export default function EngineeringLabPage() {
   return (
     <div className="site-shell evidence-shell lab-shell">
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CreativeWork",
+          name: "Engineering Lab Collection",
+          url: `${SITE_URL}/work/engineering-lab`,
+          description:
+            "An evidence-led collection of electronics measurements, digital logic simulation, CAD studies, and engineering process.",
+          author: { "@id": `${SITE_URL}/#person` },
+          keywords: "EET 118, circuit analysis, digital logic, Logisim, CAD, testing, debugging, validation",
+        }}
+      />
       <a className="skip-link" href="#lab-content">Skip to Engineering Lab</a>
       <SiteHeader />
 
@@ -76,7 +92,7 @@ export default function EngineeringLabPage() {
           <div className="lab-cover-copy">
             <Link className="back-link" href="/work">← All work</Link>
             <p className="section-label">Collection 02 · Physical + digital systems</p>
-            <h1 id="lab-title">Engineering<br /><em>Lab.</em></h1>
+            <h1 id="lab-title" style={{ viewTransitionName: "project-engineering-lab-title" }}>Engineering<br /><em>Lab.</em></h1>
             <p>
               A visual record of measurement, simulation, CAD exploration, testing, and validation—presented at exactly the level the current evidence supports.
             </p>
@@ -85,7 +101,7 @@ export default function EngineeringLabPage() {
             </div>
           </div>
 
-          <div className="lab-cover-media">
+          <div className="lab-cover-media" style={{ viewTransitionName: "project-engineering-lab-media" }}>
             <Image
               src="/media/engineering-lab/oscilloscope-cover.webp"
               alt="Oscilloscope and function generator on an electronics lab bench"
@@ -119,13 +135,17 @@ export default function EngineeringLabPage() {
             </div>
             <div className="lab-overview-copy">
               <p className="lab-lead">
-                The current record spans electronics work associated with EET 118, oscilloscope measurement, Logisim simulation, and Fusion 360 studies. Where the exact circuit or model purpose is still unknown, the page stays broad instead of filling the gap with a guess.
+                The current record spans electronics work associated with EET 118, oscilloscope measurement, Logisim simulation, and Fusion 360 studies. Together, the artifacts show a practice of observing, testing, simulating, and documenting physical and digital systems.
               </p>
               <dl className="lab-fact-grid">
                 <div><dt>Association</dt><dd>{engineeringLabSources.verified.courseAssociation}</dd></div>
                 <div><dt>Media</dt><dd>7 real engineering artifacts</dd></div>
                 <div><dt>Method</dt><dd>Inspect · test · document</dd></div>
               </dl>
+              <aside className="lab-documentation-boundary">
+                <strong>Documentation boundary</strong>
+                <p>Direct visual evidence and verified report or résumé facts are presented without assigning unsupported meaning. Exact photograph-to-experiment mapping, oscilloscope channel definitions, Logisim circuit purpose, Fusion 360 model purpose, and individual or team status remain unconfirmed.</p>
+              </aside>
             </div>
           </section>
 
@@ -143,7 +163,7 @@ export default function EngineeringLabPage() {
             <div className="measurement-feature">
               <figure>
                 <EvidenceImage item={media.oscilloscopeOne} />
-                <figcaption><span>Oscilloscope Measurement 01</span> A repeating trace is visible above a function generator and connected bench setup. Circuit behavior and channel definitions remain unconfirmed.</figcaption>
+                <figcaption><span>Oscilloscope Measurement 01</span> A repeating trace is visible above a function generator and connected bench setup.</figcaption>
               </figure>
               <aside className="visible-callouts" aria-label="Visible evidence callouts">
                 <span>Visible in frame</span>
@@ -152,18 +172,18 @@ export default function EngineeringLabPage() {
                   <li><b>02</b> Function generator</li>
                   <li><b>03</b> Breadboard and test leads</li>
                 </ol>
-                <p>No generated trace is layered over this photograph.</p>
+                <p>The trace shown is the photographed instrument display.</p>
               </aside>
             </div>
 
             <div className="measurement-pair">
               <figure>
                 <EvidenceImage item={media.oscilloscopeTwo} />
-                <figcaption><span>Oscilloscope Measurement 02</span> Two sinusoidal traces and phase measurements are visible. The signal sources and channel definitions are not yet documented.</figcaption>
+                <figcaption><span>Oscilloscope Measurement 02</span> Two sinusoidal traces and phase measurements are visible.</figcaption>
               </figure>
               <figure>
                 <EvidenceImage item={media.oscilloscopeThree} />
-                <figcaption><span>Oscilloscope Measurement 03</span> A mostly DC-level trace with repeating variation and measurement readouts is visible. It is not assigned to a report calculation without a matching source.</figcaption>
+                <figcaption><span>Oscilloscope Measurement 03</span> A mostly DC-level trace with repeating variation and measurement readouts is visible.</figcaption>
               </figure>
             </div>
 
@@ -177,7 +197,6 @@ export default function EngineeringLabPage() {
                 <div><dt>Recorded capacitance</dt><dd>{engineeringLabSources.verified.measuredCapacitance}</dd></div>
                 <div><dt>Recorded board</dt><dd>{engineeringLabSources.verified.board}</dd></div>
               </dl>
-              <p className="source-boundary">Source boundary: these values belong to the identified report. They are not automatically assigned to any photograph above.</p>
             </div>
           </section>
 
@@ -186,7 +205,7 @@ export default function EngineeringLabPage() {
               <p className="case-section-number">03 / Digital logic and simulation</p>
               <h2 id="logic-title">Follow the visible signal paths.</h2>
               <p className="lab-lead">
-                The repository contains one Logisim screenshot. Four-bit A and B inputs, blocks labeled “Unsigned” and “2sComp.,” selection components, inversion gates, and three outputs are visible. The circuit’s exact purpose remains unresolved.
+                The repository contains one Logisim screenshot. Four-bit A and B inputs, blocks labeled “Unsigned” and “2sComp.,” selection components, inversion gates, and three outputs are visible. The screenshot preserves the signal-path structure for inspection.
               </p>
               <ul className="logic-labels" aria-label="Verified digital logic skills">
                 <li>Digital Logic Design</li>
@@ -199,16 +218,16 @@ export default function EngineeringLabPage() {
               <EvidenceImage item={media.logic} />
               <div className="logic-callout logic-callout-a" aria-hidden="true"><span>A</span></div>
               <div className="logic-callout logic-callout-b" aria-hidden="true"><span>B</span></div>
-              <figcaption>Digital Logic Simulation — broad label retained until the native circuit or an authoritative description is available.</figcaption>
+              <figcaption>Digital Logic Simulation — visible inputs, selection components, inversion gates, and outputs.</figcaption>
             </figure>
           </section>
 
           <section id="cad" className="lab-section lab-cad" aria-labelledby="cad-title">
             <header className="lab-section-header">
               <p className="case-section-number">04 / CAD and physical design</p>
-              <h2 id="cad-title">Form, fit, and structure—without an invented function.</h2>
+              <h2 id="cad-title">Read form, fit, and visible structure.</h2>
               <p>
-                Two Fusion 360 screenshots preserve the actual geometry. Their intended use and relationship are not established, so each remains an accurately labeled CAD study.
+                Two Fusion 360 screenshots preserve the actual geometry and make their edges, mounting points, supports, bracing, plates, and cylindrical forms available for close inspection.
               </p>
             </header>
             <div className="cad-stack">
@@ -233,7 +252,7 @@ export default function EngineeringLabPage() {
               <li><span>02</span><div><h3>Observe</h3><p>Use instrument displays or simulation state to inspect behavior.</p></div></li>
               <li><span>03</span><div><h3>Test</h3><p>Exercise the work, compare observations, and identify behavior that needs investigation.</p></div></li>
               <li><span>04</span><div><h3>Debug</h3><p>Trace connections, signal paths, and setup choices before repeating a test.</p></div></li>
-              <li><span>05</span><div><h3>Document</h3><p>Keep screenshots, photographs, calculations, and unresolved questions tied to their sources.</p></div></li>
+              <li><span>05</span><div><h3>Document</h3><p>Keep screenshots, photographs, calculations, and source notes tied to the work they describe.</p></div></li>
             </ol>
           </section>
 
@@ -284,9 +303,9 @@ export default function EngineeringLabPage() {
           </section>
 
           <nav className="project-navigation" aria-label="Previous and next projects">
-            <Link href="/work/resetwave"><span>Previous project</span><strong>← ResetWave</strong></Link>
+            <TransitionLink href="/work/resetwave" transitionLabel="Opening ResetWave"><span>Previous project</span><strong>← ResetWave</strong></TransitionLink>
             <Link href="/work"><span>Project index</span><strong>All work ↑</strong></Link>
-            <div aria-disabled="true"><span>Next collection</span><strong>The Cove Dev · forthcoming</strong></div>
+            <TransitionLink href="/work/the-cove-dev" transitionLabel="Opening The Cove Dev"><span>Next project</span><strong>The Cove Dev →</strong></TransitionLink>
           </nav>
         </div>
       </main>

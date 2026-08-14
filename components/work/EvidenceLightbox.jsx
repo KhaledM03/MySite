@@ -12,6 +12,7 @@ export default function EvidenceLightbox({ src, alt, width, height, children, cl
     if (!open) return undefined;
 
     const previousOverflow = document.body.style.overflow;
+    const trigger = triggerRef.current;
     const onKeyDown = (event) => {
       if (event.key === "Escape") setOpen(false);
       if (event.key === "Tab") {
@@ -27,7 +28,7 @@ export default function EvidenceLightbox({ src, alt, width, height, children, cl
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
-      triggerRef.current?.focus();
+      trigger?.focus();
     };
   }, [open]);
 
