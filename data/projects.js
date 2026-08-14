@@ -43,15 +43,14 @@ export const projects = [
     role: "Full-stack web development",
     technology: ["HTML", "CSS", "JavaScript", "Git"],
     proof: "Verified repository screenshots show responsive client-facing interfaces",
-    status: "Evidence preview",
-    href: "/media/the-cove-dev.webp",
-    action: "Open interface proof",
-    image: "/media/the-cove-dev.webp",
+    status: "Full case study",
+    href: "/work/the-cove-dev",
+    action: "Read the case study",
+    image: "/media/the-cove-dev/home.webp",
     imageWidth: 1257,
     imageHeight: 798,
     imageAlt: "Responsive landing-page interface created for The Cove Dev",
     tone: "coral",
-    externalAsset: true,
   },
 ];
 
@@ -98,5 +97,33 @@ export const engineeringLabSources = {
     logisimCircuitPurpose: true,
     fusionModelPurpose: true,
     individualOrTeamStatus: true,
+  },
+};
+
+// Source ledger: résumé statements and preserved repository captures are kept
+// separate from details that are not established by the current public record.
+export const coveDevSources = {
+  verified: {
+    organization: "The Cove Dev, LLC",
+    period: "August 2025–present",
+    role: "Full-Stack Web Development",
+    technology: ["HTML", "CSS", "JavaScript", "Git"],
+    responsibilities: [
+      "Developed responsive web applications with dynamic user interfaces for clients",
+      "Implemented client-side logic and debugging to improve performance and usability",
+      "Applied modular design and version control using Git",
+    ],
+    repositoryMedia: [
+      "Home interface capture",
+      "About interface capture",
+      "Services interface capture",
+    ],
+  },
+  unresolved: {
+    namedClientIdentities: true,
+    perScreenContribution: true,
+    mobileCaptureSet: true,
+    analyticsOrBusinessMetrics: true,
+    clientHandoffArtifacts: true,
   },
 };

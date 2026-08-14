@@ -1,17 +1,17 @@
 import Image from "next/image";
-import Link from "next/link";
+import TransitionLink from "@/components/navigation/TransitionLink";
 
 export default function ProjectCard({ project, featured = false }) {
-  const actionProps = project.externalAsset
-    ? { target: "_blank", rel: "noreferrer" }
-    : {};
-
   return (
     <article
       id={project.slug}
       className={`project-card project-card-${project.tone}${featured ? " project-card-featured" : ""}`}
     >
-      <div className="project-card-visual" aria-hidden={!project.image}>
+      <div
+        className="project-card-visual"
+        aria-hidden={!project.image}
+        style={{ viewTransitionName: `project-${project.slug}-media` }}
+      >
         {project.image ? (
           <Image
             src={project.image}
@@ -41,7 +41,7 @@ export default function ProjectCard({ project, featured = false }) {
           <span>{project.status}</span>
         </div>
         <p className="project-eyebrow">{project.eyebrow}</p>
-        <h2>{project.name}</h2>
+        <h2 style={{ viewTransitionName: `project-${project.slug}-title` }}>{project.name}</h2>
         <p className="project-problem">{project.problem}</p>
         <dl className="project-facts">
           <div><dt>Role</dt><dd>{project.role}</dd></div>
@@ -50,9 +50,13 @@ export default function ProjectCard({ project, featured = false }) {
         <ul className="technology-list" aria-label={`${project.name} technology`}>
           {project.technology.map((technology) => <li key={technology}>{technology}</li>)}
         </ul>
-        <Link className="text-link" href={project.href} {...actionProps}>
+        <TransitionLink
+          className="text-link"
+          href={project.href}
+          transitionLabel={`Opening ${project.name}`}
+        >
           {project.action} <span aria-hidden="true">↗</span>
-        </Link>
+        </TransitionLink>
       </div>
     </article>
   );
