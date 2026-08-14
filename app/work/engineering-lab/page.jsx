@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import TransitionLink from "@/components/navigation/TransitionLink";
+import LongPageNav from "@/components/navigation/LongPageNav";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import EngineeringLabExperience from "@/components/work/EngineeringLabExperience";
@@ -61,6 +62,15 @@ const media = {
   },
 };
 
+const labSections = [
+  { id: "overview", label: "Overview" },
+  { id: "electronics", label: "Measurement" },
+  { id: "logic", label: "Logic" },
+  { id: "cad", label: "CAD" },
+  { id: "process", label: "Process" },
+  { id: "gallery", label: "Evidence" },
+];
+
 function EvidenceImage({ item, className = "" }) {
   return (
     <EvidenceLightbox {...item} className={className}>
@@ -88,7 +98,7 @@ export default function EngineeringLabPage() {
       <SiteHeader />
 
       <main id="lab-content" className="lab-page">
-        <section className="lab-cover" aria-labelledby="lab-title">
+        <section id="lab-top" className="lab-cover" aria-labelledby="lab-title" tabIndex={-1}>
           <div className="lab-cover-copy">
             <Link className="back-link" href="/work">← All work</Link>
             <p className="section-label">Collection 02 · Physical + digital systems</p>
@@ -118,17 +128,10 @@ export default function EngineeringLabPage() {
           </div>
         </section>
 
-        <nav className="lab-section-nav" aria-label="Engineering Lab contents">
-          <a href="#overview"><span>01</span> Overview</a>
-          <a href="#electronics"><span>02</span> Measurement</a>
-          <a href="#logic"><span>03</span> Logic</a>
-          <a href="#cad"><span>04</span> CAD</a>
-          <a href="#process"><span>05</span> Process</a>
-          <a href="#gallery"><span>06</span> Evidence</a>
-        </nav>
+        <LongPageNav items={labSections} ariaLabel="Engineering Lab contents" className="lab-section-nav" topId="lab-top" />
 
         <div className="lab-story">
-          <section id="overview" className="lab-section lab-overview" aria-labelledby="overview-title">
+          <section id="overview" className="lab-section lab-overview" aria-labelledby="overview-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">01 / Engineering Lab overview</p>
               <h2 id="overview-title">A collection built from real artifacts.</h2>
@@ -151,7 +154,7 @@ export default function EngineeringLabPage() {
 
           <EngineeringLabExperience />
 
-          <section id="electronics" className="lab-section lab-electronics" aria-labelledby="electronics-title">
+          <section id="electronics" className="lab-section lab-electronics" aria-labelledby="electronics-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">02 / Electronics and measurement</p>
               <h2 id="electronics-title">The instrument display is the evidence.</h2>
@@ -200,7 +203,7 @@ export default function EngineeringLabPage() {
             </div>
           </section>
 
-          <section id="logic" className="lab-section lab-logic" aria-labelledby="logic-title">
+          <section id="logic" className="lab-section lab-logic" aria-labelledby="logic-title" tabIndex={-1}>
             <div className="logic-copy">
               <p className="case-section-number">03 / Digital logic and simulation</p>
               <h2 id="logic-title">Follow the visible signal paths.</h2>
@@ -222,7 +225,7 @@ export default function EngineeringLabPage() {
             </figure>
           </section>
 
-          <section id="cad" className="lab-section lab-cad" aria-labelledby="cad-title">
+          <section id="cad" className="lab-section lab-cad" aria-labelledby="cad-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">04 / CAD and physical design</p>
               <h2 id="cad-title">Read form, fit, and visible structure.</h2>
@@ -242,7 +245,7 @@ export default function EngineeringLabPage() {
             </div>
           </section>
 
-          <section id="process" className="lab-section lab-process" aria-labelledby="process-title">
+          <section id="process" className="lab-section lab-process" aria-labelledby="process-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">05 / Engineering and testing process</p>
               <h2 id="process-title">A process the evidence can support.</h2>
@@ -270,7 +273,7 @@ export default function EngineeringLabPage() {
             </div>
           </section>
 
-          <section id="gallery" className="lab-section lab-gallery" aria-labelledby="gallery-title">
+          <section id="gallery" className="lab-section lab-gallery" aria-labelledby="gallery-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">07 / Real evidence gallery</p>
               <h2 id="gallery-title">Inspect the source material.</h2>

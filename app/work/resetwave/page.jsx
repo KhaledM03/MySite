@@ -42,6 +42,12 @@ export default function ResetWavePage() {
           <strong>Public-scope note</strong>
           <p>This account deliberately omits credentials, infrastructure identifiers, private source code, internal screenshots, and company-specific topology.</p>
         </div>
+        <aside className="company-context-card">
+          <div><span>Company validation</span><strong>Boingo Wireless company post</strong></div>
+          <blockquote>“Meet Khaled and Emely, our 2024 summer interns from Queens College in New York.”</blockquote>
+          <p>The company record confirms the Summer 2024 placement and broader wireless-infrastructure learning context. It does not establish that ResetWave was deployed into Boingo production systems.</p>
+          <Link href="/experience#infrastructure">See the Field Record ↗</Link>
+        </aside>
       </section>
 
       <section id="problem" className="case-section">

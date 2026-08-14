@@ -138,6 +138,7 @@ export default function TheCoveDevPage() {
                 <p>The public record confirms the role, core technologies, responsibilities, and three interface captures. It does not establish client identities, per-screen contribution, analytics, business metrics, or a mobile capture set.</p>
               </div>
             </div>
+            <Link className="cove-field-record-link" href="/experience#ownership">See how this work fits the wider Field Record ↗</Link>
           </section>
 
           <section id="cove-role" className="cove-section cove-role" aria-labelledby="cove-role-title">
