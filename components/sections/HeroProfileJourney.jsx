@@ -6,6 +6,7 @@ import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import { projects } from "@/data/projects";
+import TransitionLink from "@/components/navigation/TransitionLink";
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(max, Math.max(min, value));
@@ -417,9 +418,9 @@ export default function HeroProfileJourney() {
               <h3>{project.name}</h3>
               <strong>{project.proof}</strong>
               <span>{project.role}</span>
-              <Link href={project.href} target={project.externalAsset ? "_blank" : undefined} rel={project.externalAsset ? "noreferrer" : undefined}>
+              <TransitionLink href={project.href} transitionLabel={`Opening ${project.name}`}>
                 {project.action} <span aria-hidden="true">↗</span>
-              </Link>
+              </TransitionLink>
             </article>
           ))}
         </div>

@@ -14,7 +14,7 @@ export default function CaseStudyLayout({ children }) {
           <div className="case-study-hero-copy">
             <Link className="back-link" href="/work">← All work</Link>
             <p className="section-label">Case study 01 · Engineering automation</p>
-            <h1 id="resetwave-title">ResetWave</h1>
+            <h1 id="resetwave-title" style={{ viewTransitionName: "project-resetwave-title" }}>ResetWave</h1>
             <p className="case-study-deck">
               A sanitized account of an internship automation system built to make a repetitive infrastructure-management task dramatically faster.
             </p>
@@ -26,7 +26,11 @@ export default function CaseStudyLayout({ children }) {
             <p className="calculation-note">7,200 seconds ÷ 10 seconds = approximately 720× faster.</p>
           </div>
 
-          <div className="case-study-cover" aria-hidden="true">
+          <div
+            className="case-study-cover"
+            aria-hidden="true"
+            style={{ viewTransitionName: "project-resetwave-media" }}
+          >
             <div className="cover-terminal">
               <span>RESETWAVE / OPERATIONAL RUN</span>
               <i /><i /><i /><i />
