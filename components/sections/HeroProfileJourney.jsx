@@ -7,6 +7,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import { projects } from "@/data/projects";
 import TransitionLink from "@/components/navigation/TransitionLink";
+import ExperienceTeaser from "@/components/sections/ExperienceTeaser";
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(max, Math.max(min, value));
@@ -183,7 +184,7 @@ export default function HeroProfileJourney() {
       if (!marker || !focusTarget) return;
 
       const rootStyles = window.getComputedStyle(document.documentElement);
-      const headerHeight = Number.parseFloat(rootStyles.getPropertyValue("--site-header-height")) || 0;
+      const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
       const anchorGap = Number.parseFloat(rootStyles.getPropertyValue("--site-anchor-gap")) || 0;
       const destinationTop = reduceMotion.matches
         ? focusTarget.getBoundingClientRect().top + window.scrollY
@@ -425,6 +426,8 @@ export default function HeroProfileJourney() {
           ))}
         </div>
       </section>
+
+      <ExperienceTeaser />
 
       <SiteFooter />
     </main>

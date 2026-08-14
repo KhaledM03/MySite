@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,6 +10,7 @@ const links = [
   { label: "Profile", href: "/#profile", section: "home" },
   { label: "Engineering", href: "/#engineering", section: "home" },
   { label: "Work", href: "/work", section: "work" },
+  { label: "Experience", href: "/experience", section: "experience" },
 ];
 
 export default function SiteHeader() {
@@ -32,7 +34,17 @@ export default function SiteHeader() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return undefined;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [open]);
+
   const workIsCurrent = pathname.startsWith("/work");
+  const experienceIsCurrent = pathname === "/experience";
 
   const navigateToHomeChapter = (event, href) => {
     setOpen(false);
@@ -51,8 +63,10 @@ export default function SiteHeader() {
 
   return (
     <header className="site-header" aria-label="Primary navigation">
-      <Link className="wordmark" href="/">
-        <span className="wordmark-mark">KM</span>
+      <Link className="wordmark" href="/#arrival" onClick={(event) => navigateToHomeChapter(event, "/#arrival")}>
+        <span className="wordmark-mark" aria-hidden="true">
+          <Image className="wordmark-image" src="/brand/chibi-khaled-header.webp" alt="" width={64} height={64} priority sizes="(max-width: 760px) 32px, 36px" />
+        </span>
         <span className="wordmark-name">Khaled Mousa</span>
       </Link>
 
@@ -62,7 +76,8 @@ export default function SiteHeader() {
         aria-label="Portfolio chapters"
       >
         {links.map((link) => {
-          const current = link.section === "work" && workIsCurrent;
+          const current = (link.section === "work" && workIsCurrent)
+            || (link.section === "experience" && experienceIsCurrent);
           return (
             <Link
               key={link.label}
