@@ -207,6 +207,7 @@ a {
 
 .journey-stage {
   --journey-progress: 0;
+  --hero-content-edge: calc((100vw - 1520px) / 2);
   position: sticky;
   top: 0;
   height: 100vh;
@@ -228,7 +229,7 @@ a {
 
 .hero-copy {
   top: 50%;
-  left: clamp(1.5rem, 8vw, 9rem);
+  left: max(clamp(1.5rem, 8vw, 9rem), var(--hero-content-edge));
   width: min(47vw, 690px);
   transform: translateY(-44%);
 }
@@ -415,7 +416,7 @@ a {
 
 .hero-character {
   top: 10vh;
-  right: -2vw;
+  right: max(-2vw, var(--hero-content-edge));
   width: min(47vw, 690px);
   height: min(86vh, 850px);
   transform: rotate(-4deg);
@@ -2712,8 +2713,8 @@ a {
   }
 
   .hero-character {
-    right: -12vw;
-    width: 58vw;
+    right: 0;
+    width: 38vw;
   }
 
   .profile-copy {
