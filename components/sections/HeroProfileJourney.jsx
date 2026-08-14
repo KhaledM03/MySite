@@ -98,7 +98,7 @@ export default function HeroProfileJourney() {
       const rect = elements.journey.getBoundingClientRect();
       const distance = Math.max(1, elements.journey.offsetHeight - window.innerHeight);
       const progress = clamp(-rect.top / distance);
-      const isCompact = window.innerWidth < 780;
+      const isCompact = window.innerWidth <= 760;
 
       const heroOpacity = 1 - range(progress, 0.13, 0.19);
       const profileOpacity = sceneWindow(progress, 0.20, 0.26, 0.52, 0.58);
