@@ -4,16 +4,33 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import ProjectCard from "@/components/work/ProjectCard";
 import { projects } from "@/data/projects";
+import StructuredData from "@/components/seo/StructuredData";
+import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
-export const metadata = {
-  title: "Selected Work — Khaled Mousa",
+export const metadata = createPageMetadata({
+  title: "Selected Work",
   description:
     "Engineering automation, hardware validation, digital systems, and client web products by Khaled Mousa.",
-};
+  path: "/work",
+});
 
 export default function WorkPage() {
   return (
     <div className="site-shell evidence-shell">
+      <StructuredData
+        data={{
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Selected Work — Khaled Mousa",
+          url: `${SITE_URL}/work`,
+          author: { "@id": `${SITE_URL}/#person` },
+          hasPart: projects.map((project) => ({
+            "@type": "CreativeWork",
+            name: project.title,
+            url: `${SITE_URL}/work/${project.slug}`,
+          })),
+        }}
+      />
       <a className="skip-link" href="#work-content">Skip to selected work</a>
       <SiteHeader />
 
