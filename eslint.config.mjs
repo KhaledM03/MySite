@@ -7,6 +7,7 @@ export default defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "review/**",
     "next-env.d.ts",
     "_legacy_static_site/**",
   ]),
