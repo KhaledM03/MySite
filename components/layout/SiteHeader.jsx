@@ -17,25 +17,61 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const menuButtonRef = useRef(null);
-
-  useEffect(() => {
-    const onKeyDown = (event) => {
-      if (event.key === "Escape" && open) {
-        setOpen(false);
-        menuButtonRef.current?.focus();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open]);
+  const navRef = useRef(null);
+  const wordmarkRef = useRef(null);
+  const restoreMenuFocusRef = useRef(true);
 
   useEffect(() => {
     if (!open) return undefined;
+
     const previousOverflow = document.body.style.overflow;
+    const menuButton = menuButtonRef.current;
+    const focusTimer = window.setTimeout(() => {
+      navRef.current?.querySelector("a[href]")?.focus();
+    }, 200);
+    const obscuredContent = [...document.querySelectorAll("main > :not(.site-header)")]
+      .map((element) => ({ element, inert: element.inert }));
+    const getFocusableItems = () => [
+      wordmarkRef.current,
+      ...(navRef.current?.querySelectorAll("a[href]") ?? []),
+      menuButton,
+    ].filter((element) => element && !element.hasAttribute("disabled"));
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        restoreMenuFocusRef.current = true;
+        setOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") return;
+      const focusableItems = getFocusableItems();
+      const firstItem = focusableItems[0];
+      const lastItem = focusableItems.at(-1);
+
+      if (event.shiftKey && document.activeElement === firstItem) {
+        event.preventDefault();
+        lastItem?.focus();
+      } else if (!event.shiftKey && document.activeElement === lastItem) {
+        event.preventDefault();
+        firstItem?.focus();
+      }
+    };
+
     document.body.style.overflow = "hidden";
+    obscuredContent.forEach(({ element }) => {
+      element.inert = true;
+    });
+    window.addEventListener("keydown", onKeyDown);
+
     return () => {
+      window.clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
+      obscuredContent.forEach(({ element, inert }) => {
+        element.inert = inert;
+      });
+      window.removeEventListener("keydown", onKeyDown);
+      if (restoreMenuFocusRef.current) menuButton?.focus();
     };
   }, [open]);
 
@@ -43,6 +79,7 @@ export default function SiteHeader() {
   const experienceIsCurrent = pathname === "/experience";
 
   const navigateToHomeChapter = (event, href) => {
+    restoreMenuFocusRef.current = false;
     setOpen(false);
     if (pathname !== "/") return;
 
@@ -59,7 +96,7 @@ export default function SiteHeader() {
 
   return (
     <header className="site-header" aria-label="Primary navigation">
-      <Link className="wordmark" href="/#arrival" onClick={(event) => navigateToHomeChapter(event, "/#arrival")}>
+      <Link ref={wordmarkRef} className="wordmark" href="/#arrival" onClick={(event) => navigateToHomeChapter(event, "/#arrival")}>
         <span className="wordmark-mark" aria-hidden="true">
           <Image className="wordmark-image" src="/brand/chibi-khaled-header.webp" alt="" width={64} height={64} priority sizes="(max-width: 760px) 32px, 36px" />
         </span>
@@ -67,6 +104,7 @@ export default function SiteHeader() {
       </Link>
 
       <nav
+        ref={navRef}
         id="primary-navigation"
         className={`chapter-nav${open ? " is-open" : ""}`}
         aria-label="Portfolio chapters"
@@ -81,13 +119,23 @@ export default function SiteHeader() {
               aria-current={current ? "page" : undefined}
               onClick={(event) => link.section === "home"
                 ? navigateToHomeChapter(event, link.href)
-                : setOpen(false)}
+                : (() => {
+                  restoreMenuFocusRef.current = false;
+                  setOpen(false);
+                })()}
             >
               {link.label}
             </Link>
           );
         })}
-        <a className="mobile-nav-contact" href="mailto:khaledmousa216@gmail.com">
+        <a
+          className="mobile-nav-contact"
+          href="mailto:khaledmousa216@gmail.com"
+          onClick={() => {
+            restoreMenuFocusRef.current = false;
+            setOpen(false);
+          }}
+        >
           Let&apos;s talk <span aria-hidden="true">↗</span>
         </a>
       </nav>
@@ -98,7 +146,10 @@ export default function SiteHeader() {
         type="button"
         aria-expanded={open}
         aria-controls="primary-navigation"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          if (open) restoreMenuFocusRef.current = true;
+          setOpen((value) => !value);
+        }}
       >
         <span className="nav-toggle-label">{open ? "Close" : "Menu"}</span>
         <span className="nav-toggle-icon" aria-hidden="true"><i /><i /></span>

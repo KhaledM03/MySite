@@ -87,18 +87,24 @@ export default function HeroProfileJourney() {
     if (Object.values(elements).some((element) => !element)) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileFlow = window.matchMedia("(max-width: 760px)");
     let frame = 0;
     let pointerX = 0;
     let pointerY = 0;
     let navigationFrame = 0;
     let historyTimer = 0;
 
+    const getScrollDistance = () => Math.max(
+      1,
+      elements.journey.offsetHeight - elements.stage.getBoundingClientRect().height,
+    );
+
     const render = () => {
       frame = 0;
       const rect = elements.journey.getBoundingClientRect();
-      const distance = Math.max(1, elements.journey.offsetHeight - window.innerHeight);
+      const distance = getScrollDistance();
       const progress = clamp(-rect.top / distance);
-      const usesMobileFlow = window.innerWidth <= 760;
+      const usesMobileFlow = mobileFlow.matches;
 
       if (usesMobileFlow) {
         const reveal = (element, start = 0.92, duration = 0.28) => {
@@ -225,11 +231,11 @@ export default function HeroProfileJourney() {
       const rootStyles = window.getComputedStyle(document.documentElement);
       const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
       const anchorGap = Number.parseFloat(rootStyles.getPropertyValue("--site-anchor-gap")) || 0;
-      const usesMobileFlow = window.innerWidth <= 760;
+      const usesMobileFlow = mobileFlow.matches;
       const destinationTop = reduceMotion.matches || usesMobileFlow
         ? getDocumentTop(focusTarget)
         : elements.journey.getBoundingClientRect().top + window.scrollY
-          + chapterProgress[hash] * Math.max(1, elements.journey.offsetHeight - window.innerHeight)
+          + chapterProgress[hash] * getScrollDistance()
           + headerHeight + anchorGap;
       const top = hash === "#arrival" && !reduceMotion.matches
         ? 0
@@ -292,6 +298,7 @@ export default function HeroProfileJourney() {
     window.addEventListener("hashchange", onHistoryNavigation, { capture: true });
     window.addEventListener("pageshow", onPageShow, { capture: true });
     reduceMotion.addEventListener("change", requestRender);
+    mobileFlow.addEventListener("change", requestRender);
     render();
 
     if (chapterTargets[window.location.hash]) {
@@ -310,6 +317,7 @@ export default function HeroProfileJourney() {
       window.removeEventListener("hashchange", onHistoryNavigation, { capture: true });
       window.removeEventListener("pageshow", onPageShow, { capture: true });
       reduceMotion.removeEventListener("change", requestRender);
+      mobileFlow.removeEventListener("change", requestRender);
       if (previousScrollRestoration) {
         window.history.scrollRestoration = previousScrollRestoration;
       }
