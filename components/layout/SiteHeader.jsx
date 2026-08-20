@@ -19,10 +19,6 @@ export default function SiteHeader() {
   const menuButtonRef = useRef(null);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     const onKeyDown = (event) => {
       if (event.key === "Escape" && open) {
         setOpen(false);
