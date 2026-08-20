@@ -9,9 +9,9 @@ import { coveDevSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "The Cove Dev Case Study",
+  title: "The Cove Dev — Full-Stack Client Work",
   description:
-    "An evidence-backed case study of Khaled Mousa’s responsive client web interface work for The Cove Dev.",
+    "See Khaled Mousa's responsive full-stack client work for The Cove Dev through verified interface screenshots, design decisions, and project evidence.",
   path: "/work/the-cove-dev",
 });
 

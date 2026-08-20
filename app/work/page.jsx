@@ -8,9 +8,9 @@ import StructuredData from "@/components/seo/StructuredData";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Selected Work",
+  title: "Selected Work — Engineering & Software Projects",
   description:
-    "Engineering automation, hardware validation, digital systems, and client web products by Khaled Mousa.",
+    "Explore Khaled Mousa's engineering, automation, electronics, digital systems, and full-stack development projects through evidence-led case studies.",
   path: "/work",
 });
 

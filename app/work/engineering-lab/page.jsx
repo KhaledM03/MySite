@@ -11,9 +11,9 @@ import { engineeringLabSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Engineering Lab Collection",
+  title: "Engineering Lab — Electronics, Logic & CAD",
   description:
-    "An evidence-led collection of Khaled Mousa’s electronics measurements, digital logic simulation, CAD studies, and engineering process.",
+    "Explore real electronics measurements, digital logic simulations, CAD studies, testing, and engineering evidence from Khaled Mousa's lab work.",
   path: "/work/engineering-lab",
 });
 

@@ -8,9 +8,9 @@ import { experienceSources, pureGymReviews } from "@/data/experience";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Field Record — Experience",
+  title: "Experience — Engineering, Client Work & Leadership",
   description:
-    "An evidence-led record of Khaled Mousa’s engineering exposure, client ownership, and people-centered service.",
+    "Explore Khaled Mousa's engineering experience, client ownership, leadership, and people-centered service through an evidence-led field record.",
   path: "/experience",
 });
 
