@@ -1,9 +1,9 @@
 export default function manifest() {
   return {
-    name: "Khaled Mousa — Engineering, Code & Systems",
+    name: "Khaled Mousa — Engineering, Software & Automation",
     short_name: "Khaled Mousa",
     description:
-      "Khaled Mousa’s portfolio of electrical and computer engineering, software, and systems work.",
+      "Computer and electrical engineering student building at the intersection of hardware and software.",
     start_url: "/",
     display: "browser",
     background_color: "#f7f0df",

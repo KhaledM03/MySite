@@ -11,7 +11,7 @@ const routes = [
 
 export default function sitemap() {
   return routes.map(({ path, ...entry }) => ({
-    url: `${SITE_URL}${path}`,
+    url: path === "/" ? SITE_URL : `${SITE_URL}${path}`,
     ...entry,
   }));
 }

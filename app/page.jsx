@@ -1,10 +1,13 @@
 import HeroProfileJourney from "@/components/sections/HeroProfileJourney";
-import { createPageMetadata } from "@/lib/metadata";
+import {
+  createPageMetadata,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+} from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "Engineering, Code & Systems",
-  description:
-    "Khaled Mousa builds and validates software, electronics, automation, and systems through evidence-led engineering work.",
+  title: DEFAULT_TITLE,
+  description: DEFAULT_DESCRIPTION,
   path: "/",
 });
 

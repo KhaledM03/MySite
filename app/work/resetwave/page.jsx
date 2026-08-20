@@ -6,9 +6,9 @@ import { resetWaveFacts } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
-  title: "ResetWave Automation Case Study",
+  title: "ResetWave — Network Automation Case Study",
   description:
-    "How Khaled Mousa reduced a repetitive engineering task from approximately two hours to approximately ten seconds with a sanitized Python and Linux automation workflow.",
+    "See how Khaled Mousa used Python and Linux automation to reduce a repetitive engineering task from approximately two hours to approximately ten seconds.",
   path: "/work/resetwave",
 });
 
