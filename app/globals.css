@@ -190,6 +190,7 @@ a {
 .journey {
   position: relative;
   height: 390vh;
+  height: 390dvh;
   min-height: 2600px;
 }
 
@@ -211,15 +212,23 @@ a {
   position: sticky;
   top: 0;
   height: 100vh;
-  height: 100svh;
-  min-height: 680px;
+  height: 100dvh;
+  min-height: 0;
   overflow: hidden;
+  isolation: isolate;
+}
+
+.journey-canvas {
+  position: relative;
+  width: 100%;
+  height: 100%;
   isolation: isolate;
 }
 
 .chapter-copy {
   position: absolute;
   z-index: 8;
+  scroll-margin-top: calc(var(--site-header-height) + var(--site-anchor-gap));
   will-change: opacity, transform;
 }
 
@@ -2834,12 +2843,37 @@ a {
   }
 
   .journey {
-    height: 345vh;
-    min-height: 2320px;
+    height: auto;
+    min-height: 0;
   }
 
   .journey-stage {
-    min-height: 620px;
+    position: relative;
+    top: auto;
+    height: auto;
+    min-height: 0;
+    display: block;
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .journey-canvas {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "hero-copy"
+      "hero-art"
+      "profile-copy"
+      "profile-art"
+      "engineering-copy"
+      "engineering-art";
+    padding-top: calc(var(--site-header-height) + clamp(1.5rem, 4vh, 2.25rem));
+    padding-bottom: calc(4.5rem + var(--safe-bottom));
+    overflow: hidden;
   }
 
   .chapter-progress,
@@ -2848,9 +2882,12 @@ a {
   }
 
   .hero-copy {
-    top: 12vh;
-    left: 1.2rem;
-    width: calc(100vw - 2.4rem);
+    grid-area: hero-copy;
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin: 0 max(1.2rem, var(--safe-right)) 0 max(1.2rem, var(--safe-left));
+    opacity: 1;
     transform: none;
   }
 
@@ -2891,50 +2928,79 @@ a {
   }
 
   .hero-character {
-    top: 61vh;
-    right: -7vw;
-    width: 82vw;
-    height: 43vh;
+    grid-area: hero-art;
+    position: relative;
+    inset: auto;
+    justify-self: center;
+    width: min(100%, 500px);
+    height: clamp(330px, 112vw, 500px);
+    margin-top: 1rem;
   }
 
   .radio-character {
+    grid-area: profile-art;
+    position: relative;
     z-index: 6;
-    top: 69vh;
-    left: -4vw;
-    width: 65vw;
-    height: 47vh;
+    inset: auto;
+    align-self: end;
+    justify-self: start;
+    width: min(78vw, 360px);
+    height: clamp(350px, 118vw, 520px);
+    margin-left: -4vw;
   }
 
   .engineering-character {
+    grid-area: engineering-art;
+    position: relative;
     z-index: 6;
-    top: 69vh;
-    right: -5vw;
-    width: 75vw;
-    height: 43vh;
+    inset: auto;
+    justify-self: end;
+    width: min(92vw, 470px);
+    height: clamp(360px, 118vw, 540px);
+    margin-right: -5vw;
   }
 
-  .drone { width: 52vw; }
+  .drone {
+    grid-area: profile-art;
+    position: relative;
+    inset: auto;
+    align-self: start;
+    justify-self: end;
+    width: min(54vw, 250px);
+    margin: clamp(1.5rem, 7vw, 3rem) 2vw 0 0;
+  }
+
+  .drone-primary { z-index: 7; }
   .drone-echo { display: none; }
 
   .drone-trail {
-    top: 54%;
-    left: -20%;
-    width: 120vw;
+    grid-area: profile-art;
+    position: relative;
+    inset: auto;
+    z-index: 5;
+    align-self: start;
+    width: 100%;
+    margin-top: clamp(2.5rem, 10vw, 4rem);
   }
 
   .profile-copy {
-    top: 12vh;
-    right: auto;
-    left: 1.2rem;
-    width: calc(100vw - 2.4rem);
-    transform: translateY(7vh);
+    grid-area: profile-copy;
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin: clamp(5rem, 16vw, 7rem) max(1.2rem, var(--safe-right)) 0 max(1.2rem, var(--safe-left));
+    opacity: 1;
+    transform: none;
   }
 
   .engineering-copy {
-    top: 11vh;
-    left: 1.2rem;
-    width: calc(100vw - 2.4rem);
-    transform: translateY(5vh);
+    grid-area: engineering-copy;
+    position: relative;
+    inset: auto;
+    width: auto;
+    margin: clamp(5rem, 16vw, 7rem) max(1.2rem, var(--safe-right)) 0 max(1.2rem, var(--safe-left));
+    opacity: 1;
+    transform: none;
   }
 
   .profile-copy h2 {
@@ -3293,6 +3359,16 @@ a {
     position: relative;
     height: auto;
     min-height: 0;
+    display: block;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .journey-canvas {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
     display: grid;
     grid-template-columns: 1fr 0.9fr;
     gap: 2rem;
@@ -3883,7 +3959,7 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) and (max-width: 760px) {
-  .journey-stage {
+  .journey-canvas {
     display: block;
     padding: 8rem 1.2rem 5rem;
   }
