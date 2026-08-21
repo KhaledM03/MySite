@@ -2,6 +2,7 @@ import "./globals.css";
 import StructuredData from "@/components/seo/StructuredData";
 import FieldConsole from "@/components/ui/FieldConsole";
 import InteractionLayer from "@/components/ui/InteractionLayer";
+import ContactFieldCard from "@/components/ui/ContactFieldCard";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
@@ -128,6 +129,7 @@ export default function RootLayout({ children }) {
       <body>
         <StructuredData data={identityData} />
         {children}
+        <ContactFieldCard />
         <FieldConsole />
         <InteractionLayer />
       </body>

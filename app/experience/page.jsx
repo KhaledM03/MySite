@@ -4,7 +4,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import LongPageNav from "@/components/navigation/LongPageNav";
 import StructuredData from "@/components/seo/StructuredData";
-import { experienceSources, pureGymReviews } from "@/data/experience";
+import { experienceScanRecords, experienceSources, pureGymReviews } from "@/data/experience";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
@@ -70,6 +70,22 @@ export default function ExperiencePage() {
             />
           </div>
         </section>
+
+        <nav className="experience-scan-rail" aria-label="Fast scan of field records">
+          <div className="experience-scan-heading">
+            <span>Fast scan</span>
+            <strong>Three field signals</strong>
+          </div>
+          {experienceScanRecords.map((record) => (
+            <a key={record.number} href={record.href}>
+              <span>{record.number}</span>
+              <div><strong>{record.organization}</strong><small>{record.role}</small></div>
+              <p>{record.signal}</p>
+              <em>{record.period}</em>
+              <i>{record.action} ↗</i>
+            </a>
+          ))}
+        </nav>
 
         <LongPageNav items={sections} ariaLabel="Field Record contents" topId="field-top" />
 

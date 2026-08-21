@@ -26,7 +26,7 @@ export default function WorkPage() {
           author: { "@id": `${SITE_URL}/#person` },
           hasPart: projects.map((project) => ({
             "@type": "CreativeWork",
-            name: project.title,
+            name: project.name,
             url: `${SITE_URL}/work/${project.slug}`,
           })),
         }}
@@ -44,7 +44,7 @@ export default function WorkPage() {
             </p>
             <div className="work-hero-actions">
               <a className="button button-primary" href="#resetwave">Start with ResetWave ↓</a>
-              <Link className="button button-secondary" href="/">Replay the field log ↗</Link>
+              <Link className="button button-secondary" href="/#field-brief">30 second field brief ↗</Link>
             </div>
           </div>
 

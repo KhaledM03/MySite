@@ -71,3 +71,35 @@ export const pureGymReviews = [
     url: "https://share.google/GYqmokk4N04TatoPd",
   },
 ];
+
+// Fast-scan records intentionally omit employment details that remain
+// unresolved in the source ledger.
+export const experienceScanRecords = [
+  {
+    number: "01",
+    organization: experienceSources.verified.boingo.organization,
+    role: experienceSources.verified.boingo.role,
+    period: experienceSources.verified.boingo.period,
+    signal: "Linux · wireless operations · testing · validation",
+    href: "#infrastructure",
+    action: "Open engineering record",
+  },
+  {
+    number: "02",
+    organization: experienceSources.verified.cove.organization,
+    role: experienceSources.verified.cove.role,
+    period: experienceSources.verified.cove.period,
+    signal: "Responsive interfaces · client-side logic · Git",
+    href: "#ownership",
+    action: "Open product record",
+  },
+  {
+    number: "03",
+    organization: "Public member evidence",
+    role: "People-centered service record",
+    period: "Four independent sources",
+    signal: "Safety · care · confidence · cleanliness",
+    href: "#people",
+    action: "Inspect public sources",
+  },
+];

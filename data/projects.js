@@ -6,6 +6,8 @@ export const projects = [
     eyebrow: "Engineering automation · Summer 2024",
     problem:
       "A repetitive engineering task for remotely managing infrastructure devices took approximately two hours.",
+    build:
+      "A Python and Linux automation workflow for remotely managing infrastructure devices.",
     role: "Engineering automation project during a Boingo Wireless internship",
     technology: ["Python", "Linux", "SSH", "Paramiko", "ThreadPoolExecutor"],
     proof: "Approximately 2 hours → approximately 10 seconds",
@@ -21,6 +23,8 @@ export const projects = [
     eyebrow: "Hardware · digital systems · validation",
     problem:
       "Coursework and hands-on builds required physical measurements, simulated logic, debugging, and functional validation.",
+    build:
+      "Measured circuits, simulated digital logic, and documented CAD and testing evidence.",
     role: "Computer and electrical engineering student",
     technology: ["Circuit analysis", "Logisim", "Oscilloscope", "Fusion 360"],
     proof: "Real lab captures, digital logic simulation, and CAD studies",
@@ -40,6 +44,8 @@ export const projects = [
     eyebrow: "Client web products · Aug 2025–present",
     problem:
       "Small-business clients needed responsive web applications with dynamic user interfaces.",
+    build:
+      "Responsive client-facing interfaces with client-side logic, debugging, and Git-based delivery.",
     role: "Full-stack web development",
     technology: ["HTML", "CSS", "JavaScript", "Git"],
     proof: "Verified repository screenshots show responsive client-facing interfaces",
