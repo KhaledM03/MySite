@@ -147,7 +147,7 @@ test("chapter navigation, direct hashes, and history preserve the approved scene
   }
 });
 
-test("desktop journey has no empty viewport and releases continuously into Selected Work", async ({ page, browserName }) => {
+test("desktop journey has no empty viewport and releases continuously through the evidence layers", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Cinematic scroll timing runs in Chromium.");
 
   for (const viewport of [
@@ -156,6 +156,8 @@ test("desktop journey has no empty viewport and releases continuously into Selec
   ]) {
     await page.setViewportSize(viewport);
     await page.goto("/#arrival", { waitUntil: "networkidle" });
+    let reachedBrief = false;
+    let reachedMap = false;
     let reachedWork = false;
     let firstReleaseState = null;
 
@@ -171,25 +173,34 @@ test("desktop journey has no empty viewport and releases continuously into Selec
           return Number(getComputedStyle(element).opacity) > 0.05
             && rect.bottom > 80 && rect.top < innerHeight;
         });
-        const work = document.querySelector(".home-work").getBoundingClientRect();
-        const workVisible = work.top < innerHeight && work.bottom > 80;
-        return { visibleSceneElements, workVisible, workTop: work.top };
+        const visibleEvidenceLayers = [".field-brief", ".systems-map", ".home-work"]
+          .filter((selector) => {
+            const rect = document.querySelector(selector).getBoundingClientRect();
+            return rect.top < innerHeight && rect.bottom > 80;
+          });
+        return { visibleSceneElements, visibleEvidenceLayers };
       });
 
       expect(
-        state.visibleSceneElements.length > 0 || state.workVisible,
+        state.visibleSceneElements.length > 0 || state.visibleEvidenceLayers.length > 0,
         `${viewport.width}x${viewport.height} step ${step}: ${JSON.stringify(state)}`,
       ).toBeTruthy();
 
-      if (state.workVisible) {
-        reachedWork = true;
+      if (!firstReleaseState && state.visibleEvidenceLayers.includes(".field-brief")) {
         firstReleaseState = state;
+      }
+      reachedBrief ||= state.visibleEvidenceLayers.includes(".field-brief");
+      reachedMap ||= state.visibleEvidenceLayers.includes(".systems-map");
+      reachedWork ||= state.visibleEvidenceLayers.includes(".home-work");
+      if (reachedWork) {
         break;
       }
       await page.mouse.wheel(0, Math.max(120, Math.round(viewport.height / 6)));
       await page.waitForTimeout(40);
     }
 
+    expect(reachedBrief).toBeTruthy();
+    expect(reachedMap).toBeTruthy();
     expect(reachedWork).toBeTruthy();
     expect(firstReleaseState.visibleSceneElements).toContain(".engineering-copy");
   }

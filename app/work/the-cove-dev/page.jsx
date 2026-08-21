@@ -9,6 +9,7 @@ import LiveProjectPortal from "@/components/work/LiveProjectPortal";
 import LongPageNav from "@/components/navigation/LongPageNav";
 import { coveDevSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import CopyFieldLink from "@/components/ui/CopyFieldLink";
 
 export const metadata = createPageMetadata({
   title: "The Cove Dev — Full-Stack Client Work",
@@ -155,7 +156,7 @@ export default function TheCoveDevPage() {
           <section id="cove-interface" className="cove-section cove-interface" aria-labelledby="cove-interface-title" tabIndex={-1}>
             <header className="cove-section-header">
               <p className="case-section-number">03 / Interface and responsive work</p>
-              <h2 id="cove-interface-title">A consistent system across three public-facing states.</h2>
+              <div className="evidence-heading-link"><h2 id="cove-interface-title">A consistent system across three public-facing states.</h2><CopyFieldLink targetId="cove-interface" label="Copy interface link" /></div>
               <p>Visible elements repeat with purpose: persistent navigation, a focused headline, short supporting copy, a primary call to action, and product imagery framed by the purple visual system.</p>
             </header>
 

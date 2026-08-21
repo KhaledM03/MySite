@@ -141,17 +141,18 @@ export default function SiteHeader() {
             </Link>
           );
         })}
-        <a
+        <button
+          type="button"
           className="mobile-nav-contact"
-          href="mailto:khaledmousa216@gmail.com"
-          data-signal="EMAIL ↗"
+          data-contact-trigger
+          data-signal="OPEN CONTACT"
           onClick={() => {
             restoreMenuFocusRef.current = false;
             setOpen(false);
           }}
         >
           Let&apos;s talk <span aria-hidden="true">↗</span>
-        </a>
+        </button>
       </nav>
 
       <button
@@ -169,9 +170,9 @@ export default function SiteHeader() {
         <span className="nav-toggle-icon" aria-hidden="true"><i /><i /></span>
       </button>
 
-      <a className="header-cta" href="mailto:khaledmousa216@gmail.com" data-magnetic data-signal="EMAIL ↗">
+      <button className="header-cta" type="button" data-contact-trigger data-magnetic data-signal="OPEN CONTACT">
         Let&apos;s talk <span aria-hidden="true">↗</span>
-      </a>
+      </button>
     </header>
   );
 }

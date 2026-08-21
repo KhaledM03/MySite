@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CANONICAL_RESUME, CAREER_LINKS, PUBLIC_CODE } from "@/data/career";
 
 export default function SiteFooter() {
   return (
@@ -9,14 +10,15 @@ export default function SiteFooter() {
       </div>
       <div className="site-footer-links">
         <Link href="/experience">Experience ↗</Link>
-        <a href="mailto:khaledmousa216@gmail.com">Email ↗</a>
-        <a href="https://github.com/KhaledM03" target="_blank" rel="noreferrer">GitHub ↗</a>
-        <a href="https://www.linkedin.com/in/thekhaledmousa/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-        <a href="/resume/khaled-mousa-resume.pdf" target="_blank" rel="noreferrer">Résumé ↗</a>
+        <button type="button" data-contact-trigger>Contact ↗</button>
+        <a href={CAREER_LINKS.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+        <a href={CAREER_LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+        <a href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer">Résumé ↗</a>
+        <a href={PUBLIC_CODE.portfolio.href} target="_blank" rel="noreferrer">Portfolio code ↗</a>
       </div>
       <div className="site-footer-base">
         <span>Khaled Mousa · Engineering + software</span>
-        <Link href="/#arrival">Return home ↑</Link>
+        <Link href="/#arrival">Replay the field log ↑</Link>
       </div>
     </footer>
   );

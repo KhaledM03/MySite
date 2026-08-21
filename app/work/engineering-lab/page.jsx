@@ -10,6 +10,7 @@ import EvidenceHotspots from "@/components/work/EvidenceHotspots";
 import StructuredData from "@/components/seo/StructuredData";
 import { engineeringLabSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import CopyFieldLink from "@/components/ui/CopyFieldLink";
 
 export const metadata = createPageMetadata({
   title: "Engineering Lab — Electronics, Logic & CAD",
@@ -344,7 +345,7 @@ export default function EngineeringLabPage() {
           <section id="gallery" className="lab-section lab-gallery" aria-labelledby="gallery-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">07 / Real evidence gallery</p>
-              <h2 id="gallery-title">Inspect the source material.</h2>
+              <div className="evidence-heading-link"><h2 id="gallery-title">Inspect the source material.</h2><CopyFieldLink targetId="gallery" label="Copy evidence link" /></div>
               <p>Every item opens into a larger view. Deployment copies are optimized and metadata-free; the original repository files remain preserved.</p>
             </header>
             <div className="evidence-grid">
