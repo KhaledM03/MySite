@@ -2,20 +2,24 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { CANONICAL_RESUME, CAREER_LINKS, PUBLIC_CODE } from "@/data/career";
 
 const COMMANDS = [
   { number: "01", label: "Intro", detail: "Arrival scene", href: "/#arrival", keywords: "home hero start" },
   { number: "02", label: "Profile", detail: "The builder", href: "/#profile", keywords: "about builder" },
   { number: "03", label: "Engineering", detail: "Capabilities", href: "/#engineering", keywords: "hardware software systems" },
-  { number: "04", label: "Work", detail: "Project index", href: "/work", keywords: "projects portfolio" },
-  { number: "05", label: "Experience", detail: "Field record", href: "/experience", keywords: "career boingo cove" },
-  { number: "06", label: "ResetWave", detail: "Automation case study", href: "/work/resetwave", keywords: "python linux ssh" },
-  { number: "07", label: "Engineering Lab", detail: "Electronics · logic · CAD", href: "/work/engineering-lab", keywords: "lab circuits logisim fusion oscilloscope" },
-  { number: "08", label: "The Cove Dev", detail: "Client web products", href: "/work/the-cove-dev", keywords: "cove website full stack" },
-  { number: "09", label: "Résumé", detail: "Open PDF", href: "/resume/khaled-mousa-resume.pdf", external: true, keywords: "resume cv" },
-  { number: "10", label: "GitHub", detail: "Code record", href: "https://github.com/KhaledM03", external: true, keywords: "source repositories" },
-  { number: "11", label: "LinkedIn", detail: "Professional profile", href: "https://www.linkedin.com/in/thekhaledmousa/", external: true, keywords: "network profile" },
-  { number: "12", label: "Contact", detail: "Open email", href: "mailto:khaledmousa216@gmail.com", external: true, keywords: "email talk" },
+  { number: "04", label: "30 Second Brief", detail: "Quick professional signal", href: "/#field-brief", keywords: "quick recruiter summary proof" },
+  { number: "05", label: "Systems Map", detail: "Evidence across layers", href: "/#systems-map", keywords: "capabilities proof physical digital automation" },
+  { number: "06", label: "Work", detail: "Project index", href: "/work", keywords: "projects portfolio" },
+  { number: "07", label: "Experience", detail: "Field record", href: "/experience", keywords: "career boingo cove" },
+  { number: "08", label: "ResetWave", detail: "Automation case study", href: "/work/resetwave", keywords: "python linux ssh" },
+  { number: "09", label: "Engineering Lab", detail: "Electronics · logic · CAD", href: "/work/engineering-lab", keywords: "lab circuits logisim fusion oscilloscope" },
+  { number: "10", label: "The Cove Dev", detail: "Client web products", href: "/work/the-cove-dev", keywords: "cove website full stack" },
+  { number: "11", label: "Résumé", detail: "Open PDF", href: CANONICAL_RESUME.href, external: true, keywords: "resume cv" },
+  { number: "12", label: "GitHub", detail: "Public code record", href: CAREER_LINKS.github, external: true, keywords: "source repositories" },
+  { number: "13", label: "Portfolio Code", detail: "Public site repository", href: PUBLIC_CODE.portfolio.href, external: true, keywords: "view code nextjs source" },
+  { number: "14", label: "LinkedIn", detail: "Professional profile", href: CAREER_LINKS.linkedin, external: true, keywords: "network profile" },
+  { number: "15", label: "Contact", detail: "Available channels", action: "contact", keywords: "email talk linkedin resume" },
 ];
 
 function normalize(value) {
@@ -84,23 +88,32 @@ export default function FieldConsole() {
   };
 
   const runCommand = (command) => {
+    const restoreTarget = restoreFocusRef.current ?? launcherRef.current;
     closeConsole();
 
+    if (command.action === "contact") {
+      window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("portfolio:contact", { detail: { trigger: restoreTarget } }));
+      }, 0);
+      return;
+    }
+
     if (command.external) {
-      if (command.href.startsWith("mailto:")) window.open(command.href, "_self");
-      else window.open(command.href, "_blank", "noopener,noreferrer");
+      window.open(command.href, "_blank", "noopener,noreferrer");
       return;
     }
 
     if (pathname === "/" && command.href.startsWith("/#")) {
       const hash = command.href.slice(1);
-      window.dispatchEvent(new CustomEvent("portfolio:navigate", {
-        detail: {
-          hash,
-          behavior: "smooth",
-          historyMode: window.location.hash === hash ? "replace" : "push",
-        },
-      }));
+      window.setTimeout(() => {
+        window.dispatchEvent(new CustomEvent("portfolio:navigate", {
+          detail: {
+            hash,
+            behavior: "smooth",
+            historyMode: window.location.hash === hash ? "replace" : "push",
+          },
+        }));
+      }, 0);
       return;
     }
 

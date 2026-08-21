@@ -21,12 +21,13 @@ export default function ProjectCard({ project, featured = false }) {
         </div>
         <p className="project-eyebrow">{project.eyebrow}</p>
         <h2 style={{ viewTransitionName: `project-${project.slug}-title` }}>{project.name}</h2>
-        <p className="project-problem">{project.problem}</p>
-        <dl className="project-facts">
-          <div><dt>Role</dt><dd>{project.role}</dd></div>
+        <dl className="project-proof-stack">
+          <div><dt>Problem</dt><dd>{project.problem}</dd></div>
+          <div><dt>Build</dt><dd>{project.build}</dd></div>
           <div><dt>Proof</dt><dd>{project.proof}</dd></div>
         </dl>
-        <ul className="technology-list" aria-label={`${project.name} technology`}>
+        <p className="project-stack-label">Stack</p>
+        <ul className="technology-list" aria-label={`${project.name} technology stack`}>
           {project.technology.map((technology) => <li key={technology}>{technology}</li>)}
         </ul>
         <TransitionLink
@@ -36,7 +37,7 @@ export default function ProjectCard({ project, featured = false }) {
           data-magnetic
           data-signal="OPEN CASE"
         >
-          {project.action} <span aria-hidden="true">↗</span>
+          Trace the evidence <span aria-hidden="true">↗</span>
         </TransitionLink>
       </div>
     </article>

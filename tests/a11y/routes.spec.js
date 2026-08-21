@@ -47,4 +47,16 @@ test("Phase II interactive states meet the automated accessibility floor", async
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
     .analyze();
   expect(results.violations, "Mobile live-project fallback").toEqual([]);
+
+  await page.goto("/#field-brief", { waitUntil: "networkidle" });
+  results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
+    .analyze();
+  expect(results.violations, "Field Brief and Systems Map").toEqual([]);
+
+  await page.getByRole("button", { name: /Open contact card/ }).click();
+  results = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
+    .analyze();
+  expect(results.violations, "Contact Field Card").toEqual([]);
 });

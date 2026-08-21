@@ -39,7 +39,7 @@ const CAPTURES = [
 export default function LiveProjectPortal() {
   const [device, setDevice] = useState("desktop");
   const [active, setActive] = useState(false);
-  const [frameReady, setFrameReady] = useState(false);
+  const [frameState, setFrameState] = useState("idle");
   const [narrow, setNarrow] = useState(true);
   const [captureIndex, setCaptureIndex] = useState(0);
 
@@ -52,7 +52,17 @@ export default function LiveProjectPortal() {
   }, []);
 
   const usesLiveFrame = active && !narrow;
+  const frameReady = frameState === "ready";
+  const frameUnavailable = usesLiveFrame && frameState === "unavailable";
   const capture = CAPTURES[captureIndex];
+
+  useEffect(() => {
+    if (!usesLiveFrame) return undefined;
+    const timer = window.setTimeout(() => {
+      setFrameState((state) => state === "ready" ? state : "unavailable");
+    }, 6000);
+    return () => window.clearTimeout(timer);
+  }, [usesLiveFrame]);
 
   const nextCapture = (direction) => {
     setCaptureIndex((index) => (index + direction + CAPTURES.length) % CAPTURES.length);
@@ -64,7 +74,7 @@ export default function LiveProjectPortal() {
         <div className="live-portal-controls" aria-hidden="true"><i /><i /><i /></div>
         <span className="live-portal-address"><b aria-hidden="true">⌁</b> thecovedev.com</span>
         <span className={`live-portal-status${frameReady ? " is-ready" : ""}`}>
-          {usesLiveFrame ? (frameReady ? "Live build" : "Connecting") : "Preview ready"}
+          {frameUnavailable ? "Evidence fallback" : usesLiveFrame ? (frameReady ? "Live build" : "Connecting") : "Preview ready"}
         </span>
       </header>
 
@@ -82,16 +92,17 @@ export default function LiveProjectPortal() {
         ))}
       </div>
 
-      <div className="live-portal-stage" data-device={device} data-mode={usesLiveFrame ? "live" : "poster"}>
+      <div className="live-portal-stage" data-device={device} data-mode={frameUnavailable ? "fallback" : usesLiveFrame ? "live" : "poster"}>
         <div className="live-portal-viewport">
-          {usesLiveFrame ? (
+          {usesLiveFrame && !frameUnavailable ? (
             <iframe
               src="https://thecovedev.com/"
               title="Live interactive preview of The Cove Dev"
               loading="lazy"
               sandbox="allow-forms allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
               referrerPolicy="strict-origin-when-cross-origin"
-              onLoad={() => setFrameReady(true)}
+              onLoad={() => setFrameState("ready")}
+              onError={() => setFrameState("unavailable")}
             />
           ) : (
             <div className={`live-portal-poster${active ? " is-active" : ""}`}>
@@ -104,14 +115,15 @@ export default function LiveProjectPortal() {
                 priority
                 sizes="(max-width: 760px) 94vw, 58vw"
               />
-              {!active ? (
+              {!active || frameUnavailable ? (
                 <div className="live-portal-poster-note">
-                  <span>Lightweight portal</span>
-                  <strong>Load the live build only when you ask.</strong>
+                  <span>{frameUnavailable ? "Preserved evidence" : "Lightweight portal"}</span>
+                  <strong>{frameUnavailable ? "The live frame did not respond. The verified capture remains available." : "Load the live build only when you ask."}</strong>
                 </div>
               ) : null}
             </div>
           )}
+          {usesLiveFrame && frameState === "loading" ? <div className="live-portal-loading" role="status"><i aria-hidden="true" /> Connecting to external build…</div> : null}
         </div>
       </div>
 
@@ -126,7 +138,9 @@ export default function LiveProjectPortal() {
       <footer className="live-portal-footer">
         <div>
           <span>{narrow ? "Controlled preview" : "External live build"}</span>
-          <p>{narrow
+          <p>{frameUnavailable
+            ? "The external frame is unavailable, so the portal has returned to preserved repository evidence."
+            : narrow
             ? "Tap through verified captures without introducing a nested scrolling surface."
             : "The external site is isolated and loads only after explicit interaction."}</p>
         </div>
@@ -135,11 +149,23 @@ export default function LiveProjectPortal() {
             <button
               type="button"
               className="button live-portal-interact"
-              onClick={() => setActive(true)}
+              onClick={() => {
+                setFrameState(narrow ? "idle" : "loading");
+                setActive(true);
+              }}
               data-magnetic
               data-signal="INTERACT"
             >
               Interact with build <span aria-hidden="true">↗</span>
+            </button>
+          ) : null}
+          {usesLiveFrame && !frameUnavailable ? (
+            <button
+              type="button"
+              className="button live-portal-evidence"
+              onClick={() => setFrameState("unavailable")}
+            >
+              Use preserved evidence
             </button>
           ) : null}
           <a

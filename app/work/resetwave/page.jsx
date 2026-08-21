@@ -4,6 +4,7 @@ import TransitionLink from "@/components/navigation/TransitionLink";
 import StructuredData from "@/components/seo/StructuredData";
 import { resetWaveFacts } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import CopyFieldLink from "@/components/ui/CopyFieldLink";
 
 export const metadata = createPageMetadata({
   title: "ResetWave — Network Automation Case Study",
@@ -130,7 +131,7 @@ export default function ResetWavePage() {
 
       <section id="outcome" className="case-section case-outcome" tabIndex={-1}>
         <p className="case-section-number">06 / Outcome & technology</p>
-        <h2>From hours to seconds.</h2>
+        <div className="evidence-heading-link"><h2>From hours to seconds.</h2><CopyFieldLink targetId="outcome" label="Copy impact link" /></div>
         <div className="outcome-number"><span>≈</span><strong>720×</strong><small>calculated timing improvement</small></div>
         <p>
           The main claim remains the clearer one: an engineering task documented at approximately two hours was reduced to approximately ten seconds. The 720× figure is the direct calculation from those timings, not a separate benchmark claim.

@@ -9,6 +9,9 @@ import { projects } from "@/data/projects";
 import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTeaser from "@/components/sections/ExperienceTeaser";
 import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
+import FieldBrief from "@/components/sections/FieldBrief";
+import SystemsMap from "@/components/sections/SystemsMap";
+import { CANONICAL_RESUME, CAREER_LINKS, HERO_CAPABILITIES } from "@/data/career";
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(max, Math.max(min, value));
@@ -28,13 +31,6 @@ const PARTICLES = [
   [75, 13, 7],
   [84, 74, 5],
   [94, 31, 5],
-];
-
-const CAPABILITIES = [
-  { number: "01", title: "Automation", detail: "Python · Linux · network operations" },
-  { number: "02", title: "Hardware", detail: "Circuits · testing · troubleshooting" },
-  { number: "03", title: "Digital systems", detail: "Logic design · architecture · validation" },
-  { number: "04", title: "Web products", detail: "JavaScript · responsive UI · Node.js" },
 ];
 
 export default function HeroProfileJourney() {
@@ -216,22 +212,26 @@ export default function HeroProfileJourney() {
       "#engineering": 0.86,
     };
 
+    const getDocumentTop = (element) => {
+      const transform = window.getComputedStyle(element).transform;
+      const translateY = transform === "none"
+        ? 0
+        : new window.DOMMatrixReadOnly(transform).m42;
+      return element.getBoundingClientRect().top + window.scrollY - translateY;
+    };
+
+    const getHeaderOffset = () => {
+      const rootStyles = window.getComputedStyle(document.documentElement);
+      const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
+      const anchorGap = Number.parseFloat(rootStyles.getPropertyValue("--site-anchor-gap")) || 0;
+      return { headerHeight, anchorGap };
+    };
+
     const navigateToChapter = ({ hash, behavior = "auto", historyMode = "none" }) => {
       const marker = document.querySelector(hash);
       const focusTarget = chapterTargets[hash];
       if (!marker || !focusTarget) return;
-
-      const getDocumentTop = (element) => {
-        const transform = window.getComputedStyle(element).transform;
-        const translateY = transform === "none"
-          ? 0
-          : new window.DOMMatrixReadOnly(transform).m42;
-        return element.getBoundingClientRect().top + window.scrollY - translateY;
-      };
-
-      const rootStyles = window.getComputedStyle(document.documentElement);
-      const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
-      const anchorGap = Number.parseFloat(rootStyles.getPropertyValue("--site-anchor-gap")) || 0;
+      const { headerHeight, anchorGap } = getHeaderOffset();
       const usesMobileFlow = mobileFlow.matches;
       const destinationTop = reduceMotion.matches || usesMobileFlow
         ? getDocumentTop(focusTarget)
@@ -241,7 +241,7 @@ export default function HeroProfileJourney() {
       const top = hash === "#arrival" && !reduceMotion.matches
         ? 0
         : Math.max(0, destinationTop - headerHeight - anchorGap);
-      const scrollBehavior = reduceMotion.matches ? "auto" : behavior;
+      const scrollBehavior = reduceMotion.matches || behavior === "auto" ? "instant" : behavior;
 
       if (historyMode === "push") window.history.pushState(null, "", hash);
       if (historyMode === "replace") window.history.replaceState(null, "", hash);
@@ -251,11 +251,31 @@ export default function HeroProfileJourney() {
       requestRender();
     };
 
+    const navigateToOrdinaryAnchor = ({ hash, behavior = "auto", historyMode = "none" }) => {
+      const target = document.querySelector(hash);
+      if (!target) return;
+      const { headerHeight, anchorGap } = getHeaderOffset();
+      const top = Math.max(0, getDocumentTop(target) - headerHeight - anchorGap);
+      const scrollBehavior = reduceMotion.matches || behavior === "auto" ? "instant" : behavior;
+
+      if (historyMode === "push") window.history.pushState(null, "", hash);
+      if (historyMode === "replace") window.history.replaceState(null, "", hash);
+
+      window.scrollTo({ top, behavior: scrollBehavior });
+      target.focus({ preventScroll: true });
+      requestRender();
+    };
+
+    const navigateToHash = (options) => {
+      if (chapterTargets[options.hash]) navigateToChapter(options);
+      else navigateToOrdinaryAnchor(options);
+    };
+
     const scheduleChapterNavigation = (options) => {
       if (navigationFrame) window.cancelAnimationFrame(navigationFrame);
       navigationFrame = window.requestAnimationFrame(() => {
         navigationFrame = 0;
-        navigateToChapter(options);
+        navigateToHash(options);
       });
     };
 
@@ -264,10 +284,10 @@ export default function HeroProfileJourney() {
     };
 
     const onHistoryNavigation = () => {
-      if (chapterTargets[window.location.hash]) {
+      if (window.location.hash && document.querySelector(window.location.hash)) {
         const hash = window.location.hash;
         const restoreHistoryPosition = () => {
-          navigateToChapter({ hash, behavior: "auto" });
+          navigateToHash({ hash, behavior: "auto" });
         };
         restoreHistoryPosition();
         if (historyTimer) window.clearTimeout(historyTimer);
@@ -279,8 +299,8 @@ export default function HeroProfileJourney() {
     };
 
     const onPageShow = () => {
-      if (chapterTargets[window.location.hash]) {
-        navigateToChapter({ hash: window.location.hash, behavior: "auto" });
+      if (window.location.hash && document.querySelector(window.location.hash)) {
+        navigateToHash({ hash: window.location.hash, behavior: "auto" });
       }
     };
 
@@ -302,8 +322,11 @@ export default function HeroProfileJourney() {
     mobileFlow.addEventListener("change", requestRender);
     render();
 
-    if (chapterTargets[window.location.hash]) {
+    if (window.location.hash && document.querySelector(window.location.hash)) {
       scheduleChapterNavigation({ hash: window.location.hash, behavior: "auto" });
+      historyTimer = window.setTimeout(() => {
+        scheduleChapterNavigation({ hash: window.location.hash, behavior: "auto" });
+      }, 350);
     }
 
     return () => {
@@ -370,7 +393,7 @@ export default function HeroProfileJourney() {
               </p>
               <div className="hero-actions">
                 <a className="button button-primary" href="#profile" onClick={(event) => navigateWithinJourney(event, "#profile")} data-magnetic data-signal="CONTINUE">Start the field log <span aria-hidden="true">↓</span></a>
-                <a className="button button-secondary" href="/resume/khaled-mousa-resume.pdf" target="_blank" rel="noreferrer" data-magnetic data-signal="OPEN PDF ↗">Read résumé <span aria-hidden="true">↗</span></a>
+                <a className="button button-secondary" href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer" data-magnetic data-signal="OPEN PDF ↗">Read résumé <span aria-hidden="true">↗</span></a>
               </div>
               <div className="hero-signal-strip" aria-label="Engineering focus areas">
                 <span><b>Signal 01</b> Physical systems</span>
@@ -401,8 +424,8 @@ export default function HeroProfileJourney() {
                 <div><b>Field-tested thinking</b><span>Wireless operations · Linux infrastructure · system validation</span></div>
               </div>
               <div className="profile-links">
-                <a href="https://github.com/KhaledM03" target="_blank" rel="noreferrer">GitHub ↗</a>
-                <a href="https://www.linkedin.com/in/thekhaledmousa/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
+                <a href={CAREER_LINKS.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+                <a href={CAREER_LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
               </div>
             </article>
 
@@ -427,10 +450,10 @@ export default function HeroProfileJourney() {
                 The work is multidisciplinary by design: diagnose the system, model the behavior, build the tool, then validate it under real constraints.
               </p>
               <div className="capability-grid">
-                {CAPABILITIES.map((capability) => (
-                  <div className="capability-card" key={capability.number}>
-                    <span>{capability.number}</span><h3>{capability.title}</h3><p>{capability.detail}</p>
-                  </div>
+                {HERO_CAPABILITIES.map((capability) => (
+                  <Link className="capability-card" href={capability.href} key={capability.number} data-signal="TRACE EVIDENCE">
+                    <span>{capability.number}</span><h3>{capability.title}</h3><p>{capability.detail}</p><i>Proof ↗</i>
+                  </Link>
                 ))}
               </div>
               <div className="proof-rail">
@@ -449,6 +472,10 @@ export default function HeroProfileJourney() {
           </div>
         </div>
       </section>
+
+      <FieldBrief />
+
+      <SystemsMap />
 
       <section id="next-chapter" className="home-work" aria-labelledby="next-title">
         <header className="home-work-header">
@@ -469,8 +496,10 @@ export default function HeroProfileJourney() {
               <p>{project.eyebrow}</p>
               <h3>{project.name}</h3>
               <ProjectSignalPreview project={project} />
-              <strong>{project.proof}</strong>
-              <span>{project.role}</span>
+              <dl className="home-project-proof">
+                <div><dt>Build</dt><dd>{project.build}</dd></div>
+                <div><dt>Proof</dt><dd>{project.proof}</dd></div>
+              </dl>
               <TransitionLink href={project.href} transitionLabel={`Opening ${project.name}`} data-magnetic data-signal="OPEN CASE">
                 {project.action} <span aria-hidden="true">↗</span>
               </TransitionLink>
