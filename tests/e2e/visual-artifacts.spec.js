@@ -18,6 +18,13 @@ async function capture(page, name, viewport, url) {
       document.activeElement === document.querySelector(selector)
       && Number(getComputedStyle(document.querySelector(selector)).opacity) > 0.98
     ), sceneSelector);
+  } else if (hash) {
+    await page.waitForFunction((selector) => {
+      const target = document.querySelector(selector);
+      const header = document.querySelector(".site-header");
+      return document.activeElement === target
+        && target.getBoundingClientRect().top >= header.getBoundingClientRect().bottom - 1;
+    }, hash);
   }
   await page.waitForTimeout(80);
   await page.screenshot({ path: path.join(outputDirectory, `${name}.png`) });
@@ -79,4 +86,37 @@ test("generate final responsive review artifacts", async ({ page, browserName })
   await hotspot.click();
   await page.waitForTimeout(240);
   await page.screenshot({ path: path.join(outputDirectory, "phase-two-hotspot-1440x900.png") });
+
+  for (const viewport of [
+    { name: "390x844", width: 390, height: 844 },
+    { name: "1440x900", width: 1440, height: 900 },
+    { name: "2560x1440", width: 2560, height: 1440 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/#field-brief", { waitUntil: "networkidle" });
+    await page.screenshot({ path: path.join(outputDirectory, `phase-three-field-brief-${viewport.name}.png`) });
+    await page.goto("/#systems-map", { waitUntil: "networkidle" });
+    await page.screenshot({ path: path.join(outputDirectory, `phase-three-systems-map-${viewport.name}.png`) });
+  }
+
+  for (const viewport of [
+    { name: "390x844", width: 390, height: 844 },
+    { name: "1440x900", width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/work", { waitUntil: "networkidle" });
+    if (viewport.width <= 760) {
+      await page.getByRole("button", { name: "Menu" }).click();
+      await page.getByRole("button", { name: /Let's talk/ }).click();
+    } else {
+      await page.getByRole("button", { name: /Let's talk/ }).click();
+    }
+    await page.waitForTimeout(220);
+    await page.screenshot({ path: path.join(outputDirectory, `phase-three-contact-${viewport.name}.png`) });
+    await page.keyboard.press("Escape");
+
+    await page.goto("/experience", { waitUntil: "networkidle" });
+    await page.locator(".experience-scan-rail").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(outputDirectory, `phase-three-experience-scan-${viewport.name}.png`) });
+  }
 });
