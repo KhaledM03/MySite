@@ -32,7 +32,7 @@ export default function ResetWavePage() {
           keywords: technology.join(", "),
         }}
       />
-      <section id="overview" className="case-section case-overview">
+      <section id="overview" className="case-section case-overview" tabIndex={-1}>
         <p className="case-section-number">01 / Overview</p>
         <h2>Operational automation with a measurable result.</h2>
         <p className="case-lead">
@@ -50,7 +50,7 @@ export default function ResetWavePage() {
         </aside>
       </section>
 
-      <section id="problem" className="case-section">
+      <section id="problem" className="case-section" tabIndex={-1}>
         <p className="case-section-number">02 / Problem, role & constraints</p>
         <h2>The documented problem</h2>
         <div className="case-split">
@@ -72,7 +72,7 @@ export default function ResetWavePage() {
         </ul>
       </section>
 
-      <section id="workflow" className="case-section">
+      <section id="workflow" className="case-section" tabIndex={-1}>
         <p className="case-section-number">03 / Sanitized workflow</p>
         <h2>Architecture at the level that can be shared.</h2>
         <figure className="workflow-diagram">
@@ -95,7 +95,7 @@ export default function ResetWavePage() {
         </figure>
       </section>
 
-      <section id="approach" className="case-section">
+      <section id="approach" className="case-section" tabIndex={-1}>
         <p className="case-section-number">04 / Technical approach</p>
         <h2>Automate the sequence, then validate the system.</h2>
         <div className="approach-grid">
@@ -114,7 +114,7 @@ export default function ResetWavePage() {
         </div>
       </section>
 
-      <section id="validation" className="case-section">
+      <section id="validation" className="case-section" tabIndex={-1}>
         <p className="case-section-number">05 / Testing & validation</p>
         <h2>A fast run was not enough.</h2>
         <p className="case-lead">
@@ -128,7 +128,7 @@ export default function ResetWavePage() {
         </div>
       </section>
 
-      <section id="outcome" className="case-section case-outcome">
+      <section id="outcome" className="case-section case-outcome" tabIndex={-1}>
         <p className="case-section-number">06 / Outcome & technology</p>
         <h2>From hours to seconds.</h2>
         <div className="outcome-number"><span>≈</span><strong>720×</strong><small>calculated timing improvement</small></div>
@@ -140,7 +140,7 @@ export default function ResetWavePage() {
         </ul>
       </section>
 
-      <section id="reflection" className="case-section">
+      <section id="reflection" className="case-section" tabIndex={-1}>
         <p className="case-section-number">07 / Reflection &amp; next iteration</p>
         <h2>Figure it out, then make it useful.</h2>
         <p className="case-lead">

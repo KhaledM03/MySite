@@ -49,4 +49,34 @@ test("generate final responsive review artifacts", async ({ page, browserName })
   await capture(page, "work-1440x900", { width: 1440, height: 900 }, "/work");
   await capture(page, "experience-1440x900", { width: 1440, height: 900 }, "/experience");
   await capture(page, "engineering-lab-1440x900", { width: 1440, height: 900 }, "/work/engineering-lab");
+
+  for (const viewport of [
+    { name: "390x844", width: 390, height: 844 },
+    { name: "768x1024", width: 768, height: 1024 },
+    { name: "1440x900", width: 1440, height: 900 },
+    { name: "2560x1440", width: 2560, height: 1440 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/", { waitUntil: "networkidle" });
+    await page.locator(".home-work").scrollIntoViewIfNeeded();
+    await page.screenshot({ path: path.join(outputDirectory, `phase-two-project-worlds-${viewport.name}.png`) });
+
+    await page.goto("/work/the-cove-dev", { waitUntil: "networkidle" });
+    await page.screenshot({ path: path.join(outputDirectory, `phase-two-cove-portal-${viewport.name}.png`) });
+  }
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.keyboard.press("Control+k");
+  await page.waitForTimeout(320);
+  await page.screenshot({ path: path.join(outputDirectory, "phase-two-console-390x844.png") });
+  await page.keyboard.press("Escape");
+
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/work/engineering-lab", { waitUntil: "networkidle" });
+  const hotspot = page.getByRole("button", { name: /01 Signal: Photographed oscilloscope trace/ });
+  await hotspot.scrollIntoViewIfNeeded();
+  await hotspot.click();
+  await page.waitForTimeout(240);
+  await page.screenshot({ path: path.join(outputDirectory, "phase-two-hotspot-1440x900.png") });
 });

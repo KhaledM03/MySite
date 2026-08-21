@@ -20,6 +20,7 @@ export default function SiteHeader() {
   const navRef = useRef(null);
   const wordmarkRef = useRef(null);
   const restoreMenuFocusRef = useRef(true);
+  const pendingHomeNavigationRef = useRef(null);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -75,23 +76,35 @@ export default function SiteHeader() {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (open || !pendingHomeNavigationRef.current) return undefined;
+    const detail = pendingHomeNavigationRef.current;
+    pendingHomeNavigationRef.current = null;
+    const frame = window.requestAnimationFrame(() => {
+      window.dispatchEvent(new CustomEvent("portfolio:navigate", { detail }));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [open]);
+
   const workIsCurrent = pathname.startsWith("/work");
   const experienceIsCurrent = pathname === "/experience";
 
   const navigateToHomeChapter = (event, href) => {
+    const menuWasOpen = open;
     restoreMenuFocusRef.current = false;
     setOpen(false);
     if (pathname !== "/") return;
 
     event.preventDefault();
     const hash = href.slice(href.indexOf("#"));
-    window.dispatchEvent(new CustomEvent("portfolio:navigate", {
-      detail: {
-        hash,
-        behavior: "smooth",
-        historyMode: window.location.hash === hash ? "replace" : "push",
-      },
-    }));
+    const detail = {
+      hash,
+      behavior: "smooth",
+      historyMode: window.location.hash === hash ? "replace" : "push",
+    };
+
+    if (menuWasOpen) pendingHomeNavigationRef.current = detail;
+    else window.dispatchEvent(new CustomEvent("portfolio:navigate", { detail }));
   };
 
   return (
@@ -131,6 +144,7 @@ export default function SiteHeader() {
         <a
           className="mobile-nav-contact"
           href="mailto:khaledmousa216@gmail.com"
+          data-signal="EMAIL ↗"
           onClick={() => {
             restoreMenuFocusRef.current = false;
             setOpen(false);
@@ -155,7 +169,7 @@ export default function SiteHeader() {
         <span className="nav-toggle-icon" aria-hidden="true"><i /><i /></span>
       </button>
 
-      <a className="header-cta" href="mailto:khaledmousa216@gmail.com">
+      <a className="header-cta" href="mailto:khaledmousa216@gmail.com" data-magnetic data-signal="EMAIL ↗">
         Let&apos;s talk <span aria-hidden="true">↗</span>
       </a>
     </header>

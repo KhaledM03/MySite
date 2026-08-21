@@ -6,6 +6,7 @@ const contentSecurityPolicy = [
   "font-src 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
+  "frame-src 'self' https://thecovedev.com",
   "img-src 'self' data: blob:",
   "manifest-src 'self'",
   "media-src 'self'",

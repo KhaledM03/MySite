@@ -2,6 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
+import LongPageNav from "@/components/navigation/LongPageNav";
+
+const resetWaveSections = [
+  { id: "overview", label: "Overview" },
+  { id: "problem", label: "Problem" },
+  { id: "workflow", label: "Workflow" },
+  { id: "approach", label: "Approach" },
+  { id: "validation", label: "Validation" },
+  { id: "outcome", label: "Outcome" },
+  { id: "reflection", label: "Reflection" },
+];
 
 export default function CaseStudyLayout({ children }) {
   return (
@@ -53,17 +64,14 @@ export default function CaseStudyLayout({ children }) {
           <div><span>Published detail</span><strong>Sanitized</strong></div>
         </div>
 
+        <LongPageNav
+          items={resetWaveSections}
+          ariaLabel="ResetWave case study contents"
+          className="case-progress-nav"
+          topId="case-study-content"
+        />
+
         <div className="case-study-layout">
-          <aside className="case-study-toc" aria-label="Case study contents">
-            <span>On this page</span>
-            <a href="#overview">Overview</a>
-            <a href="#problem">Problem & role</a>
-            <a href="#workflow">Workflow</a>
-            <a href="#approach">Approach</a>
-            <a href="#validation">Validation</a>
-            <a href="#outcome">Outcome</a>
-            <a href="#reflection">Reflection</a>
-          </aside>
           <article className="case-study-document">{children}</article>
         </div>
       </main>

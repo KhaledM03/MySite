@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
-export default function EvidenceLightbox({ src, alt, width, height, children, className = "" }) {
+export default function EvidenceLightbox({ src, alt, width, height, children, className = "", indexLabel }) {
   const [open, setOpen] = useState(false);
   const closeRef = useRef(null);
   const triggerRef = useRef(null);
@@ -50,6 +50,7 @@ export default function EvidenceLightbox({ src, alt, width, height, children, cl
           <button ref={closeRef} className="lightbox-close" type="button" onClick={() => setOpen(false)}>
             Close <span aria-hidden="true">×</span>
           </button>
+          {indexLabel ? <span className="lightbox-index">Evidence {indexLabel}</span> : null}
           <div className="lightbox-image-wrap" onClick={(event) => event.stopPropagation()}>
             <Image src={src} alt={alt} width={width} height={height} sizes="96vw" />
           </div>

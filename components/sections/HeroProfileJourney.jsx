@@ -8,6 +8,7 @@ import SiteHeader from "@/components/layout/SiteHeader";
 import { projects } from "@/data/projects";
 import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTeaser from "@/components/sections/ExperienceTeaser";
+import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(max, Math.max(min, value));
@@ -368,8 +369,8 @@ export default function HeroProfileJourney() {
                 I&apos;m Khaled Mousa—a computer and electrical engineering student building automation, digital systems, and full-stack products that work beyond the demo.
               </p>
               <div className="hero-actions">
-                <a className="button button-primary" href="#profile" onClick={(event) => navigateWithinJourney(event, "#profile")}>Start the field log <span aria-hidden="true">↓</span></a>
-                <a className="button button-secondary" href="/resume/khaled-mousa-resume.pdf" target="_blank" rel="noreferrer">Read résumé <span aria-hidden="true">↗</span></a>
+                <a className="button button-primary" href="#profile" onClick={(event) => navigateWithinJourney(event, "#profile")} data-magnetic data-signal="CONTINUE">Start the field log <span aria-hidden="true">↓</span></a>
+                <a className="button button-secondary" href="/resume/khaled-mousa-resume.pdf" target="_blank" rel="noreferrer" data-magnetic data-signal="OPEN PDF ↗">Read résumé <span aria-hidden="true">↗</span></a>
               </div>
               <div className="hero-signal-strip" aria-label="Engineering focus areas">
                 <span><b>Signal 01</b> Physical systems</span>
@@ -467,9 +468,10 @@ export default function HeroProfileJourney() {
               <div className="home-project-topline"><span>{project.number}</span><span>{project.status}</span></div>
               <p>{project.eyebrow}</p>
               <h3>{project.name}</h3>
+              <ProjectSignalPreview project={project} />
               <strong>{project.proof}</strong>
               <span>{project.role}</span>
-              <TransitionLink href={project.href} transitionLabel={`Opening ${project.name}`}>
+              <TransitionLink href={project.href} transitionLabel={`Opening ${project.name}`} data-magnetic data-signal="OPEN CASE">
                 {project.action} <span aria-hidden="true">↗</span>
               </TransitionLink>
             </article>

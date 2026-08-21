@@ -6,6 +6,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import EngineeringLabExperience from "@/components/work/EngineeringLabExperience";
 import EvidenceLightbox from "@/components/work/EvidenceLightbox";
+import EvidenceHotspots from "@/components/work/EvidenceHotspots";
 import StructuredData from "@/components/seo/StructuredData";
 import { engineeringLabSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
@@ -23,42 +24,49 @@ const media = {
     width: 1350,
     height: 1800,
     alt: "Lab bench with a Tektronix oscilloscope, Keysight function generator, probes, leads, and a breadboard",
+    indexLabel: "01 / 07",
   },
   oscilloscopeTwo: {
     src: "/media/engineering-lab/oscilloscope-measurement-02.webp",
     width: 1350,
     height: 1800,
     alt: "Oscilloscope displaying two sinusoidal traces with visible phase measurements",
+    indexLabel: "02 / 07",
   },
   oscilloscopeThree: {
     src: "/media/engineering-lab/oscilloscope-measurement-03.webp",
     width: 1350,
     height: 1800,
     alt: "Oscilloscope displaying a mostly DC-level trace with visible repeating variation and measurement readouts",
+    indexLabel: "03 / 07",
   },
   bench: {
     src: "/media/engineering-lab/electronics-bench-04.webp",
     width: 1350,
     height: 1800,
     alt: "Electronics bench with a perforated prototyping board, diodes, resistor, capacitor, test leads, oscilloscope, multimeter, and resistance substitution box",
+    indexLabel: "04 / 07",
   },
   logic: {
     src: "/media/engineering-lab/digital-logic-simulation.webp",
     width: 723,
     height: 677,
     alt: "Digital logic simulation with four-bit A and B inputs, unsigned and two's-complement labeled blocks, multiplexers, and visible outputs",
+    indexLabel: "05 / 07",
   },
   cadOne: {
     src: "/media/engineering-lab/cad-study-01.webp",
     width: 1561,
     height: 939,
     alt: "CAD study showing a raised tray-like structure, projecting plate, support, and diagonal brace",
+    indexLabel: "06 / 07",
   },
   cadTwo: {
     src: "/media/engineering-lab/cad-study-02.webp",
     width: 744,
     height: 906,
     alt: "CAD study showing paired mounting plates arranged around a horizontal hollow cylinder",
+    indexLabel: "07 / 07",
   },
 };
 
@@ -68,7 +76,63 @@ const labSections = [
   { id: "logic", label: "Logic" },
   { id: "cad", label: "CAD" },
   { id: "process", label: "Process" },
+  { id: "skills", label: "Skills" },
   { id: "gallery", label: "Evidence" },
+  { id: "reflection", label: "Reflection" },
+];
+
+const measurementHotspots = [
+  {
+    id: "measurement-signal",
+    label: "Signal",
+    title: "Photographed oscilloscope trace",
+    body: "A repeating trace is visible on the oscilloscope display. The repository does not confirm a channel definition or experiment-to-photo mapping, so none is assigned here.",
+    x: 38,
+    y: 28,
+  },
+  {
+    id: "measurement-source",
+    label: "Equipment",
+    title: "Function generator",
+    body: "A Keysight function generator is visibly part of the bench setup beneath the oscilloscope.",
+    x: 58,
+    y: 58,
+  },
+  {
+    id: "measurement-circuit",
+    label: "Circuit",
+    title: "Breadboard and test leads",
+    body: "The lower part of the photograph shows a breadboard, probes, clips, and connected test leads. Component values are not inferred from the image.",
+    x: 72,
+    y: 84,
+  },
+];
+
+const logicHotspots = [
+  {
+    id: "logic-a",
+    label: "Input",
+    title: "Visible A input",
+    body: "The screenshot visibly labels a four-bit input as A. No behavioral meaning beyond the preserved label is assigned.",
+    x: 33,
+    y: 10,
+  },
+  {
+    id: "logic-route",
+    label: "Signal path",
+    title: "Visible routed connections",
+    body: "Green connection paths visibly route between labeled blocks and selection components. This emphasis explains the screenshot structure; it does not simulate values.",
+    x: 50,
+    y: 48,
+  },
+  {
+    id: "logic-output",
+    label: "Output",
+    title: "Visible output nodes",
+    body: "Three output nodes are visible along the lower portion of the screenshot. Their precise circuit purpose remains unconfirmed.",
+    x: 80,
+    y: 84,
+  },
 ];
 
 function EvidenceImage({ item, className = "" }) {
@@ -165,7 +229,10 @@ export default function EngineeringLabPage() {
 
             <div className="measurement-feature">
               <figure>
-                <EvidenceImage item={media.oscilloscopeOne} />
+                <div className="hotspot-media">
+                  <EvidenceImage item={media.oscilloscopeOne} />
+                  <EvidenceHotspots items={measurementHotspots} label="Oscilloscope measurement evidence notes" />
+                </div>
                 <figcaption><span>Oscilloscope Measurement 01</span> A repeating trace is visible above a function generator and connected bench setup.</figcaption>
               </figure>
               <aside className="visible-callouts" aria-label="Visible evidence callouts">
@@ -218,9 +285,10 @@ export default function EngineeringLabPage() {
               </ul>
             </div>
             <figure className="logic-evidence">
-              <EvidenceImage item={media.logic} />
-              <div className="logic-callout logic-callout-a" aria-hidden="true"><span>A</span></div>
-              <div className="logic-callout logic-callout-b" aria-hidden="true"><span>B</span></div>
+              <div className="hotspot-media hotspot-media-logic">
+                <EvidenceImage item={media.logic} />
+                <EvidenceHotspots items={logicHotspots} label="Digital logic evidence notes" variant="logic" />
+              </div>
               <figcaption>Digital Logic Simulation — visible inputs, selection components, inversion gates, and outputs.</figcaption>
             </figure>
           </section>
@@ -259,7 +327,7 @@ export default function EngineeringLabPage() {
             </ol>
           </section>
 
-          <section id="skills" className="lab-section lab-skills" aria-labelledby="skills-title">
+          <section id="skills" className="lab-section lab-skills" aria-labelledby="skills-title" tabIndex={-1}>
             <header>
               <p className="case-section-number">06 / Skills demonstrated</p>
               <h2 id="skills-title">Work across physical and digital systems.</h2>
@@ -288,7 +356,7 @@ export default function EngineeringLabPage() {
             </div>
           </section>
 
-          <section id="reflection" className="lab-section lab-reflection" aria-labelledby="reflection-title">
+          <section id="reflection" className="lab-section lab-reflection" aria-labelledby="reflection-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">08 / Reflection and next steps</p>
               <h2 id="reflection-title">Better documentation makes better engineering visible.</h2>
