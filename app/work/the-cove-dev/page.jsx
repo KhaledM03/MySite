@@ -5,6 +5,8 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import StructuredData from "@/components/seo/StructuredData";
 import EvidenceLightbox from "@/components/work/EvidenceLightbox";
+import LiveProjectPortal from "@/components/work/LiveProjectPortal";
+import LongPageNav from "@/components/navigation/LongPageNav";
 import { coveDevSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
@@ -21,20 +23,32 @@ const media = {
     width: 1257,
     height: 798,
     alt: "The Cove Dev home interface with purple gradient hero, navigation, call to action, and phone mockup",
+    indexLabel: "01 / 03",
   },
   about: {
     src: "/media/the-cove-dev/about.webp",
     width: 1263,
     height: 749,
     alt: "The Cove Dev about interface with a purple hero, navigation, introductory copy, and technology marks",
+    indexLabel: "02 / 03",
   },
   services: {
     src: "/media/the-cove-dev/services.webp",
     width: 1263,
     height: 746,
     alt: "The Cove Dev services interface with a purple hero, service message, call to action, and phone mockup",
+    indexLabel: "03 / 03",
   },
 };
+
+const coveSections = [
+  { id: "cove-overview", label: "Overview" },
+  { id: "cove-role", label: "Role" },
+  { id: "cove-interface", label: "Interface" },
+  { id: "cove-decisions", label: "Decisions" },
+  { id: "cove-evidence", label: "Evidence" },
+  { id: "cove-outcomes", label: "Outcomes" },
+];
 
 function CoveEvidence({ item, sizes = "(max-width: 760px) 92vw, 56vw" }) {
   return (
@@ -78,27 +92,13 @@ export default function TheCoveDevPage() {
                 <li key={technology}>{technology}</li>
               ))}
             </ul>
-            <a className="cove-external-link" href="https://thecovedev.com/" target="_blank" rel="noreferrer">
+            <a className="cove-external-link" href="https://thecovedev.com/" target="_blank" rel="noreferrer" data-magnetic data-signal="LAUNCH ↗">
               Visit The Cove Dev <span aria-hidden="true">↗</span>
             </a>
           </div>
 
           <div className="cove-cover-stage" style={{ viewTransitionName: "project-the-cove-dev-media" }}>
-            <div className="cove-browser cove-browser-primary">
-              <div className="cove-browser-bar" aria-hidden="true"><i /><i /><i /><span>Interface capture / Home</span></div>
-              <Image
-                src={media.home.src}
-                alt={media.home.alt}
-                width={media.home.width}
-                height={media.home.height}
-                priority
-                sizes="(max-width: 760px) 94vw, 58vw"
-              />
-            </div>
-            <div className="cove-stage-note" aria-hidden="true">
-              <span>Verified capture set</span>
-              <strong>Home · About · Services</strong>
-            </div>
+            <LiveProjectPortal />
           </div>
         </section>
 
@@ -109,17 +109,10 @@ export default function TheCoveDevPage() {
           <div><span>Evidence</span><strong>Résumé + repository captures</strong></div>
         </div>
 
-        <nav className="cove-section-nav" aria-label="The Cove Dev contents">
-          <a href="#cove-overview"><span>01</span> Overview</a>
-          <a href="#cove-role"><span>02</span> Role</a>
-          <a href="#cove-interface"><span>03</span> Interface</a>
-          <a href="#cove-decisions"><span>04</span> Decisions</a>
-          <a href="#cove-evidence"><span>05</span> Evidence</a>
-          <a href="#cove-outcomes"><span>06</span> Outcomes</a>
-        </nav>
+        <LongPageNav items={coveSections} ariaLabel="The Cove Dev contents" className="cove-section-nav" topId="cove-content" />
 
         <div className="cove-story">
-          <section id="cove-overview" className="cove-section cove-overview" aria-labelledby="cove-overview-title">
+          <section id="cove-overview" className="cove-section cove-overview" aria-labelledby="cove-overview-title" tabIndex={-1}>
             <header>
               <p className="case-section-number">01 / Overview</p>
               <h2 id="cove-overview-title">A client interface record grounded in what is public.</h2>
@@ -141,7 +134,7 @@ export default function TheCoveDevPage() {
             <Link className="cove-field-record-link" href="/experience#ownership">See how this work fits the wider Field Record ↗</Link>
           </section>
 
-          <section id="cove-role" className="cove-section cove-role" aria-labelledby="cove-role-title">
+          <section id="cove-role" className="cove-section cove-role" aria-labelledby="cove-role-title" tabIndex={-1}>
             <div className="cove-role-copy">
               <p className="case-section-number">02 / Role and responsibilities</p>
               <h2 id="cove-role-title">Build the interface, then refine its behavior.</h2>
@@ -159,7 +152,7 @@ export default function TheCoveDevPage() {
             </ol>
           </section>
 
-          <section id="cove-interface" className="cove-section cove-interface" aria-labelledby="cove-interface-title">
+          <section id="cove-interface" className="cove-section cove-interface" aria-labelledby="cove-interface-title" tabIndex={-1}>
             <header className="cove-section-header">
               <p className="case-section-number">03 / Interface and responsive work</p>
               <h2 id="cove-interface-title">A consistent system across three public-facing states.</h2>
@@ -188,11 +181,11 @@ export default function TheCoveDevPage() {
 
             <div className="cove-responsive-note">
               <span>Responsive evidence</span>
-              <p>The résumé verifies responsive web application work. The preserved repository set currently contains desktop captures only, so this page does not manufacture mobile screenshots or infer unrecorded breakpoint behavior.</p>
+              <p>The résumé verifies responsive web application work. The preserved repository set currently contains desktop captures only. The live portal can resize the current public build, but those live states are not presented as preserved repository evidence.</p>
             </div>
           </section>
 
-          <section id="cove-decisions" className="cove-section cove-decisions" aria-labelledby="cove-decisions-title">
+          <section id="cove-decisions" className="cove-section cove-decisions" aria-labelledby="cove-decisions-title" tabIndex={-1}>
             <header>
               <p className="case-section-number">04 / Technical decisions and delivery</p>
               <h2 id="cove-decisions-title">Decisions tied to the documented work.</h2>
@@ -211,7 +204,7 @@ export default function TheCoveDevPage() {
             </div>
           </section>
 
-          <section id="cove-evidence" className="cove-section cove-evidence" aria-labelledby="cove-evidence-title">
+          <section id="cove-evidence" className="cove-section cove-evidence" aria-labelledby="cove-evidence-title" tabIndex={-1}>
             <header className="cove-section-header">
               <p className="case-section-number">05 / Real interface evidence</p>
               <h2 id="cove-evidence-title">Inspect the preserved captures.</h2>
@@ -227,7 +220,7 @@ export default function TheCoveDevPage() {
             </div>
           </section>
 
-          <section id="cove-outcomes" className="cove-section cove-outcomes" aria-labelledby="cove-outcomes-title">
+          <section id="cove-outcomes" className="cove-section cove-outcomes" aria-labelledby="cove-outcomes-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">06 / Verified outcomes and next steps</p>
               <h2 id="cove-outcomes-title">A real interface record, without inflated results.</h2>

@@ -1,5 +1,5 @@
-import Image from "next/image";
 import TransitionLink from "@/components/navigation/TransitionLink";
+import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
 
 export default function ProjectCard({ project, featured = false }) {
   return (
@@ -9,30 +9,9 @@ export default function ProjectCard({ project, featured = false }) {
     >
       <div
         className="project-card-visual"
-        aria-hidden={!project.image}
         style={{ viewTransitionName: `project-${project.slug}-media` }}
       >
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={project.imageAlt}
-            width={project.imageWidth}
-            height={project.imageHeight}
-            sizes={featured ? "(max-width: 760px) 92vw, 52vw" : "(max-width: 760px) 92vw, 43vw"}
-            loading="eager"
-          />
-        ) : (
-          <div className="resetwave-visual" aria-hidden="true">
-            <span>MANUAL</span>
-            <b>02:00:00</b>
-            <i>→</i>
-            <span>AUTOMATED</span>
-            <strong>00:00:10</strong>
-            <svg viewBox="0 0 560 140" fill="none">
-              <path d="M8 92C74 92 64 28 132 28S188 110 256 110 323 48 390 48 449 80 552 16" />
-            </svg>
-          </div>
-        )}
+        <ProjectSignalPreview project={project} variant="index" />
       </div>
 
       <div className="project-card-copy">
@@ -54,6 +33,8 @@ export default function ProjectCard({ project, featured = false }) {
           className="text-link"
           href={project.href}
           transitionLabel={`Opening ${project.name}`}
+          data-magnetic
+          data-signal="OPEN CASE"
         >
           {project.action} <span aria-hidden="true">↗</span>
         </TransitionLink>

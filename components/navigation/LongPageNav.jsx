@@ -22,6 +22,7 @@ export default function LongPageNav({ items, ariaLabel, className = "", topId })
       .map(({ id }) => document.getElementById(id))
       .filter(Boolean);
     if (!sections.length) return undefined;
+    let frame = 0;
 
     const update = () => {
       const headerHeight = document.querySelector(".site-header")?.getBoundingClientRect().height || 0;
@@ -39,12 +40,20 @@ export default function LongPageNav({ items, ariaLabel, className = "", topId })
       setProgress(Math.max(0, Math.min(1, (window.scrollY - start) / Math.max(1, end - start))));
     };
 
+    const requestUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        update();
+      });
+    };
+
     update();
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
+    window.addEventListener("scroll", requestUpdate, { passive: true });
+    window.addEventListener("resize", requestUpdate);
     return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", requestUpdate);
+      window.removeEventListener("resize", requestUpdate);
     };
   }, [items]);
 
@@ -102,24 +111,34 @@ export default function LongPageNav({ items, ariaLabel, className = "", topId })
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
   };
 
+  const activeIndex = Math.max(0, items.findIndex((item) => item.id === activeId));
+  const activeItem = items[activeIndex] ?? items[0];
+
   return (
     <>
       <nav
         ref={navRef}
         className={`long-page-nav ${className}`.trim()}
         aria-label={ariaLabel}
-        style={{ "--reading-progress": progress }}
+        style={{ "--reading-progress": progress, "--section-count": items.length }}
       >
-        {items.map((item, index) => (
-          <a
-            key={item.id}
-            href={`#${item.id}`}
-            aria-current={activeId === item.id ? "location" : undefined}
-            onClick={(event) => navigate(event, item.id)}
-          >
-            <span>{String(index + 1).padStart(2, "0")}</span>{item.label}
-          </a>
-        ))}
+        <div className="long-page-nav-compact" aria-hidden="true">
+          <span>{String(activeIndex + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</span>
+          <strong>{activeItem?.label}</strong>
+          <i><b /></i>
+        </div>
+        <div className="long-page-nav-links">
+          {items.map((item, index) => (
+            <a
+              key={item.id}
+              href={`#${item.id}`}
+              aria-current={activeId === item.id ? "location" : undefined}
+              onClick={(event) => navigate(event, item.id)}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>{item.label}
+            </a>
+          ))}
+        </div>
       </nav>
       <button
         className={`back-to-top${progress > 0.12 ? " is-visible" : ""}`}

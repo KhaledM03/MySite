@@ -19,6 +19,7 @@ test("metadata, structured data, and security headers remain production-safe", a
     expect(response?.status()).toBeLessThan(400);
     const headers = response.headers();
     expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
+    expect(headers["content-security-policy"]).toContain("frame-src 'self' https://thecovedev.com");
     expect(headers["content-security-policy"]).toContain("object-src 'none'");
     expect(headers["permissions-policy"]).toContain("camera=()");
     expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
