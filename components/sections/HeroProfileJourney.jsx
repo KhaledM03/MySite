@@ -90,18 +90,38 @@ export default function HeroProfileJourney() {
     let pointerY = 0;
     let navigationFrame = 0;
     let historyTimer = 0;
+    // Desktop scenes follow an eased copy of scroll progress so wheel steps and
+    // trackpad flicks glide instead of snapping the characters between frames.
+    let easedProgress = null;
+    let lastFrameTime = 0;
+    let snapNextFrame = true;
 
     const getScrollDistance = () => Math.max(
       1,
       elements.journey.offsetHeight - elements.stage.getBoundingClientRect().height,
     );
 
-    const render = () => {
+    const render = (time = window.performance.now()) => {
       frame = 0;
       const rect = elements.journey.getBoundingClientRect();
       const distance = getScrollDistance();
-      const progress = clamp(-rect.top / distance);
+      const targetProgress = clamp(-rect.top / distance);
       const usesMobileFlow = mobileFlow.matches;
+      let progress = targetProgress;
+
+      if (usesMobileFlow || reduceMotion.matches || snapNextFrame || easedProgress === null) {
+        easedProgress = targetProgress;
+        snapNextFrame = false;
+      } else {
+        const elapsed = Math.min(64, Math.max(0, time - lastFrameTime));
+        const remaining = targetProgress - easedProgress;
+        easedProgress = Math.abs(remaining) < 0.0005
+          ? targetProgress
+          : easedProgress + remaining * (1 - Math.exp(-elapsed / 95));
+        progress = easedProgress;
+      }
+      lastFrameTime = time;
+      if (progress !== targetProgress) frame = window.requestAnimationFrame(render);
 
       if (usesMobileFlow) {
         const reveal = (element, start = 0.92, duration = 0.28) => {
@@ -197,7 +217,16 @@ export default function HeroProfileJourney() {
     };
 
     const requestRender = () => {
-      if (!frame) frame = window.requestAnimationFrame(render);
+      if (!frame) {
+        // A fresh frame after idling starts its easing clock now, not at the last paint.
+        lastFrameTime = window.performance.now();
+        frame = window.requestAnimationFrame(render);
+      }
+    };
+
+    const requestSnappedRender = () => {
+      snapNextFrame = true;
+      requestRender();
     };
 
     const chapterTargets = {
@@ -248,7 +277,8 @@ export default function HeroProfileJourney() {
 
       window.scrollTo({ top, behavior: scrollBehavior });
       focusTarget.focus({ preventScroll: true });
-      requestRender();
+      if (scrollBehavior === "instant") requestSnappedRender();
+      else requestRender();
     };
 
     const navigateToOrdinaryAnchor = ({ hash, behavior = "auto", historyMode = "none" }) => {
@@ -263,7 +293,8 @@ export default function HeroProfileJourney() {
 
       window.scrollTo({ top, behavior: scrollBehavior });
       target.focus({ preventScroll: true });
-      requestRender();
+      if (scrollBehavior === "instant") requestSnappedRender();
+      else requestRender();
     };
 
     const navigateToHash = (options) => {
@@ -312,14 +343,14 @@ export default function HeroProfileJourney() {
     };
 
     window.addEventListener("scroll", requestRender, { passive: true });
-    window.addEventListener("resize", requestRender);
+    window.addEventListener("resize", requestSnappedRender);
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     window.addEventListener("portfolio:navigate", onChapterNavigation);
     window.addEventListener("popstate", onHistoryNavigation, { capture: true });
     window.addEventListener("hashchange", onHistoryNavigation, { capture: true });
     window.addEventListener("pageshow", onPageShow, { capture: true });
-    reduceMotion.addEventListener("change", requestRender);
-    mobileFlow.addEventListener("change", requestRender);
+    reduceMotion.addEventListener("change", requestSnappedRender);
+    mobileFlow.addEventListener("change", requestSnappedRender);
     render();
 
     if (window.location.hash && document.querySelector(window.location.hash)) {
@@ -334,14 +365,14 @@ export default function HeroProfileJourney() {
       if (navigationFrame) window.cancelAnimationFrame(navigationFrame);
       if (historyTimer) window.clearTimeout(historyTimer);
       window.removeEventListener("scroll", requestRender);
-      window.removeEventListener("resize", requestRender);
+      window.removeEventListener("resize", requestSnappedRender);
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("portfolio:navigate", onChapterNavigation);
       window.removeEventListener("popstate", onHistoryNavigation, { capture: true });
       window.removeEventListener("hashchange", onHistoryNavigation, { capture: true });
       window.removeEventListener("pageshow", onPageShow, { capture: true });
-      reduceMotion.removeEventListener("change", requestRender);
-      mobileFlow.removeEventListener("change", requestRender);
+      reduceMotion.removeEventListener("change", requestSnappedRender);
+      mobileFlow.removeEventListener("change", requestSnappedRender);
       if (previousScrollRestoration) {
         window.history.scrollRestoration = previousScrollRestoration;
       }
