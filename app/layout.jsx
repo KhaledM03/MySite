@@ -2,6 +2,7 @@ import "./globals.css";
 import StructuredData from "@/components/seo/StructuredData";
 import FieldConsole from "@/components/ui/FieldConsole";
 import InteractionLayer from "@/components/ui/InteractionLayer";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 import ContactFieldCard from "@/components/ui/ContactFieldCard";
 import {
   DEFAULT_DESCRIPTION,
@@ -125,13 +126,14 @@ const identityData = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <StructuredData data={identityData} />
         {children}
         <ContactFieldCard />
         <FieldConsole />
         <InteractionLayer />
+        <ScrollReveal />
       </body>
     </html>
   );

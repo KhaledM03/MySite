@@ -36,6 +36,8 @@ test("Phase II interactive states meet the automated accessibility floor", async
   const hotspot = page.getByRole("button", { name: /01 Signal: Photographed oscilloscope trace/ });
   await hotspot.scrollIntoViewIfNeeded();
   await hotspot.click();
+  // Contrast is only meaningful once scroll-reveal entrances have settled.
+  await page.waitForFunction(() => !document.querySelector('[data-reveal="in"]'));
   results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
     .analyze();
@@ -43,6 +45,7 @@ test("Phase II interactive states meet the automated accessibility floor", async
 
   await page.goto("/work/the-cove-dev", { waitUntil: "networkidle" });
   await page.getByRole("button", { name: /Interact with build/ }).click();
+  await page.waitForFunction(() => !document.querySelector('[data-reveal="in"]'));
   results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
     .analyze();
