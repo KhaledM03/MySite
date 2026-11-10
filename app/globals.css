@@ -5552,3 +5552,154 @@ a {
   .cove-interface-stack figcaption,
   .cove-evidence-grid figcaption { font-size: 0.875rem; }
 }
+
+/* Scroll reveal ----------------------------------------------------------
+   ScrollReveal.jsx arms blocks that start below the fold, then releases them
+   as they enter. Nothing is hidden without JavaScript, at first paint, in
+   print, or when reduced motion is requested. `translate` is used instead of
+   `transform` so authored rotations and hover transforms are untouched. */
+[data-reveal] {
+  transition:
+    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    translate 780ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms) !important;
+}
+
+[data-reveal="armed"] {
+  opacity: 0 !important;
+  translate: 0 22px;
+}
+
+/* Signature detail: the gold rule beside each section label draws in, like a
+   trace being acquired, just after its block arrives. */
+.section-label::before { transform-origin: left center; }
+
+[data-reveal] .section-label::before,
+.section-label[data-reveal]::before {
+  transition: transform 720ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--reveal-delay, 0ms) + 160ms);
+}
+
+[data-reveal="armed"] .section-label::before,
+.section-label[data-reveal="armed"]::before { transform: scaleX(0); }
+
+@media (prefers-reduced-motion: reduce), print {
+  [data-reveal] { opacity: 1 !important; translate: none; transition: none !important; }
+  [data-reveal] .section-label::before,
+  .section-label[data-reveal]::before { transform: none; transition: none; }
+}
+
+/* Audit fixes ------------------------------------------------------------ */
+
+/* Journey panels: nested backdrop blurs were re-rasterised on every scroll
+   frame while the characters moved underneath. A slightly denser fill reads
+   the same without the per-frame cost. */
+.capability-card { backdrop-filter: none; background: rgba(255, 250, 240, 0.78); }
+
+@media (min-width: 981px) {
+  .profile-copy,
+  .engineering-copy { backdrop-filter: none; background: rgba(247, 240, 223, 0.94); }
+}
+
+/* Systems map: two-line evidence titles were inheriting body leading. */
+.systems-map-evidence h3 { line-height: 1.05; text-wrap: balance; }
+
+/* Experience teaser: the review note used to sit on top of the company quote
+   and hide part of it. The notes now stack in a grid and only overlap the
+   company note's empty lower margin. */
+.experience-teaser-evidence {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+}
+
+.teaser-company-note,
+.teaser-review-note { position: relative; inset: auto; }
+
+.teaser-company-note { width: 86%; min-height: 420px; padding-bottom: 5.5rem; }
+.teaser-company-note blockquote { margin: 2rem 0 2.5rem; }
+.teaser-company-note p,
+.teaser-company-note strong { max-width: 46%; }
+
+.teaser-review-note {
+  right: auto;
+  bottom: auto;
+  justify-self: end;
+  margin-top: -4rem;
+}
+
+.teaser-signature {
+  position: relative;
+  top: auto;
+  right: auto;
+  grid-row: 2;
+  grid-column: 1;
+  align-self: center;
+  justify-self: start;
+  margin-left: 12%;
+}
+
+.teaser-review-note { grid-row: 2; grid-column: 1; }
+
+@media (max-width: 760px) {
+  .experience-teaser-evidence { min-height: 0; }
+  .teaser-company-note { inset: auto; width: 100%; min-height: 0; padding-bottom: 4.5rem; }
+  .teaser-company-note p,
+  .teaser-company-note strong { max-width: none; }
+  .teaser-review-note { margin-top: -2.5rem; }
+  .teaser-signature {
+    left: auto;
+    width: 56px;
+    height: 56px;
+    align-self: start;
+    justify-self: end;
+    margin: calc(-2.5rem - 40px) 1rem 0 0;
+    border-width: 3px;
+  }
+
+  /* Capability cards: the "Proof" tag was absolutely positioned over the
+     description once the copy wrapped to three lines. */
+  .capability-card { display: flex; flex-direction: column; }
+  .capability-card p { max-width: 82%; }
+  .capability-card > i { position: static; margin-top: auto; padding-top: 0.4rem; }
+
+  .proof-rail div { min-width: 0; padding-right: 0.55rem; }
+  .proof-rail small { overflow-wrap: anywhere; }
+
+  /* The console launcher is fixed over reading content on small screens, so
+     it collapses to its mark. The accessible name is unchanged. */
+  .field-console-launcher { width: 44px; justify-content: center; padding: 0; }
+  .field-console-launcher .field-console-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Not found -------------------------------------------------------------- */
+.not-found-page {
+  min-height: 100svh;
+  display: grid;
+  align-content: center;
+  justify-items: start;
+  gap: 1.4rem;
+  padding: calc(var(--site-header-height) + 5rem) clamp(1.5rem, 7vw, 8rem) 6rem;
+}
+
+.not-found-page .section-label { margin: 0; }
+
+.not-found-page h1 {
+  max-width: 14ch;
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3.2rem, 8vw, 7.5rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  line-height: 0.92;
+}
+
+.not-found-page h1 em { color: var(--coral-dark); font-weight: inherit; }
+.not-found-page > p:not(.section-label) { max-width: 52ch; margin: 0; color: var(--ink-soft); font-size: var(--type-body); line-height: 1.7; }
+.not-found-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.6rem; }
