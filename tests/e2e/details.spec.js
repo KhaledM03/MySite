@@ -158,6 +158,19 @@ test("lab highlights, drone diagram, and current courses are on the homepage", a
   await expect(labs.getByRole("img", { name: /peaking at 10.39 watts at 198 ohms/ })).toBeVisible();
   await expect(labs.getByRole("img", { name: /unsigned and signed comparators/ })).toBeVisible();
 
+  // Figures never spill out of their boxes onto the card text, from phones to wide monitors.
+  for (const width of [390, 1366, 2000, 2560]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await labs.scrollIntoViewIfNeeded();
+    const spill = await page.evaluate(() => [...document.querySelectorAll(".lab-card-media")].map((media) => {
+      const box = media.getBoundingClientRect();
+      const figure = media.querySelector("svg, table").getBoundingClientRect();
+      return Math.max(figure.bottom - box.bottom, box.top - figure.top, figure.right - box.right, 0);
+    }));
+    expect(Math.max(...spill), `figure overflow at ${width}px`).toBeLessThanOrEqual(1);
+  }
+  await page.setViewportSize({ width: 1366, height: 768 });
+
   const order = await page.evaluate(() => [...document.querySelectorAll("main > section")].map((section) => section.id || section.className));
   expect(order.slice(1)).toEqual(["work", "labs", "experience", "builds", "gallery", "skills"]);
 
