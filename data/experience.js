@@ -21,7 +21,7 @@ export const experienceSources = {
     },
     cove: {
       organization: "The Cove Dev, LLC",
-      period: "August 2025–present",
+      period: "August–December 2025",
       role: "Full-Stack Web Development",
       summary:
         "Responsive client-facing development, dynamic interfaces, client-side logic, debugging, modular design, and Git-based delivery.",
@@ -75,22 +75,30 @@ export const pureGymReviews = [
 // Full role history, newest first. Wording follows the canonical résumé PDF.
 export const experienceTimeline = [
   {
-    id: "cove",
-    organization: "The Cove Dev, LLC",
-    role: "Full-stack web developer",
-    period: "Aug 2025 – present",
+    id: "ai-evaluation",
+    organization: "Mercor, Aligner & Handshake AI",
+    role: "AI model evaluator (contract)",
+    period: "Current",
     summary:
-      "Build responsive web applications with dynamic interfaces for small-business clients using HTML, CSS, and JavaScript, with modular design and Git version control. The business made $6K in profit in 2025.",
-    href: "/work/the-cove-dev",
-    linkLabel: "Read the case study",
+      "Evaluate and rate AI model responses against detailed project rubrics for accuracy, reasoning, and instruction-following, and write structured feedback used to improve the models.",
   },
   {
-    id: "hackathon",
-    organization: "Boingo Hack-a-Thon 2024",
-    role: "Team lead",
-    period: "Aug 2024",
+    id: "broderick",
+    organization: "J.C. Broderick & Associates",
+    role: "Environmental field technician",
+    period: "Jun – Aug 2026",
     summary:
-      "Led a software integration project built on Google Cloud and Vertex AI, and presented the architecture and results to executive leadership.",
+      "Performed industrial hygiene sampling, air quality monitoring, and on-site data collection at client sites, and supported environmental assessments and compliance documentation.",
+  },
+  {
+    id: "cove",
+    organization: "The Cove Dev, LLC",
+    role: "Founder and full-stack developer",
+    period: "Aug – Dec 2025",
+    summary:
+      "Built and deployed client websites and web applications with React, Next.js, and JavaScript. Ran the business on my own and earned about $6K in profit in 2025.",
+    href: "/work/the-cove-dev",
+    linkLabel: "Read the case study",
   },
   {
     id: "boingo",
@@ -98,7 +106,7 @@ export const experienceTimeline = [
     role: "Wireless operations intern",
     period: "Summer 2024",
     summary:
-      "Supported the engineering team with system testing, validation, and troubleshooting, helped deploy and test Linux infrastructure, and built ResetWave, a Python automation tool that cut a 2-hour task to about 10 seconds.",
+      "Built ResetWave, a Python tool that sends commands to wireless LAN controllers over SSH, cutting an access-point reset workflow from about 2 hours to 10 seconds. Troubleshot live controllers and access points, supported a field deployment in Texas, and led a team in the company’s 3-day hackathon, presenting a Google Cloud and Vertex AI concept to executive leadership.",
     href: "/work/resetwave",
     linkLabel: "Read about ResetWave",
   },
@@ -106,16 +114,16 @@ export const experienceTimeline = [
     id: "empire",
     organization: "Empire Camera Installations",
     role: "Field technician (independent contractor)",
-    period: "Summers 2023 – 2025",
+    period: "2023 – 2025",
     summary:
-      "Installed and configured systems and hardware on site, and diagnosed and fixed hardware and connectivity problems.",
+      "Installed and configured IP security camera systems at client sites over Ethernet and Power over Ethernet, and diagnosed hardware, wiring, and network faults on site.",
   },
   {
     id: "meta",
-    organization: "Meta",
-    role: "EMG research assistant (short-term)",
-    period: "Summer 2023",
+    organization: "Meta Quest Research",
+    role: "EMG research assistant",
+    period: "Summer 2021",
     summary:
-      "Supported research on a wearable electromyography (EMG) sensing system, helping evaluate signal acquisition and hardware interaction for gesture and muscle-signal detection.",
+      "Supported wearable electromyography (EMG) signal collection, hardware evaluation, and gesture-recognition testing.",
   },
 ];

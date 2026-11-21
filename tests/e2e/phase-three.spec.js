@@ -13,11 +13,11 @@ test("homepage answers a recruiter's first questions in the first screen", async
     await page.goto("/", { waitUntil: "networkidle" });
     const intro = page.locator(".intro");
     await expect(intro.getByRole("heading", { level: 1 })).toHaveText("I build the bridge between hardware and software.");
-    await expect(intro).toContainText("SUNY Farmingdale State College");
-    await expect(intro).toContainText("Spring 2028");
-    await expect(intro).toContainText("3.69");
-    await expect(intro).toContainText("B.S. Computer Engineering");
-    await expect(intro).toContainText("B.S. Electrical Engineering");
+    await expect(intro).toContainText("Farmingdale State College (SUNY)");
+    await expect(intro).toContainText("May 2028");
+    await expect(intro).toContainText("3.63");
+    await expect(intro).toContainText("B.S. Computer Engineering Technology");
+    await expect(intro).toContainText("B.S. Electrical Engineering Technology");
 
     const resume = intro.getByRole("link", { name: /View résumé/ });
     await expect(resume).toHaveAttribute("href", "/resume/khaled-mousa-resume.pdf");
@@ -30,21 +30,46 @@ test("homepage answers a recruiter's first questions in the first screen", async
   expect(resumeResponse.headers()["content-type"]).toContain("application/pdf");
 });
 
+test("availability and graduation follow the calendar without a redeploy", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Calendar behavior runs once in Chromium.");
+  await page.setViewportSize({ width: 1366, height: 768 });
+  const facts = page.locator(".intro-facts");
+
+  for (const [date, lookingFor, graduationLabel] of [
+    ["2026-11-21T12:00:00", "Summer 2027 internships", "Graduating"],
+    ["2027-03-01T12:00:00", "Summer 2027 internships", "Graduating"],
+    ["2027-09-01T12:00:00", "Full-time engineering roles", "Graduating"],
+    ["2028-07-01T12:00:00", "Full-time engineering roles", "Graduated"],
+  ]) {
+    await page.clock.setFixedTime(new Date(date));
+    await page.goto("/", { waitUntil: "networkidle" });
+    await expect(facts, date).toContainText(lookingFor);
+    await expect(facts.locator("dt").nth(1), date).toHaveText(graduationLabel);
+  }
+});
+
 test("homepage lists every résumé role and links projects to their case studies", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Homepage content coverage runs once in Chromium.");
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/", { waitUntil: "networkidle" });
 
   const roles = page.locator("#experience .timeline-item");
-  await expect(roles).toHaveCount(5);
-  for (const organization of ["The Cove Dev, LLC", "Boingo Hack-a-Thon 2024", "Boingo Wireless", "Empire Camera Installations", "Meta"]) {
+  await expect(roles).toHaveCount(6);
+  for (const organization of [
+    "Mercor, Aligner & Handshake AI",
+    "J.C. Broderick & Associates",
+    "The Cove Dev, LLC",
+    "Boingo Wireless",
+    "Empire Camera Installations",
+    "Meta Quest Research",
+  ]) {
     await expect(page.locator("#experience").getByRole("heading", { name: organization, exact: true })).toBeVisible();
   }
 
   const work = page.locator("#work");
   await expect(work.getByRole("link", { name: /Read the case study/ }).first()).toHaveAttribute("href", "/work/resetwave");
   await expect(work.getByRole("link", { name: /See the lab work/ })).toHaveAttribute("href", "/work/engineering-lab");
-  await expect(page.locator("#skills .skills-group")).toHaveCount(4);
+  await expect(page.locator("#skills .skills-group")).toHaveCount(5);
   await expect(page.locator(".field-console-launcher, .signal-cursor, .journey")).toHaveCount(0);
 });
 
@@ -104,7 +129,9 @@ test("Experience page shows the full role history on mobile", async ({ page, bro
   await page.goto("/experience", { waitUntil: "networkidle" });
 
   const roles = page.locator("#roles");
-  await expect(roles.locator(".timeline-item")).toHaveCount(5);
+  await expect(roles.locator(".timeline-item")).toHaveCount(6);
+  await expect(page.locator("#education")).toContainText("CUNY Queens College");
+  await expect(page.locator("#education")).toContainText("Dean’s List, Fall 2025 and Spring 2026");
   await expect(roles).toContainText("Wireless operations intern");
   await expect(roles).toContainText("EMG research assistant");
   await expect(page.getByRole("link", { name: /View résumé/ }).first()).toHaveAttribute("href", "/resume/khaled-mousa-resume.pdf");

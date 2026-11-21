@@ -5,7 +5,8 @@ import SiteHeader from "@/components/layout/SiteHeader";
 import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
 import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
-import { AVAILABILITY, CANONICAL_RESUME, CAREER_LINKS, EDUCATION, SKILL_GROUPS } from "@/data/career";
+import { Availability, GraduationFact } from "@/components/ui/CalendarFacts";
+import { CANONICAL_RESUME, CAREER_LINKS, EDUCATION, SKILL_GROUPS } from "@/data/career";
 import { projects } from "@/data/projects";
 import {
   createPageMetadata,
@@ -30,17 +31,17 @@ export default function HomePage() {
           <div className="intro-copy">
             <h1 id="intro-title">I build the bridge between <em>hardware</em> and software.</h1>
             <p className="intro-lead">
-              I&apos;m Khaled Mousa, an engineering student at {EDUCATION.school}. I build Python automation, digital systems, and web products, then test them until they hold up.
+              I&apos;m Khaled Mousa, an engineering technology student at {EDUCATION.school}. I test hardware, automate the slow parts with Python, and work on systems out in the field.
             </p>
 
             <dl className="intro-facts">
-              <div>
-                <dt>Degrees</dt>
-                <dd>B.S. Computer Engineering<br />B.S. Electrical Engineering</dd>
+              <div className="intro-facts-degrees">
+                <dt>Dual degree</dt>
+                <dd>{EDUCATION.degrees[0]}<br />{EDUCATION.degrees[1]}</dd>
               </div>
-              <div><dt>Graduating</dt><dd>{EDUCATION.graduation}</dd></div>
+              <div><GraduationFact /></div>
               <div><dt>GPA</dt><dd>{EDUCATION.gpa}</dd></div>
-              <div><dt>Looking for</dt><dd>{AVAILABILITY}</dd></div>
+              <div><dt>Looking for</dt><dd><Availability /></dd></div>
             </dl>
 
             <div className="intro-actions">

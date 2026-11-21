@@ -97,7 +97,7 @@ const identityData = {
       name: "Khaled Mousa",
       url: SITE_URL,
       image: `${SITE_URL}/characters/khaled-hero.webp`,
-      jobTitle: "Computer and Electrical Engineering Student",
+      jobTitle: "Computer and Electrical Engineering Technology Student",
       affiliation: {
         "@type": "CollegeOrUniversity",
         name: EDUCATION.school,

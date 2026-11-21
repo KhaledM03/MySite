@@ -5,19 +5,20 @@ import SiteHeader from "@/components/layout/SiteHeader";
 import LongPageNav from "@/components/navigation/LongPageNav";
 import StructuredData from "@/components/seo/StructuredData";
 import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
-import { CANONICAL_RESUME } from "@/data/career";
+import { CANONICAL_RESUME, EDUCATION } from "@/data/career";
 import { experienceSources, pureGymReviews } from "@/data/experience";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
   title: "Experience — Engineering, Client Work & Leadership",
   description:
-    "Khaled Mousa's experience: a Boingo Wireless internship, full-stack client work at The Cove Dev, field technician work, hackathon leadership, and short-term EMG research at Meta.",
+    "Khaled Mousa's experience: a Boingo Wireless internship, field technician work, founding The Cove Dev, environmental field work, AI model evaluation, and EMG research at Meta.",
   path: "/experience",
 });
 
 const sections = [
   { id: "roles", label: "All roles" },
+  { id: "education", label: "Education" },
   { id: "infrastructure", label: "Boingo" },
   { id: "ownership", label: "The Cove Dev" },
   { id: "people", label: "People" },
@@ -49,7 +50,7 @@ export default function ExperiencePage() {
             <p className="section-label">Experience</p>
             <h1 id="field-title">Where I&apos;ve <em>worked.</em></h1>
             <p>
-              A wireless operations internship, my own web development business, hands-on field work installing hardware, a hackathon team I led, and a short research stint at Meta.
+              A wireless operations internship, field work installing camera systems and sampling air quality, a web development business I founded, AI model evaluation, and early research at Meta.
             </p>
             <div className="experience-cover-links">
               <a className="button button-primary" href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer">
@@ -84,6 +85,32 @@ export default function ExperiencePage() {
               <p>Newest first, matching my résumé.</p>
             </header>
             <ExperienceTimeline />
+          </section>
+
+          <section id="education" className="field-section field-education" aria-labelledby="education-title" tabIndex={-1}>
+            <header className="field-section-heading">
+              <div>
+                <h2 id="education-title">Education</h2>
+              </div>
+              <p>I transferred from Queens College to Farmingdale for a hands-on engineering technology program.</p>
+            </header>
+            <ol className="timeline">
+              <li className="timeline-item">
+                <p className="timeline-period">Expected May 2028</p>
+                <div className="timeline-body">
+                  <h3>{EDUCATION.school}</h3>
+                  <p className="timeline-role">{EDUCATION.degrees.join(" and ")}</p>
+                  <p className="timeline-summary">GPA {EDUCATION.gpa}. {EDUCATION.honors}.</p>
+                </div>
+              </li>
+              <li className="timeline-item">
+                <p className="timeline-period">{EDUCATION.previous.period}</p>
+                <div className="timeline-body">
+                  <h3>{EDUCATION.previous.school}</h3>
+                  <p className="timeline-summary">{EDUCATION.previous.detail}</p>
+                </div>
+              </li>
+            </ol>
           </section>
 
           <section id="infrastructure" className="field-section field-infrastructure" aria-labelledby="infrastructure-title" tabIndex={-1}>
@@ -134,10 +161,10 @@ export default function ExperiencePage() {
 
           <section id="ownership" className="field-section field-ownership" aria-labelledby="ownership-title" tabIndex={-1}>
             <div className="field-ownership-copy">
-              <p className="case-section-number">Aug 2025 – present</p>
+              <p className="case-section-number">Aug – Dec 2025</p>
               <h2 id="ownership-title">Running The Cove Dev.</h2>
               <p className="field-lead">
-                At {cove.organization}, I build responsive websites for small-business clients: the interface, the client-side logic, the debugging, and Git-based delivery.
+                At {cove.organization}, I built and shipped websites and web apps for small-business clients: the interface, the client-side logic, the debugging, and Git-based delivery.
               </p>
               <p>
                 Running it taught me ownership: making the interface behave clearly, working within a client&apos;s real constraints, and handing over something they can maintain.
