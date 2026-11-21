@@ -60,6 +60,7 @@ test("recent builds show both projects and the video loads only on play", async 
   await expect(builds.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://youtu.be/DPGMJUyqAjA");
 
   await expect(builds.locator("iframe")).toHaveCount(0);
+  await page.mouse.move(5, 5);
   expect(youtubeRequests).toEqual([]);
 
   await builds.getByRole("button", { name: /Play: Flying my FPV drone in class/ }).click();
@@ -68,4 +69,58 @@ test("recent builds show both projects and the video loads only on play", async 
 
   await page.goto("/work", { waitUntil: "networkidle" });
   await expect(page.locator("#builds .build-card")).toHaveCount(2);
+});
+
+test("resting the pointer on the drone video starts a muted preview", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  await page.route(/youtube(-nocookie)?\.com|ytimg\.com|googlevideo\.com/, (route) =>
+    route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Video fixture</title>" }));
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const poster = page.getByRole("button", { name: /Play: Flying my FPV drone in class/ });
+  await poster.scrollIntoViewIfNeeded();
+  await poster.hover();
+  await page.waitForTimeout(300);
+  await page.mouse.move(5, 5);
+  await page.waitForTimeout(1300);
+  await expect(page.locator("#builds iframe")).toHaveCount(0);
+
+  await poster.hover();
+  const frame = page.locator('#builds iframe[title="Flying my FPV drone in class"]');
+  await expect(frame).toHaveAttribute("src", /youtube-nocookie\.com\/embed\/DPGMJUyqAjA\?autoplay=1&mute=1&loop=1/);
+});
+
+test("lab highlights, drone diagram, and current courses are on the homepage", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.clock.setFixedTime(new Date("2026-11-21T12:00:00"));
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  await expect(page.locator(".intro-currently")).toContainText("Currently taking (Fall 2026): Digital Design (VHDL on FPGA)");
+  const labs = page.locator("#labs");
+  await expect(labs.locator(".lab-card")).toHaveCount(3);
+  await expect(labs.getByRole("link", { name: /All labs on GitHub/ })).toHaveAttribute("href", "https://github.com/KhaledM03/engineering-labs");
+  await expect(page.getByRole("img", { name: /FPV drone block diagram/ })).toBeVisible();
+
+  const order = await page.evaluate(() => [...document.querySelectorAll("main > section")].map((section) => section.id || section.className));
+  expect(order.slice(1)).toEqual(["work", "labs", "experience", "builds", "skills"]);
+
+  await page.clock.setFixedTime(new Date("2027-02-10T12:00:00"));
+  await page.goto("/", { waitUntil: "networkidle" });
+  await expect(page.locator(".intro-currently")).toContainText("Spring 2027");
+  await page.clock.setFixedTime(new Date("2027-07-01T12:00:00"));
+  await page.goto("/", { waitUntil: "networkidle" });
+  await expect(page.locator(".intro-currently")).toHaveCount(0);
+});
+
+test("visitor counting stays off until a site code is configured", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  const counted = [];
+  page.on("request", (request) => {
+    if (request.url().includes("goatcounter")) counted.push(request.url());
+  });
+  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto("/work", { waitUntil: "networkidle" });
+  expect(counted).toEqual([]);
 });

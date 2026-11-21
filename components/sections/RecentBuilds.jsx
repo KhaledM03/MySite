@@ -1,4 +1,5 @@
 import Image from "next/image";
+import DroneDiagram from "@/components/work/DroneDiagram";
 import VideoFacade from "@/components/work/VideoFacade";
 import { builds } from "@/data/builds";
 
@@ -39,6 +40,8 @@ export default function RecentBuilds({ id = "builds", headingLevel = 2 }) {
           </article>
         ))}
       </div>
+
+      <DroneDiagram />
     </section>
   );
 }
