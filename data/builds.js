@@ -19,6 +19,19 @@ export const builds = [
     },
   },
   {
+    id: "window-shelf",
+    title: "3D-printed window shelf",
+    summary:
+      "Designed a window-mounted plant shelf in Fusion 360: a tray with a raised lip, a plate that screws to the sill, and a triangular brace underneath. Then I printed it, and it's been holding a cactus ever since.",
+    tags: ["Fusion 360", "CAD", "3D printing", "Design for fit"],
+    image: {
+      src: "/media/engineering-lab/cad-study-01.webp",
+      width: 1561,
+      height: 939,
+      alt: "Fusion 360 model of a window shelf with a lipped tray, a mounting plate with screw holes, and a triangular support brace",
+    },
+  },
+  {
     id: "fm-walkie-talkies",
     title: "FM walkie-talkie pair",
     summary:

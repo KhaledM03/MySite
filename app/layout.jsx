@@ -4,6 +4,7 @@ import ScrollReveal from "@/components/ui/ScrollReveal";
 import ContactFieldCard from "@/components/ui/ContactFieldCard";
 import ConsoleHello from "@/components/ui/ConsoleHello";
 import CookieNote from "@/components/ui/CookieNote";
+import VisitCounter from "@/components/ui/VisitCounter";
 import { EDUCATION } from "@/data/career";
 import {
   DEFAULT_DESCRIPTION,
@@ -138,6 +139,7 @@ export default function RootLayout({ children }) {
         <ContactFieldCard />
         <CookieNote />
         <ConsoleHello />
+        <VisitCounter />
         <ScrollReveal />
       </body>
     </html>

@@ -118,7 +118,7 @@ export default function TheCoveDevPage() {
           <section id="cove-overview" className="cove-section cove-overview" aria-labelledby="cove-overview-title" tabIndex={-1}>
             <header>
               <p className="case-section-number">01 / Overview</p>
-              <h2 id="cove-overview-title">A client interface record grounded in what is public.</h2>
+              <h2 id="cove-overview-title">Websites for small businesses.</h2>
             </header>
             <div className="cove-overview-grid">
               <div>
@@ -158,7 +158,7 @@ export default function TheCoveDevPage() {
           <section id="cove-interface" className="cove-section cove-interface" aria-labelledby="cove-interface-title" tabIndex={-1}>
             <header className="cove-section-header">
               <p className="case-section-number">03 / Interface and responsive work</p>
-              <div className="evidence-heading-link"><h2 id="cove-interface-title">A consistent system across three public-facing states.</h2><CopyFieldLink targetId="cove-interface" label="Copy interface link" /></div>
+              <div className="evidence-heading-link"><h2 id="cove-interface-title">One design system, three pages.</h2><CopyFieldLink targetId="cove-interface" label="Copy interface link" /></div>
               <p>Visible elements repeat with purpose: persistent navigation, a focused headline, short supporting copy, a primary call to action, and product imagery framed by the purple visual system.</p>
             </header>
 
@@ -191,7 +191,7 @@ export default function TheCoveDevPage() {
           <section id="cove-decisions" className="cove-section cove-decisions" aria-labelledby="cove-decisions-title" tabIndex={-1}>
             <header>
               <p className="case-section-number">04 / Technical decisions and delivery</p>
-              <h2 id="cove-decisions-title">Decisions tied to the documented work.</h2>
+              <h2 id="cove-decisions-title">Design decisions.</h2>
             </header>
             <div className="cove-decision-grid">
               <article><span>01</span><h3>Responsive foundation</h3><p>HTML and CSS support layouts intended to adapt across screen sizes while retaining a clear content hierarchy.</p></article>
@@ -210,7 +210,7 @@ export default function TheCoveDevPage() {
           <section id="cove-evidence" className="cove-section cove-evidence" aria-labelledby="cove-evidence-title" tabIndex={-1}>
             <header className="cove-section-header">
               <p className="case-section-number">05 / Real interface evidence</p>
-              <h2 id="cove-evidence-title">Inspect the preserved captures.</h2>
+              <h2 id="cove-evidence-title">Screenshots of the build.</h2>
               <p>Select any image for a larger view. The deployed WebP files are metadata-free copies; the original PNG captures remain preserved in the repository.</p>
             </header>
             <div className="cove-evidence-grid">
@@ -226,7 +226,7 @@ export default function TheCoveDevPage() {
           <section id="cove-outcomes" className="cove-section cove-outcomes" aria-labelledby="cove-outcomes-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">06 / Verified outcomes and next steps</p>
-              <h2 id="cove-outcomes-title">A real interface record, without inflated results.</h2>
+              <h2 id="cove-outcomes-title">What it delivered.</h2>
             </div>
             <div>
               <p className="cove-lead">The defensible outcome is the work itself: responsive and dynamic client web application development, modular implementation, debugging, and three preserved interface states.</p>
