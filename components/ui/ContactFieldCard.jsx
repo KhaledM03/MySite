@@ -107,7 +107,7 @@ export default function ContactFieldCard() {
           >
             <header>
               <div>
-                <span>Available channels · Direct signal</span>
+                <span>Contact</span>
                 <h2 id="contact-field-title">Let&apos;s build something useful.</h2>
               </div>
               <button ref={closeRef} type="button" onClick={closeCard} aria-label="Close contact card">Esc <b aria-hidden="true">×</b></button>
@@ -117,25 +117,25 @@ export default function ContactFieldCard() {
               <span>Email</span>
               <a href={CAREER_LINKS.mailto}>{CAREER_LINKS.email}</a>
               <div>
-                <a className="button button-primary" href={CAREER_LINKS.mailto} data-magnetic>Open mail client <span aria-hidden="true">↗</span></a>
+                <a className="button button-primary" href={CAREER_LINKS.mailto}>Open mail client <span aria-hidden="true">↗</span></a>
                 <button className="button button-secondary" type="button" onClick={copyEmail}>
                   {copyState === "copied" ? "Email copied" : "Copy email"}
                 </button>
               </div>
               <p className="contact-copy-status" aria-live="polite">
-                {copyState === "copied" ? "SIGNAL COPIED · Email address is on your clipboard." : null}
+                {copyState === "copied" ? "Copied. The email address is on your clipboard." : null}
                 {copyState === "unavailable" ? "Clipboard access is unavailable. Select the email address above." : null}
               </p>
             </div>
 
             <nav className="contact-field-links" aria-label="Professional contact channels">
               <a href={CAREER_LINKS.linkedin} target="_blank" rel="noreferrer"><span>LinkedIn</span><strong>Professional profile</strong><i aria-hidden="true">↗</i></a>
-              <a href={CAREER_LINKS.github} target="_blank" rel="noreferrer"><span>GitHub</span><strong>Public code record</strong><i aria-hidden="true">↗</i></a>
-              <a href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer"><span>Résumé</span><strong>Open canonical PDF</strong><i aria-hidden="true">↗</i></a>
-              <a href={PUBLIC_CODE.portfolio.href} target="_blank" rel="noreferrer"><span>View code</span><strong>{PUBLIC_CODE.portfolio.label}</strong><i aria-hidden="true">↗</i></a>
+              <a href={CAREER_LINKS.github} target="_blank" rel="noreferrer"><span>GitHub</span><strong>Code and projects</strong><i aria-hidden="true">↗</i></a>
+              <a href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer"><span>Résumé</span><strong>One-page PDF</strong><i aria-hidden="true">↗</i></a>
+              <a href={PUBLIC_CODE.portfolio.href} target="_blank" rel="noreferrer"><span>This site</span><strong>Source code</strong><i aria-hidden="true">↗</i></a>
             </nav>
 
-            <footer><i aria-hidden="true" /><span>Open channel · No forms, tracking, or stored contact data</span></footer>
+            <footer><i aria-hidden="true" /><span>No forms and no tracking. Just email.</span></footer>
           </section>
         </div>
       ) : null}

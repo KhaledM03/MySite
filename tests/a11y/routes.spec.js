@@ -1,5 +1,5 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures";
 import { PUBLIC_ROUTES } from "../helpers";
 
 test("public routes meet the automated WCAG accessibility floor", async ({ page, browserName }) => {
@@ -25,11 +25,12 @@ test("Phase II interactive states meet the automated accessibility floor", async
   await page.setViewportSize({ width: 390, height: 844 });
 
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.keyboard.press("Control+k");
+  await page.locator(".intro").getByRole("button", { name: "Contact me" }).click();
+  await expect(page.getByRole("dialog")).toBeVisible();
   let results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
     .analyze();
-  expect(results.violations, "Field Console").toEqual([]);
+  expect(results.violations, "Contact card").toEqual([]);
   await page.keyboard.press("Escape");
 
   await page.goto("/work/engineering-lab", { waitUntil: "networkidle" });
@@ -50,16 +51,4 @@ test("Phase II interactive states meet the automated accessibility floor", async
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
     .analyze();
   expect(results.violations, "Mobile live-project fallback").toEqual([]);
-
-  await page.goto("/#field-brief", { waitUntil: "networkidle" });
-  results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
-    .analyze();
-  expect(results.violations, "Field Brief and Systems Map").toEqual([]);
-
-  await page.getByRole("button", { name: /Open contact card/ }).click();
-  results = await new AxeBuilder({ page })
-    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
-    .analyze();
-  expect(results.violations, "Contact Field Card").toEqual([]);
 });

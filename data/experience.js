@@ -28,7 +28,7 @@ export const experienceSources = {
     },
     pureGym: {
       summary:
-        "Four public member reviews independently mentioned Khaled by name for safety, care, confidence, cleanliness, and service.",
+        "Four members of the gym where I worked mentioned me by name in public Google reviews, for safety, care, cleanliness, and making them feel welcome.",
       sourceLabel: "Public Google review",
     },
   },
@@ -72,34 +72,50 @@ export const pureGymReviews = [
   },
 ];
 
-// Fast-scan records intentionally omit employment details that remain
-// unresolved in the source ledger.
-export const experienceScanRecords = [
+// Full role history, newest first. Wording follows the canonical résumé PDF.
+export const experienceTimeline = [
   {
-    number: "01",
-    organization: experienceSources.verified.boingo.organization,
-    role: experienceSources.verified.boingo.role,
-    period: experienceSources.verified.boingo.period,
-    signal: "Linux · wireless operations · testing · validation",
-    href: "#infrastructure",
-    action: "Open engineering record",
+    id: "cove",
+    organization: "The Cove Dev, LLC",
+    role: "Full-stack web developer",
+    period: "Aug 2025 – present",
+    summary:
+      "Build responsive web applications with dynamic interfaces for small-business clients using HTML, CSS, and JavaScript, with modular design and Git version control. The business made $6K in profit in 2025.",
+    href: "/work/the-cove-dev",
+    linkLabel: "Read the case study",
   },
   {
-    number: "02",
-    organization: experienceSources.verified.cove.organization,
-    role: experienceSources.verified.cove.role,
-    period: experienceSources.verified.cove.period,
-    signal: "Responsive interfaces · client-side logic · Git",
-    href: "#ownership",
-    action: "Open product record",
+    id: "hackathon",
+    organization: "Boingo Hack-a-Thon 2024",
+    role: "Team lead",
+    period: "Aug 2024",
+    summary:
+      "Led a software integration project built on Google Cloud and Vertex AI, and presented the architecture and results to executive leadership.",
   },
   {
-    number: "03",
-    organization: "Public member evidence",
-    role: "People-centered service record",
-    period: "Four independent sources",
-    signal: "Safety · care · confidence · cleanliness",
-    href: "#people",
-    action: "Inspect public sources",
+    id: "boingo",
+    organization: "Boingo Wireless",
+    role: "Wireless operations intern",
+    period: "Summer 2024",
+    summary:
+      "Supported the engineering team with system testing, validation, and troubleshooting, helped deploy and test Linux infrastructure, and built ResetWave, a Python automation tool that cut a 2-hour task to about 10 seconds.",
+    href: "/work/resetwave",
+    linkLabel: "Read about ResetWave",
+  },
+  {
+    id: "empire",
+    organization: "Empire Camera Installations",
+    role: "Field technician (independent contractor)",
+    period: "Summers 2023 – 2025",
+    summary:
+      "Installed and configured systems and hardware on site, and diagnosed and fixed hardware and connectivity problems.",
+  },
+  {
+    id: "meta",
+    organization: "Meta",
+    role: "EMG research assistant (short-term)",
+    period: "Summer 2023",
+    summary:
+      "Supported research on a wearable electromyography (EMG) sensing system, helping evaluate signal acquisition and hardware interaction for gesture and muscle-signal detection.",
   },
 ];

@@ -34,7 +34,6 @@ export default function EvidenceHotspots({ items, label, variant = "evidence" })
           aria-controls={`${item.id}-note`}
           aria-label={`${String(index + 1).padStart(2, "0")} ${item.label}: ${item.title}`}
           onClick={() => setActiveId((value) => value === item.id ? null : item.id)}
-          data-signal="INSPECT"
         >
           <span>{String(index + 1).padStart(2, "0")}</span><i aria-hidden="true" />
         </button>
