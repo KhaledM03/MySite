@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
@@ -6,6 +5,7 @@ import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
 import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
 import { Availability, GraduationFact } from "@/components/ui/CalendarFacts";
+import IntroArt from "@/components/ui/IntroArt";
 import { CANONICAL_RESUME, CAREER_LINKS, EDUCATION, SKILL_GROUPS } from "@/data/career";
 import { projects } from "@/data/projects";
 import {
@@ -20,6 +20,14 @@ export const metadata = createPageMetadata({
   path: "/",
 });
 
+// Two periods of a sine wave per view box width, drawn twice as wide so it can
+// scroll sideways without a seam, like a live trace on an oscilloscope.
+const SCOPE_TRACE = Array.from({ length: 101 }, (_, index) => {
+  const x = index * 4;
+  const y = 12 - 7 * Math.sin((x / 50) * Math.PI * 2);
+  return `${index ? "L" : "M"}${x} ${y.toFixed(2)}`;
+}).join(" ");
+
 export default function HomePage() {
   return (
     <div className="site-shell home-shell">
@@ -29,7 +37,16 @@ export default function HomePage() {
       <main id="main" tabIndex={-1}>
         <section className="intro" aria-labelledby="intro-title">
           <div className="intro-copy">
-            <h1 id="intro-title">I build the bridge between <em>hardware</em> and software.</h1>
+            <h1 id="intro-title">
+              I build the bridge between{" "}
+              <em>
+                hardware
+                <svg className="intro-wave" viewBox="0 0 200 24" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <path d={SCOPE_TRACE} />
+                </svg>
+              </em>{" "}
+              and software.<span className="intro-caret" aria-hidden="true" />
+            </h1>
             <p className="intro-lead">
               I&apos;m Khaled Mousa, an engineering technology student at {EDUCATION.school}. I test hardware, automate the slow parts with Python, and work on systems out in the field.
             </p>
@@ -60,17 +77,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="intro-art" aria-hidden="true">
-            <div className="intro-burst" />
-            <Image
-              src="/characters/khaled-hero.webp"
-              alt=""
-              width={1023}
-              height={1537}
-              priority
-              sizes="(max-width: 760px) 70vw, 40vw"
-            />
-          </div>
+          <IntroArt />
         </section>
 
         <section id="work" className="home-work" aria-labelledby="work-title">

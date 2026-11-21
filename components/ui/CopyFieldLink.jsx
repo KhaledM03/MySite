@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-export default function CopyFieldLink({ targetId, label = "Copy field link" }) {
+export default function CopyFieldLink({ targetId, label = "Copy link to this section" }) {
   const [state, setState] = useState("idle");
   const timerRef = useRef(0);
 
@@ -23,10 +23,10 @@ export default function CopyFieldLink({ targetId, label = "Copy field link" }) {
   return (
     <span className="copy-field-link">
       <button type="button" onClick={copyLink}>
-        {state === "copied" ? "Field link copied" : label} <span aria-hidden="true">#</span>
+        {state === "copied" ? "Link copied" : label} <span aria-hidden="true">#</span>
       </button>
       <span className="sr-only" aria-live="polite">
-        {state === "copied" ? "FIELD LINK COPIED" : null}
+        {state === "copied" ? "Link copied to clipboard" : null}
         {state === "unavailable" ? "Clipboard access unavailable" : null}
       </span>
     </span>

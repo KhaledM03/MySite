@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CopyEmail, LocalTime } from "@/components/ui/FooterExtras";
 import { CANONICAL_RESUME, CAREER_LINKS, PUBLIC_CODE } from "@/data/career";
 
 export default function SiteFooter() {
@@ -7,7 +8,11 @@ export default function SiteFooter() {
       <div className="site-footer-lead">
         <h2>Build something that works beyond the demo.</h2>
         <p>Email is the fastest way to reach me.</p>
-        <a className="site-footer-email" href={CAREER_LINKS.mailto}>{CAREER_LINKS.email}</a>
+        <div className="site-footer-contact">
+          <a className="site-footer-email" href={CAREER_LINKS.mailto}>{CAREER_LINKS.email}</a>
+          <CopyEmail />
+        </div>
+        <LocalTime />
       </div>
       <nav className="site-footer-links" aria-label="Footer">
         <Link href="/work">Work</Link>

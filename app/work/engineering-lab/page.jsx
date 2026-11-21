@@ -17,6 +17,8 @@ export const metadata = createPageMetadata({
   description:
     "Explore real electronics measurements, digital logic simulations, CAD studies, testing, and engineering evidence from Khaled Mousa's lab work.",
   path: "/work/engineering-lab",
+  image: "/og/engineering-lab.png",
+  imageAlt: "Engineering Lab by Khaled Mousa.",
 });
 
 const media = {
