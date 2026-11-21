@@ -4626,9 +4626,10 @@ html {
 }
 
 .lab-card-media {
-  height: 272px;
+  height: clamp(272px, 19vw, 360px);
   display: grid;
   align-items: center;
+  overflow: hidden;
   padding: 1rem 1.1rem;
   border-bottom: 1px solid var(--line);
   background:
@@ -4637,8 +4638,14 @@ html {
     #fbf6ea;
 }
 
-.lab-figure { margin: 0; }
-.lab-figure svg { display: block; width: 100%; height: auto; }
+.lab-figure { min-height: 0; max-height: 100%; margin: 0; }
+/* The testbench table sets its own height, so its box grows to fit it. */
+.lab-card-media:has(.lab-figure-alu) { height: auto; min-height: clamp(272px, 19vw, 360px); }
+/* Drawn figures scale to fit the box in both directions, so a wide card
+   never makes them taller than the space they have. */
+.lab-figure-plot,
+.lab-figure-diagram { height: 100%; }
+.lab-figure svg { display: block; width: 100%; height: 100%; }
 
 /* ALU testbench table */
 .lab-figure-alu figcaption { margin-bottom: 0.45rem; color: var(--plum); font-size: var(--type-micro); font-weight: 800; }
