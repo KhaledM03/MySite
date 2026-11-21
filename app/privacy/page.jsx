@@ -6,8 +6,9 @@ import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
   title: "Privacy",
-  description:
-    "How Khaled Mousa's portfolio handles privacy: no cookies, no analytics, no ads, and no third-party trackers.",
+  description: ANALYTICS.goatcounterCode
+    ? "How Khaled Mousa's portfolio handles privacy: no cookies, no ads, no trackers, and cookieless visit counting that honors Do Not Track."
+    : "How Khaled Mousa's portfolio handles privacy: no cookies, no analytics, no ads, and no third-party trackers.",
   path: "/privacy",
 });
 
@@ -46,7 +47,7 @@ export default function PrivacyPage() {
               </p>
             ) : null}
             <p>
-              There are no ads and no trackers. Every script, font, and image on this site is served from this site, and nothing is loaded from ad networks or social media widgets. The only outside content is the drone video, and only if you choose to watch it.
+              There are no ads and no trackers. Every script, font, and image on this site is served from this site, and nothing is loaded from ad networks or social media widgets. {ANALYTICS.goatcounterCode ? "Apart from the visit count above, the only outside content" : "The only outside content"} is the full drone video on YouTube, and only if you choose to watch it.
             </p>
           </section>
 
