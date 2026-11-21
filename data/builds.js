@@ -12,10 +12,18 @@ export const builds = [
       height: 1050,
       alt: "Small FPV quadcopter with clear prop guards and a front-mounted camera on a blue repair mat",
     },
-    // Featured in the homepage hero. Set `loop` to a short self-hosted MP4
-    // (for example "/media/hero/fpv-loop.mp4") to play silently in place of the poster.
+    // Featured in the homepage hero as a 12-second silent loop of the goggle
+    // feed, cut from the flight video, served from this site (no YouTube).
     featured: true,
-    loop: null,
+    loop: {
+      src: "/media/hero/fpv-loop.mp4",
+      poster: {
+        src: "/media/hero/fpv-loop-poster.webp",
+        width: 800,
+        height: 600,
+        alt: "",
+      },
+    },
     video: {
       youtubeId: "DPGMJUyqAjA",
       title: "Flying my FPV drone in class",

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
@@ -50,9 +51,20 @@ export default function HomePage() {
               </em>{" "}
               and software.<span className="intro-caret" aria-hidden="true" />
             </h1>
-            <p className="intro-lead">
-              I&apos;m Khaled Mousa, an engineering technology student at {EDUCATION.school}. I test hardware, automate the slow parts with Python, and work on systems out in the field.
-            </p>
+            <div className="intro-person">
+              <Image
+                className="intro-avatar"
+                src="/media/khaled-portrait.webp"
+                alt="Khaled Mousa"
+                width={480}
+                height={480}
+                sizes="72px"
+                priority
+              />
+              <p className="intro-lead">
+                I&apos;m Khaled Mousa, an engineering technology student at {EDUCATION.school}. I test hardware, automate the slow parts with Python, and work on systems out in the field.
+              </p>
+            </div>
 
             <dl className="intro-facts">
               <div className="intro-facts-degrees">

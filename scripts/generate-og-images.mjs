@@ -17,7 +17,7 @@ const CARDS = [
     slug: "home",
     title: "I build the bridge between <em>hardware</em> and software.",
     detail: "Computer &amp; Electrical Engineering Technology<br>Farmingdale State College (SUNY)",
-    art: "/characters/khaled-hero.webp",
+    photo: "/media/khaled-portrait.webp",
   },
   {
     slug: "work",
@@ -63,7 +63,7 @@ function wavePath(width, height, cycles) {
   return points.join(" ");
 }
 
-function cardHtml({ title, detail, art }) {
+function cardHtml({ title, detail, art, photo }) {
   // Short titles get bigger type so the card never looks empty.
   const titleSize = title.replace(/<[^>]+>|&[a-z]+;/g, "x").length > 34 ? 78 : 104;
   return `<!doctype html>
@@ -92,6 +92,7 @@ function cardHtml({ title, detail, art }) {
   p { position: absolute; left: 72px; bottom: 112px; width: 640px; color: rgba(255, 250, 240, 0.78); font-size: 27px; line-height: 1.38; }
   .url { position: absolute; left: 72px; bottom: 54px; color: #f3b72f; font-size: 24px; font-weight: 800; letter-spacing: 0.04em; }
   .art { position: absolute; right: 38px; bottom: -24px; height: 640px; filter: drop-shadow(18px 26px 22px rgba(0, 0, 0, 0.28)); }
+  .photo { position: absolute; top: 118px; right: 86px; width: 330px; height: 330px; object-fit: cover; border: 8px solid #fffaf0; border-radius: 50%; box-shadow: 18px 22px 0 rgba(243, 183, 47, 0.55), 0 30px 60px rgba(0, 0, 0, 0.3); }
   .wave { position: absolute; left: 0; right: 0; bottom: 26px; width: 1200px; height: 70px; opacity: 0.55; }
 </style></head><body>
   <svg class="wave" viewBox="0 0 1200 70" aria-hidden="true">
@@ -101,7 +102,7 @@ function cardHtml({ title, detail, art }) {
   <h1>${title}</h1>
   <p>${detail}</p>
   <div class="url">mousakhaled.com</div>
-  <img class="art" src="${BASE_URL}${art}" alt="">
+  ${photo ? `<img class="photo" src="${BASE_URL}${photo}" alt="">` : `<img class="art" src="${BASE_URL}${art}" alt="">`}
 </body></html>`;
 }
 
@@ -109,7 +110,9 @@ const browser = await chromium.launch({ executablePath: process.env.OG_CHROMIUM_
 const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
 await mkdir(OUTPUT, { recursive: true });
 
-for (const card of CARDS) {
+// OG_ONLY=home,work regenerates just those cards.
+const only = process.env.OG_ONLY?.split(",");
+for (const card of CARDS.filter((entry) => !only || only.includes(entry.slug))) {
   await page.setContent(cardHtml(card), { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
   const file = path.join(OUTPUT, `${card.slug}.png`);
