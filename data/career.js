@@ -29,41 +29,52 @@ export const PUBLIC_CODE = {
   },
 };
 
-// Education and skills mirror the canonical résumé PDF. Update both together.
+// Education and skills mirror the canonical résumé PDF. GPA, honors, and
+// transfer credits follow the transcript (cumulative GPA through Spring 2026).
+// Graduation timing and what Khaled is looking for live in lib/status.js and
+// follow the calendar automatically.
 export const EDUCATION = {
-  school: "SUNY Farmingdale State College",
-  degrees: "B.S. Computer Engineering + B.S. Electrical Engineering",
-  graduation: "Spring 2028",
-  gpa: "3.69",
+  school: "Farmingdale State College (SUNY)",
+  degrees: [
+    "B.S. Computer Engineering Technology",
+    "B.S. Electrical Engineering Technology",
+  ],
+  gpa: "3.63",
+  honors: "Dean’s List, Fall 2025 and Spring 2026",
+  previous: {
+    school: "CUNY Queens College",
+    period: "2022 – 2025",
+    detail: "64 credits transferred, including Computer Programming I & II, Digital Electronics, Discrete Math, Calculus I & II, and Linear Algebra.",
+  },
 };
-
-// What the homepage says Khaled is looking for. Edit this one line when the
-// search changes (for example, a specific term or role).
-export const AVAILABILITY = "Engineering internships";
 
 export const SKILL_GROUPS = [
   {
-    title: "Languages",
-    items: ["C++", "Python", "JavaScript", "HTML", "CSS"],
+    title: "Lab and test",
+    items: ["Soldering", "Oscilloscopes", "Digital multimeters", "Function generators", "NI Multisim", "MATLAB"],
   },
   {
-    title: "Engineering",
-    items: ["Circuit analysis", "Digital systems", "System testing", "Hardware troubleshooting", "Signal analysis"],
+    title: "Digital and embedded",
+    items: ["VHDL", "Vivado", "Nexys A7 FPGA", "Logisim", "Assembly language"],
   },
   {
-    title: "Tools",
-    items: ["Git / GitHub", "Linux", "Node.js", "MATLAB", "Logisim", "Fusion 360", "Oscilloscope"],
+    title: "Networking and field systems",
+    items: ["Cisco 9800 WLC", "Access points", "Ethernet / PoE", "IP camera systems", "Linux", "SSH", "Datadog"],
+  },
+  {
+    title: "Programming",
+    items: ["Python (Paramiko)", "C++", "JavaScript", "React", "Next.js", "Node.js", "HTML / CSS", "Git / GitHub"],
   },
   {
     title: "Coursework",
     items: [
-      "Circuit Analysis",
-      "Digital Logic Design",
-      "Computer Architecture",
+      "Electric Circuits I & II",
+      "Semiconductor Devices & Circuits",
+      "Electronic Devices & Amplifiers",
+      "Digital Design (VHDL / FPGA)",
+      "Circuit Network Analysis",
       "Data Structures",
-      "Object-Oriented Programming",
-      "Computer Organization & Assembly",
-      "UNIX / Linux Operating Systems",
+      "UNIX Operating Systems",
     ],
   },
 ];

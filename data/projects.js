@@ -41,7 +41,7 @@ export const projects = [
     slug: "the-cove-dev",
     number: "03",
     name: "The Cove Dev",
-    eyebrow: "Client web products · Aug 2025–present",
+    eyebrow: "Client web products · Aug–Dec 2025",
     problem:
       "Small-business clients needed responsive web applications with dynamic user interfaces.",
     build:
@@ -111,7 +111,7 @@ export const engineeringLabSources = {
 export const coveDevSources = {
   verified: {
     organization: "The Cove Dev, LLC",
-    period: "August 2025–present",
+    period: "August–December 2025",
     role: "Full-Stack Web Development",
     technology: ["HTML", "CSS", "JavaScript", "Git"],
     responsibilities: [

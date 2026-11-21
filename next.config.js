@@ -18,6 +18,10 @@ const contentSecurityPolicy = [
 
 const nextConfig = {
   reactStrictMode: true,
+  // Lets date-aware homepage facts render correctly before the browser takes over.
+  env: {
+    NEXT_PUBLIC_BUILD_TIME: new Date().toISOString(),
+  },
   async headers() {
     return [
       {

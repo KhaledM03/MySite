@@ -125,7 +125,7 @@ export default function TheCoveDevPage() {
               </div>
               <div>
                 <h3>Documented role</h3>
-                <p>Khaled’s résumé records full-stack web development for The Cove Dev from August 2025 to the present.</p>
+                <p>Khaled’s résumé records founding The Cove Dev and doing its full-stack web development from August to December 2025.</p>
               </div>
               <div>
                 <h3>Evidence boundary</h3>
