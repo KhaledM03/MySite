@@ -16,6 +16,8 @@ export const metadata = createPageMetadata({
   description:
     "See Khaled Mousa's responsive full-stack client work for The Cove Dev through verified interface screenshots, design decisions, and project evidence.",
   path: "/work/the-cove-dev",
+  image: "/og/the-cove-dev.png",
+  imageAlt: "The Cove Dev by Khaled Mousa.",
 });
 
 const media = {

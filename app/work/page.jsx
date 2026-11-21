@@ -12,6 +12,8 @@ export const metadata = createPageMetadata({
   description:
     "Explore Khaled Mousa's engineering, automation, electronics, digital systems, and full-stack development projects through evidence-led case studies.",
   path: "/work",
+  image: "/og/work.png",
+  imageAlt: "Khaled Mousa projects: built, tested, then proven.",
 });
 
 export default function WorkPage() {

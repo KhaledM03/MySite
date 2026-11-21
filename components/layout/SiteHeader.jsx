@@ -18,6 +18,27 @@ export default function SiteHeader() {
   const navRef = useRef(null);
   const wordmarkRef = useRef(null);
   const restoreMenuFocusRef = useRef(true);
+  const headerRef = useRef(null);
+
+  // The header sits flush with the page at the top and lifts slightly once
+  // content scrolls underneath it.
+  useEffect(() => {
+    const header = headerRef.current;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      header.dataset.scrolled = window.scrollY > 12 ? "true" : "false";
+    };
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, []);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -81,7 +102,7 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="site-header" aria-label="Site">
+    <header ref={headerRef} className="site-header" aria-label="Site">
       <Link ref={wordmarkRef} className="wordmark" href="/" onClick={closeForNavigation}>
         <span className="wordmark-mark" aria-hidden="true">
           <Image className="wordmark-image" src="/brand/chibi-khaled-header.webp" alt="" width={64} height={64} priority sizes="(max-width: 760px) 32px, 36px" />
