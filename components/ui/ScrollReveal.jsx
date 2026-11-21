@@ -3,8 +3,8 @@
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
-// Blocks that enter as one unit. Anything inside the scripted journey, the
-// header, or a dialog is left alone: those already have their own motion.
+// Blocks that enter as one unit. The header, dialogs, and sticky page
+// navigation are left alone: those already have their own motion.
 const BLOCK_SELECTOR = [
   "main section > *",
   ".site-shell > section > *",
@@ -13,14 +13,13 @@ const BLOCK_SELECTOR = [
 
 // Containers whose children should arrive one after another instead of as a slab.
 const GROUP_SELECTOR = [
-  ".field-brief-signal-grid",
-  ".field-brief-proof-list",
   ".home-project-grid",
+  ".timeline",
+  ".skills-grid",
   ".project-list",
   ".boingo-evidence-grid",
   ".review-rail",
   ".approach-grid",
-  ".experience-teaser-evidence",
   ".site-footer-links",
   ".cove-overview-grid",
   ".cove-decision-grid",
@@ -29,7 +28,7 @@ const GROUP_SELECTOR = [
   ".lab-fact-grid",
 ].join(", ");
 
-const EXCLUDED = ".journey, .site-header, [role='dialog'], .long-page-nav, .case-progress-nav";
+const EXCLUDED = ".site-header, [role='dialog'], .long-page-nav, .case-progress-nav";
 const STAGGER_MS = 70;
 const MAX_STAGGER = 5;
 const SETTLE_MS = 1100;

@@ -25,7 +25,7 @@ export default function ProjectSignalPreview({ project, variant = "home" }) {
     return (
       <div className={`project-signal resetwave-signal${active ? " is-active" : ""}`} data-variant={variant}>
         <div className="project-signal-head">
-          <span>Sanitized run signal</span>
+          <span>Example run</span>
           <button type="button" aria-pressed={active} onClick={() => setActive((value) => !value)}>
             {active ? "Hold" : "Run"}
           </button>
@@ -35,14 +35,14 @@ export default function ProjectSignalPreview({ project, variant = "home" }) {
             <li key={step} style={{ "--signal-index": index }}><i aria-hidden="true" /><span>{step}</span></li>
           ))}
         </ol>
-        <p>Conceptual status sequence · no private infrastructure detail</p>
+        <p>Illustrative run. No private infrastructure details.</p>
       </div>
     );
   }
 
   if (project.slug === "engineering-lab") {
     return (
-      <div className={`project-signal lab-card-signal${active ? " is-active" : ""}`} data-variant={variant}>
+      <div className="project-signal lab-card-signal" data-variant={variant}>
         <Image
           src="/media/engineering-lab/oscilloscope-card.webp"
           alt="Real oscilloscope and electronics bench capture"
@@ -55,9 +55,6 @@ export default function ProjectSignalPreview({ project, variant = "home" }) {
           <strong>Observe · measure · validate</strong>
           <i /><i /><i />
         </div>
-        <button type="button" aria-pressed={active} onClick={() => setActive((value) => !value)}>
-          {active ? "Field active" : "Trace evidence"}
-        </button>
       </div>
     );
   }

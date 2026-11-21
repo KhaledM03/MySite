@@ -93,7 +93,7 @@ export default function TheCoveDevPage() {
                 <li key={technology}>{technology}</li>
               ))}
             </ul>
-            <a className="cove-external-link" href="https://thecovedev.com/" target="_blank" rel="noreferrer" data-magnetic data-signal="LAUNCH ↗">
+            <a className="cove-external-link" href="https://thecovedev.com/" target="_blank" rel="noreferrer">
               Visit The Cove Dev <span aria-hidden="true">↗</span>
             </a>
           </div>
@@ -132,7 +132,7 @@ export default function TheCoveDevPage() {
                 <p>The public record confirms the role, core technologies, responsibilities, and three interface captures. It does not establish client identities, per-screen contribution, analytics, business metrics, or a mobile capture set.</p>
               </div>
             </div>
-            <Link className="cove-field-record-link" href="/experience#ownership">See how this work fits the wider Field Record ↗</Link>
+            <Link className="cove-field-record-link" href="/experience#ownership">More about running The Cove Dev →</Link>
           </section>
 
           <section id="cove-role" className="cove-section cove-role" aria-labelledby="cove-role-title" tabIndex={-1}>

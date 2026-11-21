@@ -34,10 +34,8 @@ export default function ProjectCard({ project, featured = false }) {
           className="text-link"
           href={project.href}
           transitionLabel={`Opening ${project.name}`}
-          data-magnetic
-          data-signal="OPEN CASE"
         >
-          Trace the evidence <span aria-hidden="true">↗</span>
+          {project.action} <span aria-hidden="true">→</span>
         </TransitionLink>
       </div>
     </article>

@@ -4,13 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { CANONICAL_RESUME } from "@/data/career";
 
 const links = [
-  { label: "Intro", href: "/#arrival", section: "home" },
-  { label: "Profile", href: "/#profile", section: "home" },
-  { label: "Engineering", href: "/#engineering", section: "home" },
-  { label: "Work", href: "/work", section: "work" },
-  { label: "Experience", href: "/experience", section: "experience" },
+  { label: "Work", href: "/work", isCurrent: (pathname) => pathname.startsWith("/work") },
+  { label: "Experience", href: "/experience", isCurrent: (pathname) => pathname === "/experience" },
 ];
 
 export default function SiteHeader() {
@@ -20,7 +18,6 @@ export default function SiteHeader() {
   const navRef = useRef(null);
   const wordmarkRef = useRef(null);
   const restoreMenuFocusRef = useRef(true);
-  const pendingHomeNavigationRef = useRef(null);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -30,11 +27,13 @@ export default function SiteHeader() {
     const focusTimer = window.setTimeout(() => {
       navRef.current?.querySelector("a[href]")?.focus();
     }, 200);
-    const obscuredContent = [...document.querySelectorAll("main > :not(.site-header)")]
+    // Everything behind the open menu becomes inert so focus and screen
+    // readers stay inside it.
+    const obscuredContent = [...document.querySelectorAll(".site-shell > :not(.site-header)")]
       .map((element) => ({ element, inert: element.inert }));
     const getFocusableItems = () => [
       wordmarkRef.current,
-      ...(navRef.current?.querySelectorAll("a[href]") ?? []),
+      ...(navRef.current?.querySelectorAll("a[href], button") ?? []),
       menuButton,
     ].filter((element) => element && !element.hasAttribute("disabled"));
     const onKeyDown = (event) => {
@@ -76,40 +75,14 @@ export default function SiteHeader() {
     };
   }, [open]);
 
-  useEffect(() => {
-    if (open || !pendingHomeNavigationRef.current) return undefined;
-    const detail = pendingHomeNavigationRef.current;
-    pendingHomeNavigationRef.current = null;
-    const frame = window.requestAnimationFrame(() => {
-      window.dispatchEvent(new CustomEvent("portfolio:navigate", { detail }));
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [open]);
-
-  const workIsCurrent = pathname.startsWith("/work");
-  const experienceIsCurrent = pathname === "/experience";
-
-  const navigateToHomeChapter = (event, href) => {
-    const menuWasOpen = open;
+  const closeForNavigation = () => {
     restoreMenuFocusRef.current = false;
     setOpen(false);
-    if (pathname !== "/") return;
-
-    event.preventDefault();
-    const hash = href.slice(href.indexOf("#"));
-    const detail = {
-      hash,
-      behavior: "smooth",
-      historyMode: window.location.hash === hash ? "replace" : "push",
-    };
-
-    if (menuWasOpen) pendingHomeNavigationRef.current = detail;
-    else window.dispatchEvent(new CustomEvent("portfolio:navigate", { detail }));
   };
 
   return (
-    <header className="site-header" aria-label="Primary navigation">
-      <Link ref={wordmarkRef} className="wordmark" href="/#arrival" onClick={(event) => navigateToHomeChapter(event, "/#arrival")}>
+    <header className="site-header" aria-label="Site">
+      <Link ref={wordmarkRef} className="wordmark" href="/" onClick={closeForNavigation}>
         <span className="wordmark-mark" aria-hidden="true">
           <Image className="wordmark-image" src="/brand/chibi-khaled-header.webp" alt="" width={64} height={64} priority sizes="(max-width: 760px) 32px, 36px" />
         </span>
@@ -120,38 +93,28 @@ export default function SiteHeader() {
         ref={navRef}
         id="primary-navigation"
         className={`chapter-nav${open ? " is-open" : ""}`}
-        aria-label="Portfolio chapters"
+        aria-label="Main"
       >
-        {links.map((link) => {
-          const current = (link.section === "work" && workIsCurrent)
-            || (link.section === "experience" && experienceIsCurrent);
-          return (
-            <Link
-              key={link.label}
-              href={link.href}
-              aria-current={current ? "page" : undefined}
-              onClick={(event) => link.section === "home"
-                ? navigateToHomeChapter(event, link.href)
-                : (() => {
-                  restoreMenuFocusRef.current = false;
-                  setOpen(false);
-                })()}
-            >
-              {link.label}
-            </Link>
-          );
-        })}
+        {links.map((link) => (
+          <Link
+            key={link.label}
+            href={link.href}
+            aria-current={link.isCurrent(pathname) ? "page" : undefined}
+            onClick={closeForNavigation}
+          >
+            {link.label}
+          </Link>
+        ))}
+        <a href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer" onClick={closeForNavigation}>
+          Résumé <span className="sr-only">(PDF, opens in a new tab)</span>
+        </a>
         <button
           type="button"
           className="mobile-nav-contact"
           data-contact-trigger
-          data-signal="OPEN CONTACT"
-          onClick={() => {
-            restoreMenuFocusRef.current = false;
-            setOpen(false);
-          }}
+          onClick={closeForNavigation}
         >
-          Let&apos;s talk <span aria-hidden="true">↗</span>
+          Contact
         </button>
       </nav>
 
@@ -170,8 +133,8 @@ export default function SiteHeader() {
         <span className="nav-toggle-icon" aria-hidden="true"><i /><i /></span>
       </button>
 
-      <button className="header-cta" type="button" data-contact-trigger data-magnetic data-signal="OPEN CONTACT">
-        Let&apos;s talk <span aria-hidden="true">↗</span>
+      <button className="header-cta" type="button" data-contact-trigger>
+        Contact
       </button>
     </header>
   );
