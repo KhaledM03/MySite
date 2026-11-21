@@ -11,6 +11,16 @@ const canonicalRoutes = new Map([
   ["/privacy", "https://mousakhaled.com/privacy"],
 ]);
 
+const previewCards = new Map([
+  ["/", "home"],
+  ["/work", "work"],
+  ["/experience", "experience"],
+  ["/work/resetwave", "resetwave"],
+  ["/work/engineering-lab", "engineering-lab"],
+  ["/work/the-cove-dev", "the-cove-dev"],
+  ["/privacy", "home"],
+]);
+
 test("metadata, structured data, and security headers remain production-safe", async ({ page, context, browserName }) => {
   test.skip(browserName !== "chromium", "Platform metadata coverage runs once in Chromium.");
   const titles = new Set();
@@ -34,6 +44,7 @@ test("metadata, structured data, and security headers remain production-safe", a
       description: document.querySelector('meta[name="description"]')?.content,
       canonical: document.querySelector('link[rel="canonical"]')?.href,
       ogImage: document.querySelector('meta[property="og:image"]')?.content,
+      twitterImage: document.querySelector('meta[name="twitter:image"]')?.content,
       jsonLd: [...document.querySelectorAll('script[type="application/ld+json"]')].map((script) => JSON.parse(script.textContent)),
       localStorageEntries: localStorage.length,
       sessionStorageEntries: sessionStorage.length,
@@ -43,7 +54,9 @@ test("metadata, structured data, and security headers remain production-safe", a
     titles.add(metadata.title);
     expect(metadata.description).toBeTruthy();
     expect(metadata.canonical.replace(/\/$/, "")).toBe(canonicalRoutes.get(route));
-    expect(metadata.ogImage).toBe("https://mousakhaled.com/og/mousakhaled-preview.png");
+    const card = `https://mousakhaled.com/og/${previewCards.get(route)}.png`;
+    expect(metadata.ogImage).toBe(card);
+    expect(metadata.twitterImage).toBe(card);
     expect(metadata.jsonLd.length).toBeGreaterThan(0);
     expect(metadata.localStorageEntries).toBe(0);
     expect(metadata.sessionStorageEntries).toBe(0);
@@ -74,7 +87,7 @@ test("discovery and brand assets resolve with exact public routes", async ({ req
     "/apple-touch-icon.png",
     "/icon-192.png",
     "/icon-512.png",
-    "/og/mousakhaled-preview.png",
+    ...new Set([...previewCards.values()].map((slug) => `/og/${slug}.png`)),
   ]) {
     expect((await request.get(asset)).ok(), asset).toBeTruthy();
   }

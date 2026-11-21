@@ -11,6 +11,8 @@ export const metadata = createPageMetadata({
   description:
     "See how Khaled Mousa used Python and Linux automation to reduce a repetitive engineering task from approximately two hours to approximately ten seconds.",
   path: "/work/resetwave",
+  image: "/og/resetwave.png",
+  imageAlt: "ResetWave: 2 hours to 10 seconds.",
 });
 
 const technology = [

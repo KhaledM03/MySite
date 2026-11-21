@@ -2,6 +2,7 @@ import "./globals.css";
 import StructuredData from "@/components/seo/StructuredData";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import ContactFieldCard from "@/components/ui/ContactFieldCard";
+import ConsoleHello from "@/components/ui/ConsoleHello";
 import CookieNote from "@/components/ui/CookieNote";
 import { EDUCATION } from "@/data/career";
 import {
@@ -136,6 +137,7 @@ export default function RootLayout({ children }) {
         {children}
         <ContactFieldCard />
         <CookieNote />
+        <ConsoleHello />
         <ScrollReveal />
       </body>
     </html>
