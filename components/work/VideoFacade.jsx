@@ -10,7 +10,16 @@ const HOVER_DELAY_MS = 1100;
 // it starts a muted, looping preview; pressing it plays with sound. Only then
 // does the page load YouTube's privacy-enhanced player, so visitors who skip
 // the video send nothing to Google.
-export default function VideoFacade({ youtubeId, title, url, poster }) {
+export default function VideoFacade({
+  youtubeId,
+  title,
+  url,
+  poster,
+  overlay = null,
+  loop = null,
+  sizes = "(max-width: 760px) 92vw, 44vw",
+  priority = false,
+}) {
   const [mode, setMode] = useState("poster");
   const hoverTimerRef = useRef(0);
 
@@ -45,7 +54,13 @@ export default function VideoFacade({ youtubeId, title, url, poster }) {
           onPointerEnter={startHover}
           onPointerLeave={cancelHover}
         >
-          <Image src={poster.src} alt="" width={poster.width} height={poster.height} sizes="(max-width: 760px) 92vw, 44vw" />
+          {/* A short self-hosted clip, when there is one, loops silently in
+              place of the poster. It needs nothing from YouTube. */}
+          {loop ? (
+            <video className="video-facade-loop" src={loop} poster={poster.src} muted loop playsInline autoPlay preload="metadata" aria-hidden="true" />
+          ) : (
+            <Image src={poster.src} alt="" width={poster.width} height={poster.height} sizes={sizes} priority={priority} />
+          )}
           <span className="video-facade-play" aria-hidden="true">
             <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" /></svg>
           </span>
@@ -61,6 +76,7 @@ export default function VideoFacade({ youtubeId, title, url, poster }) {
           referrerPolicy="strict-origin-when-cross-origin"
         />
       )}
+      {mode !== "playing" ? overlay : null}
       <a className="video-facade-link" href={url} target="_blank" rel="noreferrer">
         Watch on YouTube <span aria-hidden="true">↗</span>
       </a>
