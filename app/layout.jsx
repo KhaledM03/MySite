@@ -134,6 +134,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
+        <div className="scroll-progress" aria-hidden="true" />
         <StructuredData data={identityData} />
         {children}
         <ContactFieldCard />

@@ -12,6 +12,10 @@ export const builds = [
       height: 1050,
       alt: "Small FPV quadcopter with clear prop guards and a front-mounted camera on a blue repair mat",
     },
+    // Featured in the homepage hero. Set `loop` to a short self-hosted MP4
+    // (for example "/media/hero/fpv-loop.mp4") to play silently in place of the poster.
+    featured: true,
+    loop: null,
     video: {
       youtubeId: "DPGMJUyqAjA",
       title: "Flying my FPV drone in class",
@@ -22,13 +26,20 @@ export const builds = [
     id: "window-shelf",
     title: "3D-printed window shelf",
     summary:
-      "Designed a window-mounted plant shelf in Fusion 360: a tray with a raised lip, a plate that screws to the sill, and a triangular brace underneath. Then I printed it, and it's been holding a cactus ever since.",
+      "Designed a window-mounted plant shelf in Fusion 360: a tray with a raised lip, a plate that screws to the sill, and a triangular brace underneath. Then I printed it, and it's been holding a cactus ever since. (The cactus's name is embossed in the tray.)",
     tags: ["Fusion 360", "CAD", "3D printing", "Design for fit"],
     image: {
       src: "/media/engineering-lab/cad-study-01.webp",
       width: 1561,
       height: 939,
       alt: "Fusion 360 model of a window shelf with a lipped tray, a mounting plate with screw holes, and a triangular support brace",
+    },
+    // The printed shelf in use. The card prints this in over the model.
+    printed: {
+      src: "/media/builds/window-shelf-print.webp",
+      width: 1600,
+      height: 1000,
+      alt: "The printed white shelf mounted on a window sill, holding a potted cactus",
     },
   },
   {
