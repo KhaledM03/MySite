@@ -184,13 +184,44 @@ test("lab highlights, drone diagram, and current courses are on the homepage", a
   await expect(page.locator(".intro-currently")).toHaveCount(0);
 });
 
-test("visitor counting stays off until a site code is configured", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+// Serves the local build under the real domain so the counter's domain check
+// passes, and records (without sending) any GoatCounter requests.
+async function visitAsLiveSite(page, path) {
   const counted = [];
+  await page.route("https://mousakhaled.com/**", async (route) => {
+    const url = route.request().url().replace("https://mousakhaled.com", "http://127.0.0.1:3000");
+    const response = await route.fetch({ url });
+    await route.fulfill({ response });
+  });
+  await page.route(/goatcounter\.com/, (route) => {
+    counted.push(route.request().url());
+    return route.fulfill({ status: 200, contentType: "image/gif", body: Buffer.from("R0lGODlhAQABAAAAACw=", "base64") });
+  });
+  await page.goto(`https://mousakhaled.com${path}`, { waitUntil: "networkidle" });
+  return counted;
+}
+
+test("visitor counting is cookieless, live-domain only, and honors privacy signals", async ({ page, context, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+
+  // Local and preview hosts are never counted.
+  const offDomain = [];
   page.on("request", (request) => {
-    if (request.url().includes("goatcounter")) counted.push(request.url());
+    if (request.url().includes("goatcounter")) offDomain.push(request.url());
   });
   await page.goto("/", { waitUntil: "networkidle" });
-  await page.goto("/work", { waitUntil: "networkidle" });
+  expect(offDomain).toEqual([]);
+
+  // On the real domain each page view sends one image request and sets no cookie.
+  const counted = await visitAsLiveSite(page, "/work");
+  expect(counted).toHaveLength(1);
+  expect(counted[0]).toMatch(/^https:\/\/khaledm03\.goatcounter\.com\/count\?p=%2Fwork/);
+  expect(await context.cookies()).toEqual([]);
+});
+
+test("visitors who send Global Privacy Control are not counted", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  await page.addInitScript(() => Object.defineProperty(navigator, "globalPrivacyControl", { get: () => true }));
+  const counted = await visitAsLiveSite(page, "/");
   expect(counted).toEqual([]);
 });

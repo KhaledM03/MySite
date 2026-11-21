@@ -32,6 +32,8 @@ test("metadata, structured data, and security headers remain production-safe", a
     expect(headers["content-security-policy"]).toContain("frame-ancestors 'none'");
     expect(headers["content-security-policy"]).toContain("frame-src 'self' https://thecovedev.com https://www.youtube-nocookie.com");
     expect(headers["content-security-policy"]).toContain("object-src 'none'");
+    expect(headers["content-security-policy"]).toContain("img-src 'self' data: blob: https://khaledm03.goatcounter.com");
+    expect(headers["content-security-policy"]).not.toContain("gc.zgo.at");
     expect(headers["permissions-policy"]).toContain("camera=()");
     expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
     expect(headers["x-content-type-options"]).toBe("nosniff");
