@@ -55,7 +55,7 @@ export default function ResetWavePage() {
 
       <section id="problem" className="case-section" tabIndex={-1}>
         <p className="case-section-number">02 / Problem, role & constraints</p>
-        <h2>The documented problem</h2>
+        <h2>The problem</h2>
         <div className="case-split">
           <div>
             <h3>Context</h3>
@@ -77,7 +77,7 @@ export default function ResetWavePage() {
 
       <section id="workflow" className="case-section" tabIndex={-1}>
         <p className="case-section-number">03 / Sanitized workflow</p>
-        <h2>Architecture at the level that can be shared.</h2>
+        <h2>How it works.</h2>
         <figure className="workflow-diagram">
           <div className="workflow-node">
             <span>01</span><strong>Operator input</strong><small>Approved task targets</small>
@@ -133,7 +133,7 @@ export default function ResetWavePage() {
 
       <section id="outcome" className="case-section case-outcome" tabIndex={-1}>
         <p className="case-section-number">06 / Outcome & technology</p>
-        <div className="evidence-heading-link"><h2>From hours to seconds.</h2><CopyFieldLink targetId="outcome" label="Copy impact link" /></div>
+        <div className="evidence-heading-link"><h2>From hours to seconds.</h2><CopyFieldLink targetId="outcome" label="Copy link" /></div>
         <div className="outcome-number"><span>≈</span><strong>720×</strong><small>calculated timing improvement</small></div>
         <p>
           The main claim remains the clearer one: an engineering task documented at approximately two hours was reduced to approximately ten seconds. The 720× figure is the direct calculation from those timings, not a separate benchmark claim.

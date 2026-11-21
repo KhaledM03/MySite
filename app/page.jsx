@@ -3,9 +3,10 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
+import LabWork from "@/components/sections/LabWork";
 import RecentBuilds from "@/components/sections/RecentBuilds";
 import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
-import { Availability, GraduationFact } from "@/components/ui/CalendarFacts";
+import { Availability, CurrentCourses, GraduationFact } from "@/components/ui/CalendarFacts";
 import IntroArt from "@/components/ui/IntroArt";
 import { CANONICAL_RESUME, CAREER_LINKS, EDUCATION, SKILL_GROUPS } from "@/data/career";
 import { projects } from "@/data/projects";
@@ -76,6 +77,8 @@ export default function HomePage() {
               <a href={CAREER_LINKS.linkedin} target="_blank" rel="noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
               <a href={CAREER_LINKS.github} target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
             </p>
+
+            <CurrentCourses />
           </div>
 
           <IntroArt />
@@ -108,7 +111,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <RecentBuilds />
+        <LabWork />
 
         <section id="experience" className="home-section" aria-labelledby="experience-title">
           <header className="home-section-header">
@@ -117,6 +120,8 @@ export default function HomePage() {
           </header>
           <ExperienceTimeline />
         </section>
+
+        <RecentBuilds />
 
         <section id="skills" className="home-section home-skills" aria-labelledby="skills-title">
           <header className="home-section-header">
