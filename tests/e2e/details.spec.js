@@ -42,3 +42,30 @@ test("timeline pads light up as roles scroll into view", async ({ page, browserN
   await lastRole.scrollIntoViewIfNeeded();
   await expect.poll(() => lastRole.getAttribute("data-reveal"), { timeout: 4000 }).not.toBe("armed");
 });
+
+test("recent builds show both projects and the video loads only on play", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  const youtubeRequests = [];
+  await page.route(/youtube(-nocookie)?\.com|ytimg\.com|googlevideo\.com/, (route) => {
+    youtubeRequests.push(route.request().url());
+    return route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Video fixture</title>" });
+  });
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const builds = page.locator("#builds");
+  await expect(builds.locator(".build-card")).toHaveCount(2);
+  await expect(builds.getByRole("heading", { name: "Custom FPV drone" })).toBeVisible();
+  await expect(builds.getByRole("heading", { name: "FM walkie-talkie pair" })).toBeVisible();
+  await expect(builds.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://youtu.be/DPGMJUyqAjA");
+
+  await expect(builds.locator("iframe")).toHaveCount(0);
+  expect(youtubeRequests).toEqual([]);
+
+  await builds.getByRole("button", { name: /Play: Flying my FPV drone in class/ }).click();
+  const frame = builds.locator('iframe[title="Flying my FPV drone in class"]');
+  await expect(frame).toHaveAttribute("src", /^https:\/\/www\.youtube-nocookie\.com\/embed\/DPGMJUyqAjA\?autoplay=1/);
+
+  await page.goto("/work", { waitUntil: "networkidle" });
+  await expect(page.locator("#builds .build-card")).toHaveCount(2);
+});

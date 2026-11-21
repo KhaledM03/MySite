@@ -6,7 +6,8 @@ const contentSecurityPolicy = [
   "font-src 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  "frame-src 'self' https://thecovedev.com",
+  // The Cove Dev live preview, and the FPV drone video (loaded only on play).
+  "frame-src 'self' https://thecovedev.com https://www.youtube-nocookie.com",
   "img-src 'self' data: blob:",
   "manifest-src 'self'",
   "media-src 'self'",
