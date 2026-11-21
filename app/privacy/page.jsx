@@ -1,6 +1,7 @@
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import { CAREER_LINKS } from "@/data/career";
+import { ANALYTICS } from "@/data/analytics";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
@@ -39,8 +40,13 @@ export default function PrivacyPage() {
 
           <section aria-labelledby="privacy-tracking">
             <h2 id="privacy-tracking">Analytics, ads, and trackers</h2>
+            {ANALYTICS.goatcounterCode ? (
+              <p>
+                I count visits with <a href="https://www.goatcounter.com/" target="_blank" rel="noreferrer">GoatCounter</a>, which uses no cookies and stores nothing in your browser. Each page view sends the page address, the referring site, your screen size, and a rough location derived from your IP address, which GoatCounter does not store. If your browser sends Do Not Track or Global Privacy Control, you aren&apos;t counted at all.
+              </p>
+            ) : null}
             <p>
-              There are none. Every script, font, and image on this site is served from this site. Nothing is loaded from ad networks, analytics services, or social media widgets. The only outside content is the drone video, and only if you choose to play it.
+              There are no ads and no trackers. Every script, font, and image on this site is served from this site, and nothing is loaded from ad networks or social media widgets. The only outside content is the drone video, and only if you choose to watch it.
             </p>
           </section>
 
@@ -54,7 +60,7 @@ export default function PrivacyPage() {
           <section aria-labelledby="privacy-embeds">
             <h2 id="privacy-embeds">Embedded video, preview, and outside links</h2>
             <p>
-              The FPV drone video shows a photo from this site until you press play. Only then does it load YouTube&apos;s privacy-enhanced player (youtube-nocookie.com), and YouTube&apos;s own policies apply from that point.
+              The FPV drone video shows a photo from this site until you press play or rest your pointer on it for a moment. Only then does it load YouTube&apos;s privacy-enhanced player (youtube-nocookie.com), and YouTube&apos;s own policies apply from that point.
             </p>
             <p>
               On The Cove Dev case study, the live preview of thecovedev.com only loads after you press &ldquo;Interact with build&rdquo;. Links to GitHub, LinkedIn, YouTube, and Google reviews open those sites, which have their own policies.

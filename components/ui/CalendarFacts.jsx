@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { getAvailability, GRADUATION, hasGraduated } from "@/lib/status";
+import { getAvailability, getCurrentSemester, GRADUATION, hasGraduated } from "@/lib/status";
 
 // The page is prerendered at build time, so the server snapshot uses the build
 // date and the browser swaps in today's date right after it loads. Visitors
@@ -25,5 +25,18 @@ export function GraduationFact() {
       <dt>{graduated ? "Graduated" : "Graduating"}</dt>
       <dd>{GRADUATION.label}</dd>
     </>
+  );
+}
+
+export function CurrentCourses() {
+  const semester = getCurrentSemester(useToday());
+  if (!semester) return null;
+  return (
+    <p className="intro-currently">
+      <span className="intro-currently-dot" aria-hidden="true" />
+      <span>
+        <strong>Currently taking</strong> ({semester.name}): {semester.courses.join(", ")}
+      </span>
+    </p>
   );
 }

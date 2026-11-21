@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
+const analytics = require("./data/analytics.json");
+
+// Cookieless visitor counting sends one image request per page view.
+const analyticsHost = analytics.goatcounterCode
+  ? ` https://${analytics.goatcounterCode}.goatcounter.com`
+  : "";
+
 const contentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -8,7 +15,7 @@ const contentSecurityPolicy = [
   "frame-ancestors 'none'",
   // The Cove Dev live preview, and the FPV drone video (loaded only on play).
   "frame-src 'self' https://thecovedev.com https://www.youtube-nocookie.com",
-  "img-src 'self' data: blob:",
+  `img-src 'self' data: blob:${analyticsHost}`,
   "manifest-src 'self'",
   "media-src 'self'",
   "object-src 'none'",
