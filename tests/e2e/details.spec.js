@@ -8,16 +8,17 @@ test("hero trace, cursor, and featured flight video", async ({ page, browserName
   await expect(page.locator(".intro h1 em .intro-wave path")).toHaveCount(1);
   await expect(page.locator(".intro-caret")).toHaveAttribute("aria-hidden", "true");
 
-  // The drone video is the first thing on the page, with a goggle-style OSD.
+  // The drone footage is the first thing on the page: a silent local loop.
   const flight = page.locator(".hero-flight");
   await expect(flight).toBeInViewport();
-  await expect(flight.locator(".flight-osd")).toHaveAttribute("aria-hidden", "true");
-  await expect(flight.locator(".flight-osd-rec")).toContainText(/REC \d\d:\d\d/);
+  const loop = flight.locator("video.video-facade-loop");
+  await expect(loop).toHaveAttribute("src", "/media/hero/fpv-loop.mp4");
+  await expect.poll(() => loop.evaluate((video) => !video.paused && video.muted)).toBe(true);
   // Nothing loads from YouTube until the visitor asks for it.
   await expect(flight.locator("iframe")).toHaveCount(0);
   await flight.getByRole("button", { name: /Play: Flying my FPV drone in class/ }).click();
   await expect(flight.locator("iframe")).toHaveAttribute("src", /youtube-nocookie\.com\/embed\/DPGMJUyqAjA/);
-  await expect(flight.locator(".flight-osd")).toHaveCount(0);
+  await expect(flight.locator("video")).toHaveCount(0);
 });
 
 test("shelf card prints the photo in over the CAD model", async ({ page, browserName }) => {
@@ -125,18 +126,20 @@ test("resting the pointer on the drone video starts a muted preview", async ({ p
   await page.route(/youtube(-nocookie)?\.com|ytimg\.com|googlevideo\.com/, (route) =>
     route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Video fixture</title>" }));
   await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto("/", { waitUntil: "networkidle" });
+  // The homepage hero already plays a local loop, so the hover preview lives
+  // on the Work page's drone card.
+  await page.goto("/work", { waitUntil: "networkidle" });
 
-  const poster = page.getByRole("button", { name: /Play: Flying my FPV drone in class/ });
+  const poster = page.locator("#builds").getByRole("button", { name: /Play: Flying my FPV drone in class/ });
   await poster.scrollIntoViewIfNeeded();
   await poster.hover();
   await page.waitForTimeout(300);
   await page.mouse.move(5, 5);
   await page.waitForTimeout(1300);
-  await expect(page.locator(".hero-flight iframe")).toHaveCount(0);
+  await expect(page.locator("#builds iframe")).toHaveCount(0);
 
   await poster.hover();
-  const frame = page.locator('.hero-flight iframe[title="Flying my FPV drone in class"]');
+  const frame = page.locator('#builds iframe[title="Flying my FPV drone in class"]');
   await expect(frame).toHaveAttribute("src", /youtube-nocookie\.com\/embed\/DPGMJUyqAjA\?autoplay=1&mute=1&loop=1/);
 });
 

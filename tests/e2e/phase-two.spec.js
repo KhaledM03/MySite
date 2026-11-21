@@ -82,6 +82,9 @@ test("homepage motion is fully disabled under reduced motion", async ({ page, br
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
   }));
   expect(introState).toEqual({ flight: "none", wave: "none", caret: "none", scrollBehavior: "auto" });
+  // The hero drone loop holds still on its first frame.
+  await page.waitForTimeout(600);
+  expect(await page.locator(".hero-flight video").evaluate((video) => video.paused)).toBe(true);
 
   // The shelf shows the finished print without animating it.
   const reveal = page.locator("#window-shelf .print-reveal");

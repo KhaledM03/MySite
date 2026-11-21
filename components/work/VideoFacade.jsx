@@ -22,11 +22,30 @@ export default function VideoFacade({
 }) {
   const [mode, setMode] = useState("poster");
   const hoverTimerRef = useRef(0);
+  const loopRef = useRef(null);
 
   useEffect(() => () => window.clearTimeout(hoverTimerRef.current), []);
 
+  // The silent loop plays only while it is on screen, and never for people
+  // who asked for reduced motion; they see its first frame instead.
+  useEffect(() => {
+    const video = loopRef.current;
+    if (!video || mode !== "poster") return undefined;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduced.matches || !("IntersectionObserver" in window)) return undefined;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) video.play().catch(() => {});
+      else video.pause();
+    }, { threshold: 0.25 });
+    observer.observe(video);
+    return () => observer.disconnect();
+  }, [mode]);
+
+  // With a local loop already playing, a second muted YouTube preview on hover
+  // would add nothing, so only posters get the hover preview.
   const canPreview = () =>
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    !loop
+    && window.matchMedia("(hover: hover) and (pointer: fine)").matches
     && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   const startHover = () => {
@@ -57,7 +76,7 @@ export default function VideoFacade({
           {/* A short self-hosted clip, when there is one, loops silently in
               place of the poster. It needs nothing from YouTube. */}
           {loop ? (
-            <video className="video-facade-loop" src={loop} poster={poster.src} muted loop playsInline autoPlay preload="metadata" aria-hidden="true" />
+            <video ref={loopRef} className="video-facade-loop" src={loop} poster={poster.src} muted loop playsInline preload="none" aria-hidden="true" />
           ) : (
             <Image src={poster.src} alt="" width={poster.width} height={poster.height} sizes={sizes} priority={priority} />
           )}
@@ -65,7 +84,7 @@ export default function VideoFacade({
             <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" /></svg>
           </span>
           <span className="video-facade-label">Play: {title}</span>
-          <span className="video-facade-hint" aria-hidden="true">Hover to preview</span>
+          {loop ? null : <span className="video-facade-hint" aria-hidden="true">Hover to preview</span>}
         </button>
       ) : (
         <iframe

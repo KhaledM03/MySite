@@ -4755,7 +4755,7 @@ html {
 
 .hero-flight {
   justify-self: center;
-  width: min(100%, 540px, calc(100svh - var(--site-header-height) - 9rem));
+  width: min(100%, 620px, calc((100svh - var(--site-header-height) - 10rem) * 4 / 3));
   min-width: min(100%, 300px);
   margin: 0;
   outline: none;
@@ -4763,7 +4763,7 @@ html {
 
 .hero-flight-screen {
   position: relative;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   border: 1px solid rgba(87, 50, 68, 0.35);
   border-radius: 26px 10px 26px 10px;
@@ -4784,7 +4784,23 @@ html {
 .hero-flight .video-facade-poster img { animation: hero-flight-drift 18s ease-in-out infinite alternate; }
 @keyframes hero-flight-drift { from { transform: scale(1.02) translate(0, 0); } to { transform: scale(1.1) translate(-2%, 1.5%); } }
 
-.hero-flight .video-facade-label { right: 7.5rem; }
+.hero-flight .video-facade-label { right: 1rem; }
+.hero-flight .video-facade-poster::after { background: linear-gradient(to top, rgba(20, 12, 17, 0.7), rgba(20, 12, 17, 0) 32%); }
+.hero-flight .video-facade-play { width: 64px; height: 64px; opacity: 0.92; }
+
+/* Real photo next to the intro. */
+.intro-person { display: flex; align-items: flex-start; gap: 1rem; margin-top: 1.3rem; }
+.intro-person .intro-lead { margin-top: 0; }
+.intro-avatar {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  border: 3px solid var(--paper);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(87, 50, 68, 0.25), 6px 8px 0 rgba(243, 183, 47, 0.45);
+  object-fit: cover;
+}
+@media (max-width: 420px) { .intro-avatar { width: 56px; height: 56px; } }
 
 .hero-flight figcaption {
   display: flex;
@@ -4800,52 +4816,8 @@ html {
 .hero-flight-eyebrow { color: var(--coral-dark); font-size: var(--type-micro); font-weight: 850; letter-spacing: 0.08em; text-transform: uppercase; }
 .hero-flight figcaption a { min-height: 32px; display: inline-flex; align-items: center; gap: 0.3rem; color: var(--plum); font-weight: 800; text-underline-offset: 4px; }
 
-.flight-osd {
-  position: absolute;
-  z-index: 1;
-  inset: 0;
-  color: #fffaf0;
-  font: 760 0.7rem/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  letter-spacing: 0.06em;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.75);
-  pointer-events: none;
-}
-
-.flight-osd-corner { position: absolute; width: 22px; height: 22px; border: 2px solid rgba(255, 250, 240, 0.85); filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.5)); }
-.flight-osd-tl { top: 12px; left: 12px; border-right: 0; border-bottom: 0; }
-.flight-osd-tr { top: 12px; right: 12px; border-bottom: 0; border-left: 0; }
-.flight-osd-bl { bottom: 12px; left: 12px; border-top: 0; border-right: 0; }
-.flight-osd-br { right: 12px; bottom: 12px; border-top: 0; border-left: 0; }
-
-.flight-osd-rec { position: absolute; top: 22px; left: 42px; display: inline-flex; align-items: center; gap: 0.4rem; font-variant-numeric: tabular-nums; }
-.flight-osd-rec i { width: 8px; height: 8px; border-radius: 50%; background: #ff4b3a; box-shadow: 0 0 8px #ff4b3a; animation: flight-osd-blink 1.2s steps(1, end) infinite; }
-.flight-osd-link { position: absolute; top: 22px; left: 50%; transform: translateX(-50%); color: #9be38f; white-space: nowrap; }
-.flight-osd-batt { position: absolute; right: 42px; bottom: 22px; color: var(--gold); }
-
-/* Artificial horizon, with a gap so it never crosses the play button. */
-.flight-osd-horizon {
-  position: absolute;
-  top: 50%;
-  right: 18%;
-  left: 18%;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255, 250, 240, 0.8) 0 30%, transparent 30% 70%, rgba(255, 250, 240, 0.8) 70% 100%);
-  transform: rotate(-3deg);
-  animation: flight-osd-bank 6s ease-in-out infinite alternate;
-}
-
-@keyframes flight-osd-blink { 50% { opacity: 0; } }
-@keyframes flight-osd-bank { from { transform: rotate(-4deg) translateY(-3px); } to { transform: rotate(3deg) translateY(4px); } }
-
-.video-facade[data-mode="preview"] .flight-osd-horizon { opacity: 0.55; }
-
 @media (max-width: 980px) {
   .hero-flight { width: min(100%, 520px); }
-}
-
-@media (max-width: 420px) {
-  .flight-osd { font-size: 0.62rem; }
-  .flight-osd-link { display: none; }
 }
 
 .build-watch {
@@ -5120,8 +5092,6 @@ html {
 @media (prefers-reduced-motion: reduce) {
   .hero-flight-screen,
   .hero-flight .video-facade-poster img,
-  .flight-osd-rec i,
-  .flight-osd-horizon,
   .print-reveal-nozzle span { animation: none; }
   .gallery-tile img,
   .gallery-caption,
