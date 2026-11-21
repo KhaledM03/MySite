@@ -16,6 +16,7 @@ const GROUP_SELECTOR = [
   ".home-project-grid",
   ".timeline",
   ".skills-grid",
+  ".builds-grid",
   ".project-list",
   ".boingo-evidence-grid",
   ".review-rail",

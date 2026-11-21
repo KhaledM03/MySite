@@ -3,6 +3,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
+import RecentBuilds from "@/components/sections/RecentBuilds";
 import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
 import { Availability, GraduationFact } from "@/components/ui/CalendarFacts";
 import IntroArt from "@/components/ui/IntroArt";
@@ -106,6 +107,8 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+
+        <RecentBuilds />
 
         <section id="experience" className="home-section" aria-labelledby="experience-title">
           <header className="home-section-header">

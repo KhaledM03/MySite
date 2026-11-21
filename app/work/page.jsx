@@ -3,6 +3,7 @@ import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import ProjectCard from "@/components/work/ProjectCard";
+import RecentBuilds from "@/components/sections/RecentBuilds";
 import { projects } from "@/data/projects";
 import StructuredData from "@/components/seo/StructuredData";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
@@ -84,6 +85,8 @@ export default function WorkPage() {
             ))}
           </div>
         </section>
+
+        <RecentBuilds />
 
         <section className="evidence-note" aria-labelledby="evidence-note-title">
           <div>
