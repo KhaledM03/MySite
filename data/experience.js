@@ -21,14 +21,14 @@ export const experienceSources = {
     },
     cove: {
       organization: "The Cove Dev, LLC",
-      period: "August 2025–present",
+      period: "August–December 2025",
       role: "Full-Stack Web Development",
       summary:
         "Responsive client-facing development, dynamic interfaces, client-side logic, debugging, modular design, and Git-based delivery.",
     },
     pureGym: {
       summary:
-        "Four public member reviews independently mentioned Khaled by name for safety, care, confidence, cleanliness, and service.",
+        "Four members of the gym where I worked mentioned me by name in public Google reviews, for safety, care, cleanliness, and making them feel welcome.",
       sourceLabel: "Public Google review",
     },
   },
@@ -72,34 +72,58 @@ export const pureGymReviews = [
   },
 ];
 
-// Fast-scan records intentionally omit employment details that remain
-// unresolved in the source ledger.
-export const experienceScanRecords = [
+// Full role history, newest first. Wording follows the canonical résumé PDF.
+export const experienceTimeline = [
   {
-    number: "01",
-    organization: experienceSources.verified.boingo.organization,
-    role: experienceSources.verified.boingo.role,
-    period: experienceSources.verified.boingo.period,
-    signal: "Linux · wireless operations · testing · validation",
-    href: "#infrastructure",
-    action: "Open engineering record",
+    id: "ai-evaluation",
+    organization: "Mercor, Aligner & Handshake AI",
+    role: "AI model evaluator (contract)",
+    period: "Current",
+    summary:
+      "Evaluate and rate AI model responses against detailed project rubrics for accuracy, reasoning, and instruction-following, and write structured feedback used to improve the models.",
   },
   {
-    number: "02",
-    organization: experienceSources.verified.cove.organization,
-    role: experienceSources.verified.cove.role,
-    period: experienceSources.verified.cove.period,
-    signal: "Responsive interfaces · client-side logic · Git",
-    href: "#ownership",
-    action: "Open product record",
+    id: "broderick",
+    organization: "J.C. Broderick & Associates",
+    role: "Environmental field technician",
+    period: "Jun – Aug 2026",
+    summary:
+      "Performed industrial hygiene sampling, air quality monitoring, and on-site data collection at client sites, and supported environmental assessments and compliance documentation.",
   },
   {
-    number: "03",
-    organization: "Public member evidence",
-    role: "People-centered service record",
-    period: "Four independent sources",
-    signal: "Safety · care · confidence · cleanliness",
-    href: "#people",
-    action: "Inspect public sources",
+    id: "cove",
+    organization: "The Cove Dev, LLC",
+    role: "Founder and full-stack developer",
+    period: "Aug – Dec 2025",
+    summary:
+      "Built and deployed client websites and web applications with React, Next.js, and JavaScript. Ran the business on my own and earned about $6K in profit in 2025.",
+    href: "/work/the-cove-dev",
+    linkLabel: "Read the case study",
+  },
+  {
+    id: "boingo",
+    organization: "Boingo Wireless",
+    role: "Wireless operations intern",
+    period: "Summer 2024",
+    summary:
+      "Built ResetWave, a Python tool that sends commands to wireless LAN controllers over SSH, cutting an access-point reset workflow from about 2 hours to 10 seconds. Troubleshot live controllers and access points, supported a field deployment in Texas, and led a team in the company’s 3-day hackathon, presenting a Google Cloud and Vertex AI concept to executive leadership.",
+    href: "/work/resetwave",
+    linkLabel: "Read about ResetWave",
+  },
+  {
+    id: "empire",
+    organization: "Empire Camera Installations",
+    role: "Field technician (independent contractor)",
+    period: "2023 – 2025",
+    summary:
+      "Installed and configured IP security camera systems at client sites over Ethernet and Power over Ethernet, and diagnosed hardware, wiring, and network faults on site.",
+  },
+  {
+    id: "meta",
+    organization: "Meta Quest Research",
+    role: "EMG research assistant",
+    period: "Summer 2021",
+    summary:
+      "Supported wearable electromyography (EMG) signal collection, hardware evaluation, and gesture-recognition testing.",
   },
 ];

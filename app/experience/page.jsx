@@ -4,22 +4,24 @@ import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import LongPageNav from "@/components/navigation/LongPageNav";
 import StructuredData from "@/components/seo/StructuredData";
-import { experienceScanRecords, experienceSources, pureGymReviews } from "@/data/experience";
+import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
+import { CANONICAL_RESUME, EDUCATION } from "@/data/career";
+import { experienceSources, pureGymReviews } from "@/data/experience";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
 
 export const metadata = createPageMetadata({
   title: "Experience — Engineering, Client Work & Leadership",
   description:
-    "Explore Khaled Mousa's engineering experience, client ownership, leadership, and people-centered service through an evidence-led field record.",
+    "Khaled Mousa's experience: a Boingo Wireless internship, field technician work, founding The Cove Dev, environmental field work, AI model evaluation, and EMG research at Meta.",
   path: "/experience",
 });
 
 const sections = [
-  { id: "field-overview", label: "Overview" },
-  { id: "infrastructure", label: "Engineering" },
-  { id: "ownership", label: "Ownership" },
+  { id: "roles", label: "All roles" },
+  { id: "education", label: "Education" },
+  { id: "infrastructure", label: "Boingo" },
+  { id: "ownership", label: "The Cove Dev" },
   { id: "people", label: "People" },
-  { id: "field-reflection", label: "Reflection" },
 ];
 
 export default function ExperiencePage() {
@@ -31,36 +33,37 @@ export default function ExperiencePage() {
         data={{
           "@context": "https://schema.org",
           "@type": "CollectionPage",
-          name: "Field Record",
+          name: "Experience — Khaled Mousa",
           url: `${SITE_URL}/experience`,
           description:
-            "An evidence-led record of engineering exposure, client ownership, and people-centered service.",
+            "Engineering, client work, field work, leadership, and research experience.",
           author: { "@id": `${SITE_URL}/#person` },
           inLanguage: "en-US",
         }}
       />
-      <a className="skip-link" href="#field-overview">Skip to Field Record</a>
+      <a className="skip-link" href="#roles">Skip to experience</a>
       <SiteHeader />
 
       <main className="experience-page">
         <section id="field-top" className="experience-cover" aria-labelledby="field-title" tabIndex={-1}>
           <div className="experience-cover-copy">
-            <p className="section-label">Experience · Evidence from the field</p>
-            <h1 id="field-title">Field<br /><em>Record.</em></h1>
-            <p className="experience-cover-deck">Systems are technical. Trust is human.</p>
+            <p className="section-label">Experience</p>
+            <h1 id="field-title">Where I&apos;ve <em>worked.</em></h1>
             <p>
-              A record of engineering exposure, client ownership, and the moments when people trusted me to improve their experience.
+              A wireless operations internship, field work installing camera systems and sampling air quality, a web development business I founded, AI model evaluation, and early research at Meta.
             </p>
             <div className="experience-cover-links">
-              <a className="button button-primary" href="#field-overview">Read the record ↓</a>
-              <Link className="button button-secondary" href="/work">View project evidence ↗</Link>
+              <a className="button button-primary" href={CANONICAL_RESUME.href} target="_blank" rel="noreferrer">
+                View résumé <span aria-hidden="true">↗</span>
+                <span className="sr-only">(PDF, opens in a new tab)</span>
+              </a>
+              <Link className="button button-secondary" href="/work">See the projects</Link>
             </div>
           </div>
 
           <div className="experience-cover-stage" aria-hidden="true">
             <div className="field-orbit field-orbit-one" />
             <div className="field-orbit field-orbit-two" />
-            <div className="field-stamp"><span>Record</span><strong>03 contexts</strong><small>Technology · ownership · care</small></div>
             <Image
               src="/characters/khaled-radio.webp"
               alt=""
@@ -71,50 +74,53 @@ export default function ExperiencePage() {
           </div>
         </section>
 
-        <nav className="experience-scan-rail" aria-label="Fast scan of field records">
-          <div className="experience-scan-heading">
-            <span>Fast scan</span>
-            <strong>Three field signals</strong>
-          </div>
-          {experienceScanRecords.map((record) => (
-            <a key={record.number} href={record.href}>
-              <span>{record.number}</span>
-              <div><strong>{record.organization}</strong><small>{record.role}</small></div>
-              <p>{record.signal}</p>
-              <em>{record.period}</em>
-              <i>{record.action} ↗</i>
-            </a>
-          ))}
-        </nav>
-
-        <LongPageNav items={sections} ariaLabel="Field Record contents" topId="field-top" />
+        <LongPageNav items={sections} ariaLabel="Experience contents" topId="field-top" />
 
         <div className="field-story">
-          <section id="field-overview" className="field-section field-overview" aria-labelledby="field-overview-title" tabIndex={-1}>
-            <div>
-              <p className="case-section-number">01 / The record</p>
-              <h2 id="field-overview-title">Work becomes real when other people depend on it.</h2>
-            </div>
-            <div>
-              <p className="field-lead">
-                The strongest thread across these experiences is not a job-title ladder. It is learning how technical judgment, ownership, and care show up inside real organizations—and how trust is earned through the details.
-              </p>
-              <div className="field-principles" aria-label="Field Record themes">
-                <span>Understand the system</span>
-                <span>Own the handoff</span>
-                <span>Support the person</span>
+          <section id="roles" className="field-section field-roles" aria-labelledby="roles-title" tabIndex={-1}>
+            <header className="field-section-heading">
+              <div>
+                <h2 id="roles-title">All roles</h2>
               </div>
-            </div>
+              <p>Newest first, matching my résumé.</p>
+            </header>
+            <ExperienceTimeline />
+          </section>
+
+          <section id="education" className="field-section field-education" aria-labelledby="education-title" tabIndex={-1}>
+            <header className="field-section-heading">
+              <div>
+                <h2 id="education-title">Education</h2>
+              </div>
+              <p>I transferred from Queens College to Farmingdale for a hands-on engineering technology program.</p>
+            </header>
+            <ol className="timeline">
+              <li className="timeline-item">
+                <p className="timeline-period">Expected May 2028</p>
+                <div className="timeline-body">
+                  <h3>{EDUCATION.school}</h3>
+                  <p className="timeline-role">{EDUCATION.degrees.join(" and ")}</p>
+                  <p className="timeline-summary">GPA {EDUCATION.gpa}. {EDUCATION.honors}.</p>
+                </div>
+              </li>
+              <li className="timeline-item">
+                <p className="timeline-period">{EDUCATION.previous.period}</p>
+                <div className="timeline-body">
+                  <h3>{EDUCATION.previous.school}</h3>
+                  <p className="timeline-summary">{EDUCATION.previous.detail}</p>
+                </div>
+              </li>
+            </ol>
           </section>
 
           <section id="infrastructure" className="field-section field-infrastructure" aria-labelledby="infrastructure-title" tabIndex={-1}>
             <header className="field-section-heading">
               <div>
-                <p className="case-section-number">02 / Engineering and infrastructure</p>
-                <h2 id="infrastructure-title">See the scale. Learn the system.</h2>
+                <p className="case-section-number">Summer 2024</p>
+                <h2 id="infrastructure-title">Inside the Boingo internship.</h2>
               </div>
               <p>
-                The résumé and company-post record place Khaled inside a Summer 2024 wireless-operations internship, with exposure to infrastructure work and the people and places behind large connected systems.
+                Boingo runs Wi-Fi and 5G networks in places like airports, stadiums, and transit hubs. The internship put me next to the engineers who build and operate them.
               </p>
             </header>
 
@@ -130,13 +136,13 @@ export default function ExperiencePage() {
                 </p>
                 <div className="company-post-signoff">
                   <strong>{boingo.organization}</strong>
-                  <span>Public company evidence</span>
+                  <span>Public company post</span>
                 </div>
               </article>
 
               <div className="boingo-record">
                 <div className="boingo-record-heading">
-                  <span>Verified role</span>
+                  <span>Role</span>
                   <strong>{boingo.role}</strong>
                   <small>{boingo.organization} · {boingo.period}</small>
                 </div>
@@ -148,30 +154,26 @@ export default function ExperiencePage() {
               </div>
             </div>
 
-            <aside className="field-boundary-note">
-              <strong>Evidence boundary</strong>
-              <p>
-                This company record confirms the internship context. It does not establish that ResetWave was deployed into Boingo production systems or that Khaled designed Boingo’s network.
-              </p>
-              <Link href="/work/resetwave">Read the sanitized ResetWave case study ↗</Link>
-            </aside>
+            <p className="field-boundary-note">
+              ResetWave, the automation tool I built during this internship, is written up with internal systems, credentials, and company identifiers left out. <Link href="/work/resetwave">Read the ResetWave case study</Link>.
+            </p>
           </section>
 
           <section id="ownership" className="field-section field-ownership" aria-labelledby="ownership-title" tabIndex={-1}>
             <div className="field-ownership-copy">
-              <p className="case-section-number">03 / Products and ownership</p>
-              <h2 id="ownership-title">Build for the constraint, not the screenshot.</h2>
+              <p className="case-section-number">Aug – Dec 2025</p>
+              <h2 id="ownership-title">Running The Cove Dev.</h2>
               <p className="field-lead">
-                At {cove.organization}, the verified work centers on responsive client-facing interfaces, client-side logic, debugging, modular design, and Git-based delivery.
+                At {cove.organization}, I built and shipped websites and web apps for small-business clients: the interface, the client-side logic, the debugging, and Git-based delivery.
               </p>
               <p>
-                The useful lesson is ownership: making the interface behave clearly, working through real constraints, and leaving behind a product state that can be maintained—not merely a polished frame.
+                Running it taught me ownership: making the interface behave clearly, working within a client&apos;s real constraints, and handing over something they can maintain.
               </p>
               <Link className="field-inline-link" href="/work/the-cove-dev">Open The Cove Dev case study ↗</Link>
             </div>
 
             <figure className="field-cove-evidence">
-              <div className="field-browser-bar" aria-hidden="true"><i /><i /><i /><span>Verified repository capture</span></div>
+              <div className="field-browser-bar" aria-hidden="true"><i /><i /><i /><span>thecovedev.com</span></div>
               <Image
                 src="/media/the-cove-dev/home.webp"
                 alt="The Cove Dev home interface with a purple hero, navigation, call to action, and phone mockup"
@@ -179,15 +181,15 @@ export default function ExperiencePage() {
                 height={798}
                 sizes="(max-width: 760px) 92vw, 52vw"
               />
-              <figcaption>Home interface · evidence preserved in the project repository</figcaption>
+              <figcaption>The Cove Dev home page</figcaption>
             </figure>
           </section>
 
           <section id="people" className="field-section field-people" aria-labelledby="people-title" tabIndex={-1}>
             <header className="field-section-heading">
               <div>
-                <p className="case-section-number">04 / People and operations</p>
-                <h2 id="people-title">Care is an operational skill.</h2>
+                <p className="case-section-number">Customer service</p>
+                <h2 id="people-title">What gym members said.</h2>
               </div>
               <p>{pureGym.summary}</p>
             </header>
@@ -207,27 +209,9 @@ export default function ExperiencePage() {
                 </article>
               ))}
             </div>
-            <p className="review-rail-note">Swipe or scroll to inspect all four public sources. No ratings, dates, or profile images are reproduced here.</p>
+            <p className="review-rail-note">Swipe or scroll to see all four. Each links to the original public review.</p>
           </section>
 
-          <section id="field-reflection" className="field-section field-reflection" aria-labelledby="field-reflection-title" tabIndex={-1}>
-            <div>
-              <p className="case-section-number">05 / Reflection</p>
-              <h2 id="field-reflection-title">The next system should matter outside the screen.</h2>
-            </div>
-            <div>
-              <p className="field-lead">
-                Engineering taught me to investigate the system. Client work taught me to own the result. Service work made the human consequence impossible to ignore.
-              </p>
-              <p>
-                I want to keep building things that improve real work and real experiences—tools that are technically sound, understandable to operate, and useful to the person on the other side.
-              </p>
-              <div className="field-next-links">
-                <Link href="/work"><span>Project evidence</span><strong>Explore the work →</strong></Link>
-                <Link href="/work/resetwave"><span>Featured system</span><strong>Read ResetWave →</strong></Link>
-              </div>
-            </div>
-          </section>
         </div>
       </main>
 

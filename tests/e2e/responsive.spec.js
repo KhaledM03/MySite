@@ -1,10 +1,9 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures";
 import {
   MOBILE_VIEWPORTS,
   PUBLIC_ROUTES,
   REQUIRED_VIEWPORTS,
   expectNoHorizontalOverflow,
-  expectTargetBelowHeader,
   waitForImages,
 } from "../helpers";
 
@@ -52,181 +51,64 @@ test("all rendered images load at a representative viewport", async ({ page, bro
   }
 });
 
-test("mobile journey allocates copy and artwork to separate flow rows", async ({ page, browserName }) => {
+test("homepage intro stacks copy above the illustration on phones", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "The full mobile geometry matrix runs in Chromium.");
-
-  const pairs = [
-    [".hero-copy", ".hero-character", "hero-copy", "hero-art"],
-    [".profile-copy", ".radio-character", "profile-copy", "profile-art"],
-    [".engineering-copy", ".engineering-character", "engineering-copy", "engineering-art"],
-  ];
 
   for (const viewport of MOBILE_VIEWPORTS) {
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "networkidle" });
-    const flowMode = await page.locator(".journey-stage").evaluate((stage) => ({
-      journeyHeight: getComputedStyle(stage.closest(".journey")).height,
-      position: getComputedStyle(stage).position,
-      stageHeight: getComputedStyle(stage).height,
-    }));
-    expect(flowMode.position).toBe("relative");
-    expect(flowMode.stageHeight).toBe(flowMode.journeyHeight);
-
-    for (const [copySelector, artSelector, copyArea, artArea] of pairs) {
-      await page.locator(artSelector).scrollIntoViewIfNeeded();
-      await page.waitForTimeout(100);
-      const [copy, art] = await Promise.all([
-        page.locator(copySelector).boundingBox(),
-        page.locator(artSelector).boundingBox(),
-      ]);
-      const areas = await page.evaluate(({ copySelector, artSelector }) => ({
-        copy: getComputedStyle(document.querySelector(copySelector)).gridArea,
-        art: getComputedStyle(document.querySelector(artSelector)).gridArea,
-      }), { copySelector, artSelector });
-      expect(areas).toEqual({ copy: copyArea, art: artArea });
-      expect(copy).not.toBeNull();
-      expect(art).not.toBeNull();
-      expect(copy.y + copy.height, `${viewport.name} ${copySelector}`).toBeLessThanOrEqual(art.y + 2);
-    }
+    const [actions, art] = await Promise.all([
+      page.locator(".intro-actions").boundingBox(),
+      page.locator(".intro-art").boundingBox(),
+    ]);
+    expect(actions, viewport.name).not.toBeNull();
+    expect(art, viewport.name).not.toBeNull();
+    expect(actions.y + actions.height, viewport.name).toBeLessThanOrEqual(art.y + 1);
+    await expect(page.locator(".intro h1"), viewport.name).toBeInViewport();
     await expectNoHorizontalOverflow(page);
   }
 });
 
-test("chapter navigation, direct hashes, and history preserve the approved scenes", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Detailed navigation behavior runs in Chromium.");
+test("section links land below the fixed header", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Anchor positioning runs in Chromium.");
+  await page.setViewportSize({ width: 1366, height: 768 });
 
-  for (const viewport of [
-    { width: 390, height: 844 },
-    { width: 768, height: 1024 },
-    { width: 1366, height: 768 },
-  ]) {
-    await page.setViewportSize(viewport);
-    await page.goto("/#arrival", { waitUntil: "networkidle" });
-    const navigateFromHeader = async (name) => {
-      if (viewport.width <= 980) {
-        await page.locator(".nav-toggle").click();
-        await expect(page.locator(".nav-toggle")).toHaveAttribute("aria-expanded", "true");
-      }
-      await page.getByRole("link", { name, exact: true }).click();
-    };
-    await expect(page.locator(".hero-copy")).toBeFocused();
-    await expectTargetBelowHeader(page, ".hero-copy");
-
-    await navigateFromHeader("Profile");
-    await expect(page).toHaveURL(/#profile$/);
-    await expect(page.locator(".profile-copy")).toBeFocused();
-    await expectTargetBelowHeader(page, ".profile-copy");
-
-    await navigateFromHeader("Engineering");
-    await expect(page).toHaveURL(/#engineering$/);
-    await expect(page.locator(".engineering-copy")).toBeFocused();
-    await expectTargetBelowHeader(page, ".engineering-copy");
-
-    await navigateFromHeader("Work");
-    await expect(page).toHaveURL(/\/work$/);
-    await navigateFromHeader("Intro");
-    await expect(page).toHaveURL(/#arrival$/);
-    await expect(page.locator(".hero-copy")).toBeFocused();
-    await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(0);
-
-    await page.goBack();
-    await expect(page).toHaveURL(/\/work$/);
-    await page.goForward();
-    await expect(page).toHaveURL(/#arrival$/);
-    await expect.poll(() => page.evaluate(() => Math.round(scrollY))).toBe(0);
-
-    for (const [hash, selector] of [
-      ["arrival", ".hero-copy"],
-      ["profile", ".profile-copy"],
-      ["engineering", ".engineering-copy"],
-    ]) {
-      await page.goto(`/#${hash}`, { waitUntil: "networkidle" });
-      await expect(page.locator(selector)).toBeFocused();
-      await expectTargetBelowHeader(page, selector);
-    }
+  for (const hash of ["work", "experience", "skills"]) {
+    await page.goto(`/#${hash}`, { waitUntil: "networkidle" });
+    await expect.poll(() => page.evaluate((id) => {
+      const target = document.getElementById(id).getBoundingClientRect().top;
+      const header = document.querySelector(".site-header").getBoundingClientRect().bottom;
+      return target >= header - 1 && target < header + 80;
+    }, hash), hash).toBeTruthy();
   }
 });
 
-test("desktop journey has no empty viewport and releases continuously through the evidence layers", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Cinematic scroll timing runs in Chromium.");
+test("header navigation reaches every page and marks the current one", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Navigation behavior runs in Chromium.");
 
-  for (const viewport of [
-    { width: 1366, height: 768 },
-    { width: 1920, height: 1080 },
-  ]) {
-    await page.setViewportSize(viewport);
-    await page.goto("/#arrival", { waitUntil: "networkidle" });
-    let reachedBrief = false;
-    let reachedMap = false;
-    let reachedWork = false;
-    let firstReleaseState = null;
-
-    for (let step = 0; step < 60; step += 1) {
-      const state = await page.evaluate(() => {
-        const selectors = [
-          ".hero-copy", ".profile-copy", ".engineering-copy",
-          ".hero-character", ".radio-character", ".engineering-character", ".drone-primary",
-        ];
-        const visibleSceneElements = selectors.filter((selector) => {
-          const element = document.querySelector(selector);
-          const rect = element.getBoundingClientRect();
-          return Number(getComputedStyle(element).opacity) > 0.05
-            && rect.bottom > 80 && rect.top < innerHeight;
-        });
-        const visibleEvidenceLayers = [".field-brief", ".systems-map", ".home-work"]
-          .filter((selector) => {
-            const rect = document.querySelector(selector).getBoundingClientRect();
-            return rect.top < innerHeight && rect.bottom > 80;
-          });
-        return { visibleSceneElements, visibleEvidenceLayers };
-      });
-
-      expect(
-        state.visibleSceneElements.length > 0 || state.visibleEvidenceLayers.length > 0,
-        `${viewport.width}x${viewport.height} step ${step}: ${JSON.stringify(state)}`,
-      ).toBeTruthy();
-
-      if (!firstReleaseState && state.visibleEvidenceLayers.includes(".field-brief")) {
-        firstReleaseState = state;
-      }
-      reachedBrief ||= state.visibleEvidenceLayers.includes(".field-brief");
-      reachedMap ||= state.visibleEvidenceLayers.includes(".systems-map");
-      reachedWork ||= state.visibleEvidenceLayers.includes(".home-work");
-      if (reachedWork) {
-        break;
-      }
-      await page.mouse.wheel(0, Math.max(120, Math.round(viewport.height / 6)));
-      await page.waitForTimeout(40);
-    }
-
-    expect(reachedBrief).toBeTruthy();
-    expect(reachedMap).toBeTruthy();
-    expect(reachedWork).toBeTruthy();
-    expect(firstReleaseState.visibleSceneElements).toContain(".engineering-copy");
-  }
-});
-
-test("reduced motion presents a static readable journey", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Reduced-motion layout runs in Chromium.");
-  await page.emulateMedia({ reducedMotion: "reduce" });
-
-  for (const viewport of [
-    { width: 390, height: 844 },
-    { width: 1366, height: 768 },
-  ]) {
+  for (const viewport of [{ width: 390, height: 844 }, { width: 1366, height: 768 }]) {
     await page.setViewportSize(viewport);
     await page.goto("/", { waitUntil: "networkidle" });
-    const state = await page.evaluate(() => ({
-      htmlScrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
-      journeyHeight: getComputedStyle(document.querySelector(".journey")).height,
-      stagePosition: getComputedStyle(document.querySelector(".journey-stage")).position,
-      opacities: [".hero-copy", ".profile-copy", ".engineering-copy"]
-        .map((selector) => getComputedStyle(document.querySelector(selector)).opacity),
-    }));
-    expect(state.htmlScrollBehavior).toBe("auto");
-    expect(state.stagePosition).toBe("relative");
-    expect(state.opacities).toEqual(["1", "1", "1"]);
-    await expectNoHorizontalOverflow(page);
+    const openMenu = async () => {
+      if (viewport.width > 980) return;
+      await page.locator(".nav-toggle").click();
+      await expect(page.locator(".nav-toggle")).toHaveAttribute("aria-expanded", "true");
+    };
+
+    await openMenu();
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Work", exact: true }).click();
+    await expect(page).toHaveURL(/\/work$/);
+    await expect(page.locator('#primary-navigation a[href="/work"]')).toHaveAttribute("aria-current", "page");
+
+    await openMenu();
+    await page.getByRole("navigation", { name: "Main" }).getByRole("link", { name: "Experience", exact: true }).click();
+    await expect(page).toHaveURL(/\/experience$/);
+
+    await expect(page.locator('#primary-navigation a[href="/experience"]')).toHaveAttribute("aria-current", "page");
+    await expect(page.locator("#primary-navigation a", { hasText: "Résumé" }))
+      .toHaveAttribute("href", "/resume/khaled-mousa-resume.pdf");
+    await page.locator(".wordmark").click();
+    await expect(page).toHaveURL(/\/$/);
   }
 });
 

@@ -22,7 +22,7 @@ export default function CopyFieldLink({ targetId, label = "Copy field link" }) {
 
   return (
     <span className="copy-field-link">
-      <button type="button" onClick={copyLink} data-signal="COPY LINK">
+      <button type="button" onClick={copyLink}>
         {state === "copied" ? "Field link copied" : label} <span aria-hidden="true">#</span>
       </button>
       <span className="sr-only" aria-live="polite">

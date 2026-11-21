@@ -47,7 +47,7 @@ export default function ResetWavePage() {
           <div><span>Company validation</span><strong>Boingo Wireless company post</strong></div>
           <blockquote>“Meet Khaled and Emely, our 2024 summer interns from Queens College in New York.”</blockquote>
           <p>The company record confirms the Summer 2024 placement and broader wireless-infrastructure learning context. It does not establish that ResetWave was deployed into Boingo production systems.</p>
-          <Link href="/experience#infrastructure">See the Field Record ↗</Link>
+          <Link href="/experience#infrastructure">More about the internship →</Link>
         </aside>
       </section>
 
