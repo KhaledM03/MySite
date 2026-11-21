@@ -153,8 +153,6 @@ export default function LiveProjectPortal() {
                 setFrameState(narrow ? "idle" : "loading");
                 setActive(true);
               }}
-              data-magnetic
-              data-signal="INTERACT"
             >
               Interact with build <span aria-hidden="true">↗</span>
             </button>
@@ -173,8 +171,6 @@ export default function LiveProjectPortal() {
             href="https://thecovedev.com/"
             target="_blank"
             rel="noreferrer"
-            data-magnetic
-            data-signal="LAUNCH ↗"
           >
             Open full site <span aria-hidden="true">↗</span>
           </a>

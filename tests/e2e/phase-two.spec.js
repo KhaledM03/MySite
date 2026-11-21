@@ -1,32 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "../fixtures";
 import { expectNoHorizontalOverflow } from "../helpers";
-
-test("Field Console filters destinations, supports keyboard navigation, and restores focus", async ({ page, browserName }) => {
-  test.skip(browserName !== "chromium", "Command keyboard behavior runs once in Chromium.");
-  await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto("/work", { waitUntil: "networkidle" });
-
-  const restoreTarget = page.getByRole("link", { name: /Replay the field log/ });
-  await restoreTarget.focus();
-  await page.keyboard.press("Control+k");
-
-  const dialog = page.getByRole("dialog", { name: "Field Console" });
-  const search = page.getByPlaceholder("Search projects, chapters, or signals…");
-  await expect(dialog).toBeVisible();
-  await expect(search).toBeFocused();
-  await search.fill("lab");
-  await expect(page.getByRole("option", { name: /Engineering Lab/ })).toBeVisible();
-
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await expect(restoreTarget).toBeFocused();
-
-  await page.keyboard.press("Control+k");
-  await search.fill("reset");
-  await page.keyboard.press("ArrowDown");
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/work\/resetwave$/);
-});
 
 test("Live Project Portal stays lazy, activates by intent, and switches device frames", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "External portal behavior runs once in Chromium.");
@@ -96,29 +69,32 @@ test("case-study rail reports the active section on desktop and mobile", async (
   }
 });
 
-test("new interactions remain complete under reduced motion", async ({ page, browserName }) => {
+test("homepage motion is fully disabled under reduced motion", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Reduced-motion interaction coverage runs once in Chromium.");
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/", { waitUntil: "networkidle" });
 
-  await expect(page.locator(".signal-cursor")).toBeHidden();
-  const motionState = await page.locator(".resetwave-signal li").first().evaluate((element) => ({
+  const introState = await page.evaluate(() => ({
+    art: getComputedStyle(document.querySelector(".intro-art img")).animationName,
+    underline: getComputedStyle(document.querySelector(".intro h1 em"), "::after").animationName,
+    scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
+  }));
+  expect(introState).toEqual({ art: "none", underline: "none", scrollBehavior: "auto" });
+
+  const signalState = await page.locator(".resetwave-signal li").first().evaluate((element) => ({
     animationName: getComputedStyle(element).animationName,
     opacity: getComputedStyle(element).opacity,
   }));
-  expect(motionState).toEqual({ animationName: "none", opacity: "1" });
-
-  await page.keyboard.press("Control+k");
-  await expect(page.getByRole("dialog", { name: "Field Console" })).toBeVisible();
-  await page.keyboard.press("Escape");
+  expect(signalState).toEqual({ animationName: "none", opacity: "1" });
+  expect(await page.locator("[data-reveal]").count()).toBe(0);
 });
 
 test("Phase II surfaces preserve document width at key breakpoints", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Focused overflow coverage runs once in Chromium.");
   for (const viewport of [{ width: 320, height: 568 }, { width: 768, height: 1024 }, { width: 1440, height: 900 }]) {
     await page.setViewportSize(viewport);
-    for (const route of ["/", "/work/engineering-lab", "/work/the-cove-dev"]) {
+    for (const route of ["/", "/privacy", "/work/engineering-lab", "/work/the-cove-dev"]) {
       await page.goto(route, { waitUntil: "networkidle" });
       await expectNoHorizontalOverflow(page);
     }

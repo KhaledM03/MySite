@@ -7,6 +7,7 @@ const routes = [
   { path: "/work/resetwave", priority: 0.8, changeFrequency: "yearly" },
   { path: "/work/engineering-lab", priority: 0.8, changeFrequency: "yearly" },
   { path: "/work/the-cove-dev", priority: 0.8, changeFrequency: "yearly" },
+  { path: "/privacy", priority: 0.2, changeFrequency: "yearly" },
 ];
 
 export default function sitemap() {

@@ -8,6 +8,7 @@ const canonicalRoutes = new Map([
   ["/work/resetwave", "https://mousakhaled.com/work/resetwave"],
   ["/work/engineering-lab", "https://mousakhaled.com/work/engineering-lab"],
   ["/work/the-cove-dev", "https://mousakhaled.com/work/the-cove-dev"],
+  ["/privacy", "https://mousakhaled.com/privacy"],
 ]);
 
 test("metadata, structured data, and security headers remain production-safe", async ({ page, context, browserName }) => {
@@ -25,6 +26,8 @@ test("metadata, structured data, and security headers remain production-safe", a
     expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
     expect(headers["x-content-type-options"]).toBe("nosniff");
     expect(headers["x-frame-options"]).toBe("DENY");
+    expect(headers["strict-transport-security"]).toBe("max-age=63072000");
+    expect(headers["cross-origin-opener-policy"]).toBe("same-origin");
 
     const metadata = await page.evaluate(() => ({
       title: document.title,

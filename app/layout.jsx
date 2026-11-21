@@ -1,8 +1,9 @@
 import "./globals.css";
 import StructuredData from "@/components/seo/StructuredData";
-import FieldConsole from "@/components/ui/FieldConsole";
-import InteractionLayer from "@/components/ui/InteractionLayer";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 import ContactFieldCard from "@/components/ui/ContactFieldCard";
+import CookieNote from "@/components/ui/CookieNote";
+import { EDUCATION } from "@/data/career";
 import {
   DEFAULT_DESCRIPTION,
   DEFAULT_TITLE,
@@ -96,7 +97,11 @@ const identityData = {
       name: "Khaled Mousa",
       url: SITE_URL,
       image: `${SITE_URL}/characters/khaled-hero.webp`,
-      jobTitle: "Computer and Electrical Engineering Student",
+      jobTitle: "Computer and Electrical Engineering Technology Student",
+      affiliation: {
+        "@type": "CollegeOrUniversity",
+        name: EDUCATION.school,
+      },
       description: DEFAULT_DESCRIPTION,
       sameAs: [
         "https://github.com/KhaledM03",
@@ -125,13 +130,13 @@ const identityData = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body>
         <StructuredData data={identityData} />
         {children}
         <ContactFieldCard />
-        <FieldConsole />
-        <InteractionLayer />
+        <CookieNote />
+        <ScrollReveal />
       </body>
     </html>
   );

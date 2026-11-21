@@ -7,6 +7,7 @@ export const PUBLIC_ROUTES = [
   "/work/resetwave",
   "/work/engineering-lab",
   "/work/the-cove-dev",
+  "/privacy",
 ];
 
 export const REQUIRED_VIEWPORTS = [

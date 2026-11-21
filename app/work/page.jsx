@@ -37,14 +37,14 @@ export default function WorkPage() {
       <main id="work-content" className="work-page">
         <section className="work-hero" aria-labelledby="work-title">
           <div className="work-hero-copy">
-            <p className="section-label">Selected work · Evidence index</p>
+            <p className="section-label">Projects</p>
             <h1 id="work-title">Built, tested,<br /><em>then proven.</em></h1>
             <p>
-              Three views into how I work across software and physical systems—leading with a measured automation result, then the real artifacts behind lab and client work.
+              Three projects across software and physical systems: an automation tool with a measured result, hands-on lab work, and client websites.
             </p>
             <div className="work-hero-actions">
               <a className="button button-primary" href="#resetwave">Start with ResetWave ↓</a>
-              <Link className="button button-secondary" href="/#field-brief">30 second field brief ↗</Link>
+              <Link className="button button-secondary" href="/experience">See my experience</Link>
             </div>
           </div>
 
@@ -69,11 +69,10 @@ export default function WorkPage() {
         <section className="project-index" aria-labelledby="project-index-title">
           <header className="project-index-header">
             <div>
-              <p className="section-label">Proof over decoration</p>
-              <h2 id="project-index-title">The project index</h2>
+              <h2 id="project-index-title">All projects</h2>
             </div>
             <p>
-              Every entry identifies the problem, role, technology, and a repository- or résumé-backed proof point. Unfinished documentation is labeled honestly.
+              Each project lists the problem, what I built, the tools, and the result.
             </p>
           </header>
 
@@ -86,11 +85,10 @@ export default function WorkPage() {
 
         <section className="evidence-note" aria-labelledby="evidence-note-title">
           <div>
-            <p className="section-label">Documentation standard</p>
-            <h2 id="evidence-note-title">Specific where public.<br />Sanitized where necessary.</h2>
+            <h2 id="evidence-note-title">What I leave out.</h2>
           </div>
           <p>
-            Internal infrastructure details, credentials, private source code, and company identifiers are intentionally excluded. The ResetWave case study focuses on the engineering problem, public technology record, validation, and measured outcome.
+            Internal infrastructure details, credentials, private source code, and company identifiers stay out of these write-ups. ResetWave in particular focuses on the problem, the approach, testing, and the measured result.
           </p>
         </section>
       </main>

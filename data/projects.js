@@ -30,7 +30,7 @@ export const projects = [
     proof: "Real lab captures, digital logic simulation, and CAD studies",
     status: "Full collection",
     href: "/work/engineering-lab",
-    action: "Enter the lab",
+    action: "See the lab work",
     image: "/media/engineering-lab/oscilloscope-card.webp",
     imageWidth: 1600,
     imageHeight: 1120,
@@ -41,14 +41,14 @@ export const projects = [
     slug: "the-cove-dev",
     number: "03",
     name: "The Cove Dev",
-    eyebrow: "Client web products · Aug 2025–present",
+    eyebrow: "Client web products · Aug–Dec 2025",
     problem:
       "Small-business clients needed responsive web applications with dynamic user interfaces.",
     build:
       "Responsive client-facing interfaces with client-side logic, debugging, and Git-based delivery.",
     role: "Full-stack web development",
     technology: ["HTML", "CSS", "JavaScript", "Git"],
-    proof: "Verified repository screenshots show responsive client-facing interfaces",
+    proof: "Responsive client pages, shown here in three captured screens",
     status: "Full case study",
     href: "/work/the-cove-dev",
     action: "Read the case study",
@@ -111,7 +111,7 @@ export const engineeringLabSources = {
 export const coveDevSources = {
   verified: {
     organization: "The Cove Dev, LLC",
-    period: "August 2025–present",
+    period: "August–December 2025",
     role: "Full-Stack Web Development",
     technology: ["HTML", "CSS", "JavaScript", "Git"],
     responsibilities: [
