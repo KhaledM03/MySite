@@ -1,6 +1,6 @@
 import { expect, test } from "../fixtures";
 
-test("hero trace, cursor, and illustration easter egg", async ({ page, browserName }) => {
+test("hero trace, cursor, and featured flight video", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
   await page.setViewportSize({ width: 1366, height: 768 });
   await page.goto("/", { waitUntil: "networkidle" });
@@ -8,10 +8,54 @@ test("hero trace, cursor, and illustration easter egg", async ({ page, browserNa
   await expect(page.locator(".intro h1 em .intro-wave path")).toHaveCount(1);
   await expect(page.locator(".intro-caret")).toHaveAttribute("aria-hidden", "true");
 
-  await page.locator(".intro-art").click();
-  await expect(page.locator(".intro-bubble")).toHaveText("Hi! 👋");
-  await page.locator(".intro-art").click();
-  await expect(page.locator(".intro-bubble")).toHaveText("Still here.");
+  // The drone footage is the first thing on the page: a silent local loop.
+  const flight = page.locator(".hero-flight");
+  await expect(flight).toBeInViewport();
+  const loop = flight.locator("video.video-facade-loop");
+  await expect(loop).toHaveAttribute("src", "/media/hero/fpv-loop.mp4");
+  await expect.poll(() => loop.evaluate((video) => !video.paused && video.muted)).toBe(true);
+  // Nothing loads from YouTube until the visitor asks for it.
+  await expect(flight.locator("iframe")).toHaveCount(0);
+  await flight.getByRole("button", { name: /Play: Flying my FPV drone in class/ }).click();
+  await expect(flight.locator("iframe")).toHaveAttribute("src", /youtube-nocookie\.com\/embed\/DPGMJUyqAjA/);
+  await expect(flight.locator("video")).toHaveCount(0);
+});
+
+test("shelf card prints the photo in over the CAD model", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const reveal = page.locator("#window-shelf .print-reveal");
+  await reveal.scrollIntoViewIfNeeded();
+  await expect(reveal).toHaveAttribute("data-state", "printed", { timeout: 6000 });
+  await expect(reveal.locator(".print-reveal-status")).toHaveText("Printed · in use");
+  await reveal.getByRole("button", { name: "Show the model" }).click();
+  await expect(reveal).toHaveAttribute("data-state", "model");
+  await reveal.getByRole("button", { name: "Print it" }).click();
+  await expect(reveal).toHaveAttribute("data-state", "printing");
+  await expect(reveal).toHaveAttribute("data-state", "printed", { timeout: 6000 });
+});
+
+test("gallery opens photos in a viewer with keyboard navigation", async ({ page, browserName }) => {
+  test.skip(browserName !== "chromium", "Detail coverage runs once in Chromium.");
+  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.goto("/", { waitUntil: "networkidle" });
+
+  const tiles = page.locator(".gallery-tile button");
+  await expect(tiles).toHaveCount(8);
+  await tiles.nth(1).click();
+  const dialog = page.locator(".gallery-dialog");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator(".gallery-count")).toHaveText("02 / 08");
+  await page.keyboard.press("ArrowRight");
+  await expect(dialog.locator(".gallery-count")).toHaveText("03 / 08");
+  await page.keyboard.press("ArrowLeft");
+  await page.keyboard.press("ArrowLeft");
+  await expect(dialog.locator(".gallery-count")).toHaveText("01 / 08");
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(tiles.nth(1)).toBeFocused();
 });
 
 test("header lifts after scrolling and the footer offers copy and local time", async ({ page, context, browserName }) => {
@@ -58,18 +102,23 @@ test("recent builds show every project and the video loads only on play", async 
   await expect(builds.getByRole("heading", { name: "Custom FPV drone" })).toBeVisible();
   await expect(builds.getByRole("heading", { name: "FM walkie-talkie pair" })).toBeVisible();
   await expect(builds.getByRole("heading", { name: "3D-printed window shelf" })).toBeVisible();
-  await expect(builds.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://youtu.be/DPGMJUyqAjA");
+  // On the homepage the video lives in the hero; the card links back up to it.
+  await expect(builds.getByRole("link", { name: /Watch it fly/ })).toHaveAttribute("href", "#featured-flight");
+  const hero = page.locator(".hero-flight");
+  await expect(hero.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://youtu.be/DPGMJUyqAjA");
 
-  await expect(builds.locator("iframe")).toHaveCount(0);
+  await expect(page.locator("iframe")).toHaveCount(0);
   await page.mouse.move(5, 5);
   expect(youtubeRequests).toEqual([]);
 
-  await builds.getByRole("button", { name: /Play: Flying my FPV drone in class/ }).click();
-  const frame = builds.locator('iframe[title="Flying my FPV drone in class"]');
+  await hero.getByRole("button", { name: /Play: Flying my FPV drone in class/ }).click();
+  const frame = hero.locator('iframe[title="Flying my FPV drone in class"]');
   await expect(frame).toHaveAttribute("src", /^https:\/\/www\.youtube-nocookie\.com\/embed\/DPGMJUyqAjA\?autoplay=1/);
 
+  // The work page has no hero video, so its drone card embeds it directly.
   await page.goto("/work", { waitUntil: "networkidle" });
   await expect(page.locator("#builds .build-card")).toHaveCount(3);
+  await expect(page.locator("#builds").getByRole("button", { name: /Play: Flying my FPV drone in class/ })).toBeVisible();
 });
 
 test("resting the pointer on the drone video starts a muted preview", async ({ page, browserName }) => {
@@ -77,9 +126,11 @@ test("resting the pointer on the drone video starts a muted preview", async ({ p
   await page.route(/youtube(-nocookie)?\.com|ytimg\.com|googlevideo\.com/, (route) =>
     route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Video fixture</title>" }));
   await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto("/", { waitUntil: "networkidle" });
+  // The homepage hero already plays a local loop, so the hover preview lives
+  // on the Work page's drone card.
+  await page.goto("/work", { waitUntil: "networkidle" });
 
-  const poster = page.getByRole("button", { name: /Play: Flying my FPV drone in class/ });
+  const poster = page.locator("#builds").getByRole("button", { name: /Play: Flying my FPV drone in class/ });
   await poster.scrollIntoViewIfNeeded();
   await poster.hover();
   await page.waitForTimeout(300);
@@ -103,12 +154,27 @@ test("lab highlights, drone diagram, and current courses are on the homepage", a
   await expect(labs.locator(".lab-card")).toHaveCount(3);
   await expect(labs.getByRole("link", { name: /All labs on GitHub/ })).toHaveAttribute("href", "https://github.com/KhaledM03/engineering-labs");
   await expect(page.getByRole("img", { name: /FPV drone block diagram/ })).toBeVisible();
-  await expect(labs.getByRole("table")).toContainText("A XOR B");
-  await expect(labs.getByRole("img", { name: /peaking at 10.39 watts at 198 ohms/ })).toBeVisible();
-  await expect(labs.getByRole("img", { name: /unsigned and signed comparators/ })).toBeVisible();
+  // Each lab card shows a real photo or screenshot with its key result.
+  await expect(labs.getByRole("img", { name: /Nexys A7/ })).toBeVisible();
+  await expect(labs.getByRole("img", { name: /decade resistance box/ })).toBeVisible();
+  await expect(labs.getByRole("img", { name: /Logisim circuit/ })).toBeVisible();
+  await expect(labs.locator(".lab-card-result")).toHaveText([/8 of 8 checks pass/, /10\.39 W/, /two's complement/]);
+
+  // Result labels stay inside their photo boxes, from phones to wide monitors.
+  for (const width of [390, 1366, 2000, 2560]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await labs.scrollIntoViewIfNeeded();
+    const spill = await page.evaluate(() => [...document.querySelectorAll(".lab-card-media")].map((media) => {
+      const box = media.getBoundingClientRect();
+      const figure = media.querySelector(".lab-card-result").getBoundingClientRect();
+      return Math.max(figure.bottom - box.bottom, box.top - figure.top, figure.right - box.right, 0);
+    }));
+    expect(Math.max(...spill), `figure overflow at ${width}px`).toBeLessThanOrEqual(1);
+  }
+  await page.setViewportSize({ width: 1366, height: 768 });
 
   const order = await page.evaluate(() => [...document.querySelectorAll("main > section")].map((section) => section.id || section.className));
-  expect(order.slice(1)).toEqual(["work", "labs", "experience", "builds", "skills"]);
+  expect(order.slice(1)).toEqual(["work", "labs", "experience", "builds", "gallery", "skills"]);
 
   await page.clock.setFixedTime(new Date("2027-02-10T12:00:00"));
   await page.goto("/", { waitUntil: "networkidle" });

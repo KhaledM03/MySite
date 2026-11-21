@@ -51,7 +51,7 @@ test("all rendered images load at a representative viewport", async ({ page, bro
   }
 });
 
-test("homepage intro stacks copy above the illustration on phones", async ({ page, browserName }) => {
+test("homepage intro stacks copy above the featured flight on phones", async ({ page, browserName }) => {
   test.skip(browserName !== "chromium", "The full mobile geometry matrix runs in Chromium.");
 
   for (const viewport of MOBILE_VIEWPORTS) {
@@ -59,7 +59,7 @@ test("homepage intro stacks copy above the illustration on phones", async ({ pag
     await page.goto("/", { waitUntil: "networkidle" });
     const [actions, art] = await Promise.all([
       page.locator(".intro-actions").boundingBox(),
-      page.locator(".intro-art").boundingBox(),
+      page.locator(".hero-flight").boundingBox(),
     ]);
     expect(actions, viewport.name).not.toBeNull();
     expect(art, viewport.name).not.toBeNull();

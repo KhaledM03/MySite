@@ -76,16 +76,22 @@ test("homepage motion is fully disabled under reduced motion", async ({ page, br
   await page.goto("/", { waitUntil: "networkidle" });
 
   const introState = await page.evaluate(() => ({
-    art: getComputedStyle(document.querySelector(".intro-art img")).animationName,
+    flight: getComputedStyle(document.querySelector(".hero-flight-screen")).animationName,
     wave: getComputedStyle(document.querySelector(".intro-wave path")).animationName,
     caret: getComputedStyle(document.querySelector(".intro-caret")).animationName,
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
   }));
-  expect(introState).toEqual({ art: "none", wave: "none", caret: "none", scrollBehavior: "auto" });
+  expect(introState).toEqual({ flight: "none", wave: "none", caret: "none", scrollBehavior: "auto" });
+  // The hero drone loop holds still on its first frame.
+  await page.waitForTimeout(600);
+  expect(await page.locator(".hero-flight video").evaluate((video) => video.paused)).toBe(true);
 
-  // The click-to-hop easter egg stays still for people who asked for less motion.
-  await page.locator(".intro-art").click();
-  await expect(page.locator(".intro-bubble")).toHaveCount(0);
+  // The shelf shows the finished print without animating it.
+  const reveal = page.locator("#window-shelf .print-reveal");
+  await reveal.scrollIntoViewIfNeeded();
+  await expect(reveal).toHaveAttribute("data-state", "model");
+  await reveal.getByRole("button", { name: "Print it" }).click();
+  await expect(reveal).toHaveAttribute("data-state", "printed");
 
   const signalState = await page.locator(".resetwave-signal li").first().evaluate((element) => ({
     animationName: getComputedStyle(element).animationName,

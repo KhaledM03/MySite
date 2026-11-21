@@ -142,6 +142,17 @@ export default function ExperiencePage() {
                 </div>
               </article>
 
+              <figure className="boingo-photo">
+                <Image
+                  src="/media/gallery/boingo-ceo.webp"
+                  alt="Khaled standing next to Boingo Wireless CEO Mike Finley at a conference"
+                  width={326}
+                  height={490}
+                  sizes="(max-width: 760px) 70vw, 280px"
+                />
+                <figcaption>With Boingo CEO Mike Finley at City &amp; State&apos;s Rebuilding New York summit.</figcaption>
+              </figure>
+
               <div className="boingo-record">
                 <div className="boingo-record-heading">
                   <span>Role</span>

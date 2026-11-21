@@ -60,7 +60,7 @@ export default function PrivacyPage() {
           <section aria-labelledby="privacy-embeds">
             <h2 id="privacy-embeds">Embedded video, preview, and outside links</h2>
             <p>
-              The FPV drone video shows a photo from this site until you press play or rest your pointer on it for a moment. Only then does it load YouTube&apos;s privacy-enhanced player (youtube-nocookie.com), and YouTube&apos;s own policies apply from that point.
+              The short drone clip at the top of the homepage is a video file served from this site. The full flight video, and the drone video on the Work page, load YouTube&apos;s privacy-enhanced player (youtube-nocookie.com) only after you press play, or on the Work page, rest your pointer on it for a moment. YouTube&apos;s own policies apply from that point.
             </p>
             <p>
               On The Cove Dev case study, the live preview of thecovedev.com only loads after you press &ldquo;Interact with build&rdquo;. Links to GitHub, LinkedIn, YouTube, and Google reviews open those sites, which have their own policies.

@@ -98,7 +98,7 @@ const identityData = {
       "@id": `${SITE_URL}/#person`,
       name: "Khaled Mousa",
       url: SITE_URL,
-      image: `${SITE_URL}/characters/khaled-hero.webp`,
+      image: `${SITE_URL}/media/khaled-portrait.webp`,
       jobTitle: "Computer and Electrical Engineering Technology Student",
       affiliation: {
         "@type": "CollegeOrUniversity",
@@ -134,6 +134,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
       <body>
+        <div className="scroll-progress" aria-hidden="true" />
         <StructuredData data={identityData} />
         {children}
         <ContactFieldCard />

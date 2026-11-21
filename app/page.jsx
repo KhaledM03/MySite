@@ -1,13 +1,15 @@
+import Image from "next/image";
 import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import TransitionLink from "@/components/navigation/TransitionLink";
 import ExperienceTimeline from "@/components/sections/ExperienceTimeline";
 import LabWork from "@/components/sections/LabWork";
+import Gallery from "@/components/sections/Gallery";
 import RecentBuilds from "@/components/sections/RecentBuilds";
+import HeroFlight from "@/components/work/HeroFlight";
 import ProjectSignalPreview from "@/components/work/ProjectSignalPreview";
 import { Availability, CurrentCourses, GraduationFact } from "@/components/ui/CalendarFacts";
-import IntroArt from "@/components/ui/IntroArt";
 import { CANONICAL_RESUME, CAREER_LINKS, EDUCATION, SKILL_GROUPS } from "@/data/career";
 import { projects } from "@/data/projects";
 import {
@@ -49,9 +51,20 @@ export default function HomePage() {
               </em>{" "}
               and software.<span className="intro-caret" aria-hidden="true" />
             </h1>
-            <p className="intro-lead">
-              I&apos;m Khaled Mousa, an engineering technology student at {EDUCATION.school}. I test hardware, automate the slow parts with Python, and work on systems out in the field.
-            </p>
+            <div className="intro-person">
+              <Image
+                className="intro-avatar"
+                src="/media/khaled-portrait.webp"
+                alt="Khaled Mousa"
+                width={480}
+                height={480}
+                sizes="72px"
+                priority
+              />
+              <p className="intro-lead">
+                I&apos;m Khaled Mousa, an engineering technology student at {EDUCATION.school}. I test hardware, automate the slow parts with Python, and work on systems out in the field.
+              </p>
+            </div>
 
             <dl className="intro-facts">
               <div className="intro-facts-degrees">
@@ -81,7 +94,7 @@ export default function HomePage() {
             <CurrentCourses />
           </div>
 
-          <IntroArt />
+          <HeroFlight />
         </section>
 
         <section id="work" className="home-work" aria-labelledby="work-title">
@@ -121,7 +134,9 @@ export default function HomePage() {
           <ExperienceTimeline />
         </section>
 
-        <RecentBuilds />
+        <RecentBuilds videoInHero />
+
+        <Gallery />
 
         <section id="skills" className="home-section home-skills" aria-labelledby="skills-title">
           <header className="home-section-header">
