@@ -1,5 +1,7 @@
-import Image from "next/image";
+import { AluFigure, ComparatorFigure, PowerFigure } from "@/components/work/LabFigures";
 import { LABS_REPOSITORY, labHighlights } from "@/data/labs";
+
+const FIGURES = { alu: AluFigure, power: PowerFigure, comparator: ComparatorFigure };
 
 export default function LabWork() {
   return (
@@ -12,28 +14,24 @@ export default function LabWork() {
       </header>
 
       <div className="lab-grid">
-        {labHighlights.map((lab) => (
-          <article key={lab.id} className="lab-card">
-            <div className="lab-card-media" data-fit={lab.image.fit ?? "cover"}>
-              <Image
-                src={lab.image.src}
-                alt={lab.image.alt}
-                width={lab.image.width}
-                height={lab.image.height}
-                sizes="(max-width: 760px) 92vw, (max-width: 1100px) 46vw, 30vw"
-                style={lab.image.position ? { objectPosition: lab.image.position } : undefined}
-              />
-            </div>
-            <div className="lab-card-copy">
-              <p className="lab-card-course">{lab.course}</p>
-              <h3>{lab.title}</h3>
-              <p>{lab.summary}</p>
-              <a className="timeline-link" href={lab.href} target="_blank" rel="noreferrer">
-                Code and write-up <span aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </article>
-        ))}
+        {labHighlights.map((lab) => {
+          const Figure = FIGURES[lab.figure];
+          return (
+            <article key={lab.id} className="lab-card">
+              <div className="lab-card-media">
+                <Figure />
+              </div>
+              <div className="lab-card-copy">
+                <p className="lab-card-course">{lab.course}</p>
+                <h3>{lab.title}</h3>
+                <p>{lab.summary}</p>
+                <a className="timeline-link" href={lab.href} target="_blank" rel="noreferrer">
+                  Code and write-up <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </article>
+          );
+        })}
       </div>
     </section>
   );

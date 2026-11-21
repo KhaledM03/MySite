@@ -10,6 +10,7 @@ import EvidenceHotspots from "@/components/work/EvidenceHotspots";
 import StructuredData from "@/components/seo/StructuredData";
 import { engineeringLabSources } from "@/data/projects";
 import { createPageMetadata, SITE_URL } from "@/lib/metadata";
+import { LABS_REPOSITORY } from "@/data/labs";
 import CopyFieldLink from "@/components/ui/CopyFieldLink";
 
 export const metadata = createPageMetadata({
@@ -201,7 +202,7 @@ export default function EngineeringLabPage() {
           <section id="overview" className="lab-section lab-overview" aria-labelledby="overview-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">01 / Engineering Lab overview</p>
-              <h2 id="overview-title">A collection built from real artifacts.</h2>
+              <h2 id="overview-title">Real benches, real measurements.</h2>
             </div>
             <div className="lab-overview-copy">
               <p className="lab-lead">
@@ -224,7 +225,7 @@ export default function EngineeringLabPage() {
           <section id="electronics" className="lab-section lab-electronics" aria-labelledby="electronics-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">02 / Electronics and measurement</p>
-              <h2 id="electronics-title">The instrument display is the evidence.</h2>
+              <h2 id="electronics-title">Measuring circuits on the bench.</h2>
               <p>
                 These photographs document an electronics bench, oscilloscope traces, probes, a function generator, a multimeter, and physical circuit work. Captions describe only what can be seen.
               </p>
@@ -276,7 +277,7 @@ export default function EngineeringLabPage() {
           <section id="logic" className="lab-section lab-logic" aria-labelledby="logic-title" tabIndex={-1}>
             <div className="logic-copy">
               <p className="case-section-number">03 / Digital logic and simulation</p>
-              <h2 id="logic-title">Follow the visible signal paths.</h2>
+              <h2 id="logic-title">Designing digital logic.</h2>
               <p className="lab-lead">
                 The repository contains one Logisim screenshot. Four-bit A and B inputs, blocks labeled “Unsigned” and “2sComp.,” selection components, inversion gates, and three outputs are visible. The screenshot preserves the signal-path structure for inspection.
               </p>
@@ -299,7 +300,7 @@ export default function EngineeringLabPage() {
           <section id="cad" className="lab-section lab-cad" aria-labelledby="cad-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">04 / CAD and physical design</p>
-              <h2 id="cad-title">Read form, fit, and visible structure.</h2>
+              <h2 id="cad-title">Designing parts in CAD.</h2>
               <p>
                 Two Fusion 360 screenshots preserve the actual geometry and make their edges, mounting points, supports, bracing, plates, and cylindrical forms available for close inspection.
               </p>
@@ -319,7 +320,7 @@ export default function EngineeringLabPage() {
           <section id="process" className="lab-section lab-process" aria-labelledby="process-title" tabIndex={-1}>
             <div>
               <p className="case-section-number">05 / Engineering and testing process</p>
-              <h2 id="process-title">A process the evidence can support.</h2>
+              <h2 id="process-title">How I work through a lab.</h2>
             </div>
             <ol className="process-steps">
               <li><span>01</span><div><h3>Set up</h3><p>Connect the physical or simulated system and make the observable points available.</p></div></li>
@@ -347,7 +348,7 @@ export default function EngineeringLabPage() {
           <section id="gallery" className="lab-section lab-gallery" aria-labelledby="gallery-title" tabIndex={-1}>
             <header className="lab-section-header">
               <p className="case-section-number">07 / Real evidence gallery</p>
-              <div className="evidence-heading-link"><h2 id="gallery-title">Inspect the source material.</h2><CopyFieldLink targetId="gallery" label="Copy evidence link" /></div>
+              <div className="evidence-heading-link"><h2 id="gallery-title">More from the bench.</h2><CopyFieldLink targetId="gallery" label="Copy link" /></div>
               <p>Every item opens into a larger view. Deployment copies are optimized and metadata-free; the original repository files remain preserved.</p>
             </header>
             <div className="evidence-grid">
@@ -361,18 +362,19 @@ export default function EngineeringLabPage() {
 
           <section id="reflection" className="lab-section lab-reflection" aria-labelledby="reflection-title" tabIndex={-1}>
             <div>
-              <p className="case-section-number">08 / Reflection and next steps</p>
-              <h2 id="reflection-title">Better documentation makes better engineering visible.</h2>
+              <p className="case-section-number">08 / Reflection</p>
+              <h2 id="reflection-title">What the lab taught me.</h2>
             </div>
             <div>
               <p className="lab-lead">
-                The strongest thread in this collection is the movement from an object or circuit to an observable state: connect it, inspect it, and preserve the result. The next documentation pass should make those relationships explicit at capture time.
+                Every lab follows the same loop: connect the circuit, measure it, and check the result against what the math predicts. Writing it up properly is what turns a lab into something I can build on.
               </p>
-              <ul className="next-steps-list">
-                <li>Pair each photograph with its exact experiment and report page.</li>
-                <li>Preserve native Logisim and Fusion 360 files alongside screenshots.</li>
-                <li>Record channel definitions, test conditions, and individual contribution.</li>
-              </ul>
+              <p className="lab-lead">
+                My later coursework, including VHDL designs for an FPGA board, circuit analysis, and amplifier labs, lives on GitHub with the source files and a write-up for each.
+              </p>
+              <a className="button button-primary lab-repo-link" href={LABS_REPOSITORY} target="_blank" rel="noreferrer">
+                See my labs on GitHub <span aria-hidden="true">↗</span>
+              </a>
             </div>
           </section>
 
