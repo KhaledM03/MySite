@@ -24,7 +24,11 @@ const nextConfig = {
         source: "/(.*)",
         headers: [
           { key: "Content-Security-Policy", value: contentSecurityPolicy },
-          { key: "Permissions-Policy", value: "camera=(), geolocation=(), microphone=(), payment=(), usb=()" },
+          // Browsers that have visited once will only ever use HTTPS for two
+          // years. Subdomains are left out on purpose until they all serve HTTPS.
+          { key: "Strict-Transport-Security", value: "max-age=63072000" },
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+          { key: "Permissions-Policy", value: "browsing-topics=(), camera=(), geolocation=(), microphone=(), payment=(), usb=()" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "DENY" },
