@@ -4626,66 +4626,83 @@ html {
 }
 
 .lab-card-media {
-  height: clamp(272px, 19vw, 360px);
-  display: grid;
-  align-items: center;
+  position: relative;
+  height: clamp(240px, 17vw, 320px);
+  margin: 0;
   overflow: hidden;
-  padding: 1rem 1.1rem;
   border-bottom: 1px solid var(--line);
+  background: #1e1418;
+}
+
+.lab-card-media img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1), filter 300ms ease;
+}
+
+/* Gentle shade at the bottom so the result label always reads. */
+.lab-card-media::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: linear-gradient(to top, rgba(20, 12, 17, 0.55), rgba(20, 12, 17, 0) 45%);
+  pointer-events: none;
+}
+
+/* Screenshots sit on graph paper instead of being cropped. */
+.lab-card-media-screen {
+  padding: 0.6rem 0.8rem 3rem;
   background:
     linear-gradient(90deg, rgba(87, 50, 68, 0.06) 1px, transparent 1px) 0 0 / 18px 18px,
     linear-gradient(rgba(87, 50, 68, 0.06) 1px, transparent 1px) 0 0 / 18px 18px,
     #fbf6ea;
 }
 
-.lab-figure { min-height: 0; max-height: 100%; margin: 0; }
-/* The testbench table sets its own height, so its box grows to fit it. */
-.lab-card-media:has(.lab-figure-alu) { height: auto; min-height: clamp(272px, 19vw, 360px); }
-/* Drawn figures scale to fit the box in both directions, so a wide card
-   never makes them taller than the space they have. */
-.lab-figure-plot,
-.lab-figure-diagram { height: 100%; }
-.lab-figure svg { display: block; width: 100%; height: 100%; }
+.lab-card-media-screen img { object-fit: contain; mix-blend-mode: multiply; }
+.lab-card-media-screen::after { background: linear-gradient(to top, rgba(87, 50, 68, 0.12), rgba(87, 50, 68, 0) 35%); }
 
-/* ALU testbench table */
-.lab-figure-alu figcaption { margin-bottom: 0.45rem; color: var(--plum); font-size: var(--type-micro); font-weight: 800; }
-.lab-figure-alu table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-.lab-figure-alu th { padding: 0 0.35rem 0.3rem 0; color: var(--ink-soft); font-size: 0.7rem; font-weight: 700; text-align: left; }
-.lab-figure-alu td { padding: 0.12rem 0.35rem 0.12rem 0; border-top: 1px solid rgba(87, 50, 68, 0.1); line-height: 1.25; }
-.lab-mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
-.lab-decimal { color: var(--ink-soft); font-family: ui-sans-serif, system-ui, sans-serif; letter-spacing: 0; }
-.lab-pass {
-  width: 1.05rem;
-  height: 1.05rem;
-  display: inline-grid;
-  place-items: center;
-  color: #fff;
-  border-radius: 50%;
-  background: #4f9a46;
-  font-size: 0.62rem;
-  font-weight: 900;
+.lab-card-result {
+  position: absolute;
+  z-index: 1;
+  bottom: 0.8rem;
+  left: 0.8rem;
+  max-width: calc(100% - 1.6rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.75rem 0.4rem 0.45rem;
+  color: #fffaf0;
+  border-radius: 999px;
+  background: rgba(20, 12, 17, 0.72);
+  backdrop-filter: blur(8px);
+  font: 760 0.7rem/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  letter-spacing: 0.02em;
 }
 
-/* Power plot */
-.plot-grid { stroke: rgba(87, 50, 68, 0.12); stroke-width: 1; }
-.plot-tick { fill: var(--ink-soft); font: 9px ui-sans-serif, system-ui, sans-serif; }
-.plot-axis { fill: var(--ink-soft); font: 700 9.5px ui-sans-serif, system-ui, sans-serif; }
-.plot-curve { fill: none; stroke: var(--plum); stroke-width: 2.6; stroke-linecap: round; }
-.plot-peak-line { stroke: var(--coral-dark); stroke-width: 1.2; stroke-dasharray: 3 3; }
-.plot-peak { fill: var(--gold); stroke: var(--plum); stroke-width: 2; }
-.plot-label { fill: var(--plum); font: 800 10.5px ui-sans-serif, system-ui, sans-serif; }
+.lab-card-result span {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  flex: none;
+  place-items: center;
+  color: #1e1418;
+  border-radius: 50%;
+  background: #7fd28a;
+  font-size: 0.62rem;
+}
 
-/* Comparator diagram */
-.diagram-wire { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; }
-.diagram-bus { fill: none; stroke: var(--ink-soft); stroke-width: 2.6; }
-.diagram-node { fill: var(--ink-soft); }
-.diagram-arrowhead { fill: var(--ink-soft); }
-.diagram-block { fill: var(--paper); stroke: var(--plum); stroke-width: 1.5; }
-.diagram-mux { fill: rgba(233, 109, 80, 0.12); stroke: var(--coral-dark); stroke-width: 1.5; }
-.diagram-block-label { fill: var(--ink); font: 700 11.5px ui-sans-serif, system-ui, sans-serif; }
-.diagram-block-sub { fill: var(--ink-soft); font: 9.5px ui-sans-serif, system-ui, sans-serif; }
-.diagram-input { fill: var(--plum); font: 800 11px ui-sans-serif, system-ui, sans-serif; }
-.diagram-output { fill: var(--coral-dark); font: 800 11px ui-sans-serif, system-ui, sans-serif; }
+.lab-card:hover .lab-card-media img,
+.lab-card:focus-within .lab-card-media img { transform: scale(1.04); filter: saturate(1.08); }
+.lab-card-media-screen img { transform: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lab-card-media img { transition: none; }
+  .lab-card:hover .lab-card-media img,
+  .lab-card:focus-within .lab-card-media img { transform: none; }
+}
+
 .lab-card-copy { display: flex; flex: 1; flex-direction: column; padding: 1.2rem 1.3rem 1.1rem; }
 .lab-card-course { margin: 0; color: var(--coral-dark); font-size: var(--type-micro); font-weight: 800; }
 

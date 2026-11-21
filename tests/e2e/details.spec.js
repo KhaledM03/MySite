@@ -154,17 +154,19 @@ test("lab highlights, drone diagram, and current courses are on the homepage", a
   await expect(labs.locator(".lab-card")).toHaveCount(3);
   await expect(labs.getByRole("link", { name: /All labs on GitHub/ })).toHaveAttribute("href", "https://github.com/KhaledM03/engineering-labs");
   await expect(page.getByRole("img", { name: /FPV drone block diagram/ })).toBeVisible();
-  await expect(labs.getByRole("table")).toContainText("A XOR B");
-  await expect(labs.getByRole("img", { name: /peaking at 10.39 watts at 198 ohms/ })).toBeVisible();
-  await expect(labs.getByRole("img", { name: /unsigned and signed comparators/ })).toBeVisible();
+  // Each lab card shows a real photo or screenshot with its key result.
+  await expect(labs.getByRole("img", { name: /Nexys A7/ })).toBeVisible();
+  await expect(labs.getByRole("img", { name: /decade resistance box/ })).toBeVisible();
+  await expect(labs.getByRole("img", { name: /Logisim circuit/ })).toBeVisible();
+  await expect(labs.locator(".lab-card-result")).toHaveText([/8 of 8 checks pass/, /10\.39 W/, /two's complement/]);
 
-  // Figures never spill out of their boxes onto the card text, from phones to wide monitors.
+  // Result labels stay inside their photo boxes, from phones to wide monitors.
   for (const width of [390, 1366, 2000, 2560]) {
     await page.setViewportSize({ width, height: 1000 });
     await labs.scrollIntoViewIfNeeded();
     const spill = await page.evaluate(() => [...document.querySelectorAll(".lab-card-media")].map((media) => {
       const box = media.getBoundingClientRect();
-      const figure = media.querySelector("svg, table").getBoundingClientRect();
+      const figure = media.querySelector(".lab-card-result").getBoundingClientRect();
       return Math.max(figure.bottom - box.bottom, box.top - figure.top, figure.right - box.right, 0);
     }));
     expect(Math.max(...spill), `figure overflow at ${width}px`).toBeLessThanOrEqual(1);
