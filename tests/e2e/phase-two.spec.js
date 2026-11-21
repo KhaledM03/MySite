@@ -77,10 +77,15 @@ test("homepage motion is fully disabled under reduced motion", async ({ page, br
 
   const introState = await page.evaluate(() => ({
     art: getComputedStyle(document.querySelector(".intro-art img")).animationName,
-    underline: getComputedStyle(document.querySelector(".intro h1 em"), "::after").animationName,
+    wave: getComputedStyle(document.querySelector(".intro-wave path")).animationName,
+    caret: getComputedStyle(document.querySelector(".intro-caret")).animationName,
     scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior,
   }));
-  expect(introState).toEqual({ art: "none", underline: "none", scrollBehavior: "auto" });
+  expect(introState).toEqual({ art: "none", wave: "none", caret: "none", scrollBehavior: "auto" });
+
+  // The click-to-hop easter egg stays still for people who asked for less motion.
+  await page.locator(".intro-art").click();
+  await expect(page.locator(".intro-bubble")).toHaveCount(0);
 
   const signalState = await page.locator(".resetwave-signal li").first().evaluate((element) => ({
     animationName: getComputedStyle(element).animationName,

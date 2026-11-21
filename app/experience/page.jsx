@@ -14,6 +14,8 @@ export const metadata = createPageMetadata({
   description:
     "Khaled Mousa's experience: a Boingo Wireless internship, field technician work, founding The Cove Dev, environmental field work, AI model evaluation, and EMG research at Meta.",
   path: "/experience",
+  image: "/og/experience.png",
+  imageAlt: "Khaled Mousa: where I’ve worked.",
 });
 
 const sections = [
